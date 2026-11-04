@@ -2,7 +2,8 @@ const CACHE_NAME = 'driver-diary-v1';
 const assetsToCache = [
   './index.html',
   './manifest.webmanifest',
-  './icon-512.png'
+  './icon-512.png',
+  './icon-192.png'
 ];
 
 self.addEventListener('install', event => {
