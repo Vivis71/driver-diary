@@ -1,0 +1,16 @@
+{
+  "name": "Дневник водителя",
+  "short_name": "Дневник",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121216",
+  "theme_color": "#1e1e24",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
