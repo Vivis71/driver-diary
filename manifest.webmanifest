@@ -1,6 +1,6 @@
 {
-  "name": "Дневник водителя",
-  "short_name": "Дневник",
+  "name": "Driver Diary",
+  "short_name": "Diary",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121216",
@@ -9,8 +9,7 @@
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
