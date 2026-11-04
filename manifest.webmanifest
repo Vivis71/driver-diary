@@ -39,13 +39,13 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/1.png",
+      "src": "1.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow"
     },
     {
-      "src": "screenshots/2.png",
+      "src": "2.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow"
