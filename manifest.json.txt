@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "driver-diary",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Diary",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "description": "\"Convenient logbook for international truck drivers\"",
+  "lang": "ru"
+}
