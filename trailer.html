@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Рапорт прицепа</title>
+<style>
+:root{--bg:#121216;--card:#1e1f26;--row:#25262c;--line:#33343d;--txt:#e5e7eb;--mut:#9ca3af;--acc:#ff9f0a;--green:#34d399;--yellow:#fbbf24;--red:#fb7185}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;padding:12px;display:flex;justify-content:center}
+.app{width:100%;max-width:480px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cap{color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.title{font-size:16px;font-weight:600;padding:2px 4px}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid #4b5563;color:var(--txt);text-decoration:none;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2d3748}
+input.txt{background:#16171c;border:1px solid #3d3e4a;border-radius:8px;color:var(--txt);padding:8px 10px;font-size:15px;min-width:0}
+input.txt:focus{outline:none;border-color:var(--acc)}
+.num{cursor:pointer;width:150px;text-align:center;font-size:22px;font-weight:600;letter-spacing:.06em}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
+.sb{background:transparent;border:1.5px solid;border-radius:10px;padding:8px 4px;min-height:48px;font-size:12px;line-height:1.25;font-family:inherit;cursor:pointer}
+.sb.green{color:var(--green);border-color:var(--green)}
+.sb.yellow{color:var(--yellow);border-color:var(--yellow)}
+.sb.red{color:var(--red);border-color:var(--red)}
+.sb.on{color:#10110f;font-weight:700}
+.sb.green.on{background:var(--green)}
+.sb.yellow.on{background:var(--yellow)}
+.sb.red.on{background:var(--red)}
+.g{display:grid;grid-template-columns:minmax(0,1fr) 52px 38px 32px;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.g:first-of-type{border-top:0}
+.g.zero .name,.g.zero .tot{opacity:.45}
+.tot{font-size:19px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.tot.has{color:var(--acc)}
+.ibtn{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--acc);color:var(--acc);background:transparent;font-size:22px;line-height:1;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.rbtn{width:32px;height:32px;border-radius:8px;border:1px solid #3d3e4a;color:var(--mut);background:transparent;font-size:16px;cursor:pointer;padding:0}
+.rbtn:disabled{opacity:.25;cursor:default}
+.chk{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;padding:4px 2px}
+.box{width:24px;height:24px;border-radius:6px;border:1.5px solid var(--acc);display:flex;align-items:center;justify-content:center;color:#1f1300;font-size:16px;font-weight:700}
+.chk.on .box{background:var(--acc)}
+.chk .box::after{content:""}
+.chk.on .box::after{content:"✓"}
+.sub{color:var(--mut);font-size:12px}
+.orow{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.orow .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .q{font-weight:600;color:var(--acc);min-width:30px;text-align:right}
+.xbtn{width:32px;height:32px;border-radius:8px;border:1px solid #3d3e4a;color:var(--red);background:transparent;font-size:16px;cursor:pointer;padding:0}
+.acts{display:flex;gap:8px;margin-top:4px}
+.btn{flex:1;border-radius:12px;padding:13px 4px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
+.btn.main{background:var(--acc);border-color:var(--acc);color:#1f1300}
+.btn.sec{background:transparent;border-color:#4b5563;color:var(--red)}
+.btn.plain{background:transparent;border-color:#4b5563;color:var(--txt)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+.ov.show{display:flex}
+.dlg{background:#26272f;border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px}
+.dlg h3{margin:0 0 10px;font-size:16px;font-weight:600}
+.disp{background:#16171c;border:1.5px solid var(--acc);border-radius:10px;padding:10px 14px;font-size:26px;text-align:right;min-height:54px;margin-bottom:8px;font-variant-numeric:tabular-nums}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.k{background:#2d3748;border:1px solid #4b5563;border-radius:10px;padding:13px 0;font-size:20px;color:var(--txt);font-family:inherit;cursor:pointer}
+.k.ok{background:var(--acc);border-color:var(--acc);color:#1f1300;font-weight:700;font-size:16px}
+.lab{display:block;margin:0 0 4px;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.field{width:100%;margin-bottom:10px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:#32333d;color:#f3f4f6;border:1px solid #4b5563;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="card row" style="justify-content:flex-start;gap:12px"><a href="index.html" class="back" aria-label="Назад">←</a><div class="title">Рапорт прицепа</div></div>
+
+  <div class="card">
+    <div class="row">
+      <span class="cap">Номер прицепа</span>
+      <input id="num" class="txt num" type="text" readonly inputmode="none" autocomplete="off" placeholder="нажмите">
+    </div>
+    <div class="cap" style="margin-top:12px">Состояние</div>
+    <div class="seg">
+      <button class="sb green" data-state="czysta">Чистый</button>
+      <button class="sb yellow" data-state="po">Грязный: после палет</button>
+      <button class="sb red" data-state="krew">Грязный: пятна крови</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cap" style="margin-bottom:2px">Тара</div>
+    <div id="tara"></div>
+    <div class="g" id="sciana-row" style="grid-template-columns:minmax(0,1fr)">
+      <div class="chk" id="sciana"><span class="box"></span><span>Стена</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chk" id="zwrot"><span class="box"></span><span>Возврат <span class="sub">(возвратный груз)</span></span></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><span class="cap">Прочее</span><button class="ibtn" id="addOther" aria-label="Добавить строку">+</button></div>
+    <div id="others"></div>
+  </div>
+
+  <div class="acts">
+    <button class="btn main" id="make">Сформировать</button>
+    <button class="btn sec" id="clear">Очистить</button>
+  </div>
+</div>
+
+<div class="ov" id="ovKeypad">
+  <div class="dlg">
+    <h3 id="kpTitle"></h3>
+    <div class="disp" id="kpDisp"></div>
+    <div class="kp">
+      <button class="k" data-k="1">1</button><button class="k" data-k="2">2</button><button class="k" data-k="3">3</button>
+      <button class="k" data-k="4">4</button><button class="k" data-k="5">5</button><button class="k" data-k="6">6</button>
+      <button class="k" data-k="7">7</button><button class="k" data-k="8">8</button><button class="k" data-k="9">9</button>
+      <button class="k" data-k="back">⌫</button><button class="k" data-k="0">0</button><button class="k ok" data-k="ok">ОК</button>
+    </div>
+    <button class="btn plain" id="kpCancel" style="width:100%;margin-top:8px;padding:10px">Отмена</button>
+  </div>
+</div>
+
+<div class="ov" id="ovOther">
+  <div class="dlg">
+    <h3>Прочее</h3>
+    <label class="lab" for="otName">Название</label>
+    <input id="otName" class="txt field" type="text" autocomplete="off">
+    <label class="lab" for="otQty">Количество</label>
+    <input id="otQty" class="txt field" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off">
+    <div class="acts">
+      <button class="btn main" id="otOk">ОК</button>
+      <button class="btn plain" id="otCancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ovConfirm">
+  <div class="dlg">
+    <h3 id="cfText"></h3>
+    <div class="acts">
+      <button class="btn sec" id="cfYes">Да</button>
+      <button class="btn plain" id="cfNo">Нет</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const ITEMS = [
+  {id:'haki', label:'Хаки', pl:'Haki'},
+  {id:'h1',   label:'H1 палеты', pl:'H1'},
+  {id:'e2',   label:'E2 боксы', pl:'E2'},
+  {id:'euro', label:'Европалеты', pl:'Europlt'}
+];
+const STATES = {czysta:'czysta', po:'brudna ( po paletach)', krew:'brudna ( plamy krwi)'};
+const KEY = 'trailerReport_v1';
+
+let S = fresh();
+function fresh(){
+  const q = {}; ITEMS.forEach(i => q[i.id] = 0);
+  return {num:'', state:'', qty:q, sciana:false, zwrot:false, others:[]};
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){
+      const d = JSON.parse(raw), f = fresh();
+      S = Object.assign(f, d);
+      S.qty = Object.assign(f.qty, d.qty || {});
+      if(!Array.isArray(S.others)) S.others = [];
+    }
+  }catch(e){}
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+const $ = id => document.getElementById(id);
+
+function toast(text, ms){
+  const t = $('toast');
+  t.textContent = text;
+  t.style.opacity = 1;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.opacity = 0; }, ms || 3500);
+}
+
+function render(){
+  $('num').value = S.num;
+  document.querySelectorAll('.sb').forEach(b => b.classList.toggle('on', b.dataset.state === S.state));
+
+  const box = $('tara'); box.innerHTML = '';
+  ITEMS.forEach(it => {
+    const v = S.qty[it.id] || 0;
+    const row = document.createElement('div');
+    row.className = 'g' + (v ? '' : ' zero');
+    row.innerHTML =
+      '<span class="name"></span>' +
+      '<span class="tot' + (v ? ' has' : '') + '">' + v + '</span>' +
+      '<button class="ibtn" aria-label="Добавить">+</button>' +
+      '<button class="rbtn" aria-label="Обнулить"' + (v ? '' : ' disabled') + '>↺</button>';
+    row.querySelector('.name').textContent = it.label;
+    row.querySelector('.ibtn').onclick = () => openKeypad(it);
+    row.querySelector('.rbtn').onclick = () => askConfirm('Обнулить «' + it.label + '»?', () => { S.qty[it.id] = 0; save(); render(); });
+    box.appendChild(row);
+  });
+  $('sciana').classList.toggle('on', S.sciana);
+  $('zwrot').classList.toggle('on', S.zwrot);
+
+  const o = $('others'); o.innerHTML = '';
+  S.others.forEach((x, idx) => {
+    const r = document.createElement('div');
+    r.className = 'orow';
+    r.innerHTML = '<span class="n"></span><span class="q"></span><button class="xbtn" aria-label="Удалить">✕</button>';
+    r.querySelector('.n').textContent = x.name;
+    r.querySelector('.q').textContent = x.qty ? x.qty : '';
+    r.querySelector('.xbtn').onclick = () => { S.others.splice(idx, 1); save(); render(); };
+    o.appendChild(r);
+  });
+}
+
+/* ---------- цифровая панель ---------- */
+let kpItem = null, kpVal = '', kpMode = 'add';
+function openKeypad(it){
+  kpMode = 'add'; kpItem = it; kpVal = '';
+  $('kpTitle').textContent = it.label + (S.qty[it.id] ? ' (сейчас ' + S.qty[it.id] + ')' : '');
+  $('kpDisp').textContent = '';
+  $('ovKeypad').classList.add('show');
+}
+function openNumKeypad(){
+  kpMode = 'num'; kpItem = null; kpVal = S.num || '';
+  $('kpTitle').textContent = 'Номер прицепа';
+  $('kpDisp').textContent = kpVal;
+  $('ovKeypad').classList.add('show');
+}
+function closeKeypad(){ $('ovKeypad').classList.remove('show'); kpItem = null; }
+document.querySelectorAll('.k').forEach(b => b.onclick = () => {
+  const k = b.dataset.k;
+  if(k === 'back'){ kpVal = kpVal.slice(0, -1); }
+  else if(k === 'ok'){
+    if(kpMode === 'num'){ S.num = kpVal; save(); render(); }
+    else {
+      const n = parseInt(kpVal, 10);
+      if(kpItem && n > 0){ S.qty[kpItem.id] = (S.qty[kpItem.id] || 0) + n; save(); render(); }
+    }
+    closeKeypad(); return;
+  }
+  else if(kpMode === 'num'){ if(kpVal.length < 8) kpVal += k; }
+  else if(kpVal.length < 5){ kpVal += k; if(kpVal.length > 1) kpVal = kpVal.replace(/^0+/, ''); }
+  $('kpDisp').textContent = kpVal;
+});
+$('kpCancel').onclick = closeKeypad;
+
+/* ---------- прочее ---------- */
+$('addOther').onclick = () => {
+  $('otName').value = ''; $('otQty').value = '';
+  $('ovOther').classList.add('show');
+  setTimeout(() => $('otName').focus(), 50);
+};
+$('otCancel').onclick = () => $('ovOther').classList.remove('show');
+$('otQty').oninput = e => { e.target.value = e.target.value.replace(/\D/g, ''); };
+$('otOk').onclick = () => {
+  const name = $('otName').value.trim();
+  if(!name){ $('otName').focus(); toast('Введите название'); return; }
+  S.others.push({name:name, qty:parseInt($('otQty').value, 10) || 0});
+  save(); render();
+  $('ovOther').classList.remove('show');
+};
+
+/* ---------- подтверждение ---------- */
+let cfAction = null;
+function askConfirm(text, fn){ cfAction = fn; $('cfText').textContent = text; $('ovConfirm').classList.add('show'); }
+$('cfYes').onclick = () => { $('ovConfirm').classList.remove('show'); const f = cfAction; cfAction = null; if(f) f(); };
+$('cfNo').onclick = () => { $('ovConfirm').classList.remove('show'); cfAction = null; };
+
+/* ---------- поля и кнопки ---------- */
+$('num').onclick = openNumKeypad;
+document.querySelectorAll('.sb').forEach(b => b.onclick = () => {
+  S.state = (S.state === b.dataset.state) ? '' : b.dataset.state;
+  save(); render();
+});
+$('sciana').onclick = () => { S.sciana = !S.sciana; save(); render(); };
+$('zwrot').onclick = () => { S.zwrot = !S.zwrot; save(); render(); };
+$('clear').onclick = () => askConfirm('Очистить рапорт?', () => { S = fresh(); save(); render(); });
+
+/* ---------- формирование текста ---------- */
+function buildText(){
+  let head = S.num + ' rozladowana';
+  if(S.state) head += ' , ' + STATES[S.state];
+  const lines = [head];
+
+  const mats = [];
+  ITEMS.forEach(it => { if(S.qty[it.id] > 0) mats.push(it.pl + ' - ' + S.qty[it.id]); });
+  if(S.sciana) mats.push('Sciana');
+  S.others.forEach(x => mats.push(x.qty > 0 ? x.name + ' - ' + x.qty : x.name));
+
+  if(mats.length){ lines.push('Materialy :'); mats.forEach(m => lines.push(m)); }
+  if(S.zwrot) lines.push('Zwrot');
+  return lines.join('\n');
+}
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((res, rej) => {
+    try{
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = 0;
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      ok ? res() : rej();
+    }catch(e){ rej(e); }
+  });
+}
+$('make').onclick = () => {
+  if(!S.num){ toast('Введите номер прицепа'); return; }
+  const text = buildText();
+  copyText(text).then(
+    () => toast('✅ Скопировано:\n' + text, 4500),
+    () => toast('⚠️ Не удалось скопировать. Текст:\n' + text, 6000)
+  );
+};
+
+load();
+render();
+</script>
+</body>
+</html>
