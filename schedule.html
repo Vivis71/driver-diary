@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>График</title>
+<style>
+:root{--bg:#121216;--card:#1e1f26;--row:#25262c;--line:#33343d;--txt:#e5e7eb;--mut:#9ca3af;--acc:#ff9f0a;--green:#34d399;--vac:#a49bff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;padding:12px;display:flex;justify-content:center}
+.app{width:100%;max-width:480px;padding-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cap{color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.mut{color:var(--mut);font-size:12px}
+.title{font-size:17px;font-weight:600}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid #4b5563;color:var(--txt);text-decoration:none;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2d3748;flex-shrink:0}
+.yr{background:transparent;border:1px solid var(--acc);color:var(--acc);border-radius:10px;padding:6px 8px;font-size:14px;font-weight:600;font-family:inherit}
+.yr option{background:#25262c;color:#e5e7eb}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:8px}
+.tile{background:#2d3748;border:1px solid #4b5563;border-radius:12px;padding:10px 2px 8px;text-align:center;color:var(--txt);font-size:11px;font-weight:500;line-height:1.2;min-width:0;font-family:inherit;cursor:pointer}
+.tile svg{display:block;margin:0 auto 5px}
+.sqr{display:block;width:14px;height:14px;background:#fb7185;border-radius:3px;margin:4px auto 9px}
+.big{font-size:17px;font-weight:600;margin-top:2px}
+.vrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:7px 0 0;margin-top:7px;font-size:13px}
+.x{width:30px;height:30px;border-radius:8px;border:1px solid #3d3e4a;background:transparent;color:#fb7185;font-size:14px;cursor:pointer;padding:0;flex-shrink:0}
+.warn{color:#fbbf24;font-size:11px}
+.mo{background:#1a1b21;border:1px solid var(--line);border-radius:10px;padding:6px}
+.mt{font-size:12px;font-weight:600;color:var(--acc);text-align:center;margin-bottom:4px}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:10px;color:#6b7280;text-align:center;margin-bottom:2px}
+.gd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.c{height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6b7280;border:1px solid transparent}
+.wp{background:rgba(255,159,10,.5);color:#ffe2b0;font-weight:600}
+.hp{background:rgba(52,211,153,.45);color:#d1fae5;font-weight:600}
+.wf{background:rgba(255,159,10,.1);color:rgba(255,159,10,.8);border:1px dashed rgba(255,159,10,.35)}
+.hf{background:rgba(52,211,153,.1);color:rgba(52,211,153,.85);border:1px dashed rgba(52,211,153,.35)}
+.vc{background:#7c6cf0;color:#fff;font-weight:600}
+.td{outline:2px solid #fff;outline-offset:0}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-bottom:8px}
+.lg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.l1::before{background:rgba(255,159,10,.7)}.l2::before{background:rgba(52,211,153,.7)}.l3::before{background:#7c6cf0}.l4::before{border:1px dashed #9ca3af}
+.btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
+.btn.main{background:var(--acc);border-color:var(--acc);color:#1f1300}
+.btn.out{background:transparent;border-color:var(--acc);color:var(--acc)}
+.btn.plain{background:transparent;border-color:#4b5563;color:var(--txt)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+.ov.show{display:flex}
+.dlg{background:#26272f;border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px}
+.dlg h3{margin:0 0 6px;font-size:16px;font-weight:600}
+.dlg .note{color:var(--mut);font-size:12px;margin-bottom:10px;line-height:1.4}
+.lab{display:block;margin:8px 0 4px;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+input[type=date]{width:100%;background:#16171c;border:1px solid #3d3e4a;border-radius:8px;color:var(--txt);padding:10px;font-size:16px;font-family:inherit;color-scheme:dark}
+.btns{display:flex;gap:8px;margin-top:12px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.sb{border:1.5px solid #4b5563;border-radius:10px;padding:10px 4px;text-align:center;font-size:13px;color:#d1d5db;cursor:pointer}
+.sb.on{border-color:var(--acc);background:rgba(255,159,10,.2);color:var(--acc);font-weight:600}
+.banner{border-radius:12px;padding:10px;margin-bottom:8px;border:1px solid}
+.banner.pv{background:rgba(164,155,255,.12);border-color:rgba(164,155,255,.5)}
+.banner.pl{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.4)}
+.empty{text-align:center;padding:22px 10px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:#32333d;color:#f3f4f6;border:1px solid #4b5563;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.hidden{display:none}
+a{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="card row">
+    <span style="display:flex;align-items:center;gap:10px"><a class="back" href="index.html" aria-label="Назад">←</a><span class="title">График</span></span>
+    <select id="yearSel" class="yr" aria-label="Год"></select>
+  </div>
+
+  <div id="noProfile" class="card empty hidden">
+    <div class="title">Профиль не найден</div>
+    <div class="mut" style="margin-top:6px">Вернитесь на главную и выберите профиль</div>
+  </div>
+
+  <div id="main">
+    <div class="row" style="padding:0 6px 8px">
+      <span class="mut" id="tplLine"></span>
+      <a class="mut" href="index.html#settings">изменить</a>
+    </div>
+
+    <div id="banner"></div>
+
+    <div class="tiles">
+      <button class="tile" id="bStart"><svg width="24" height="24" viewBox="0 0 24 24" fill="#34d399" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>Начало каденции</button>
+      <button class="tile" id="bEnd"><span class="sqr"></span>Конец каденции</button>
+      <button class="tile" id="bShift"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4l3 3-3 3"/><path d="M3 7h18"/><path d="M6 20l-3-3 3-3"/><path d="M21 17H3"/></svg>Сдвиг</button>
+      <button class="tile" id="bVac"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a49bff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 21h-11a1 1 0 0 1 0-2h11a1 1 0 0 1 0 2"/><path d="M12 19v-8"/><path d="M5 11a7 7 0 0 1 14 0z"/></svg>Отпуск</button>
+    </div>
+
+    <div id="emptyState" class="card empty hidden">
+      <div style="font-size:15px;font-weight:600">Укажите дату заезда</div>
+      <div class="mut" style="margin:6px 0 12px;line-height:1.4">Первый день вашей вахты. От неё построится график вперёд.</div>
+      <button class="btn out" id="bFirst" style="width:100%;flex:none">Выбрать дату</button>
+    </div>
+
+    <div id="info" class="card hidden">
+      <div class="row">
+        <div><div class="cap">Последний рабочий</div><div class="big" id="infoEnd" style="color:var(--acc)">—</div></div>
+        <div style="text-align:right"><div class="cap">Ближайший заезд</div><div class="big" id="infoArr" style="color:var(--green)">—</div></div>
+      </div>
+      <div class="mut" style="margin-top:8px" id="infoNow"></div>
+    </div>
+
+    <div class="card">
+      <div class="row"><span class="cap">Отпуск <span id="vacYear"></span></span><span id="vacCnt" style="font-weight:600;color:var(--vac)"></span></div>
+      <div id="vacList"></div>
+    </div>
+
+    <div class="card">
+      <div class="cap">Каденции</div>
+      <div id="cadList"></div>
+    </div>
+
+    <div class="card" id="calCard">
+      <div class="lg"><span class="l1">Работа</span><span class="l2">Дома</span><span class="l3">Отпуск</span><span class="l4">Прогноз</span></div>
+      <div id="cal" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ov"><div class="dlg"><h3 id="dTitle"></h3><div id="dBody"></div><div class="btns" id="dBtns"></div></div></div>
+<div id="toast"></div>
+
+<script>
+var $ = function(id){ return document.getElementById(id); };
+var DAY = 86400000, VAC_LIMIT = 20;
+var DAYS = {'Воскресенье':0,'Понедельник':1,'Вторник':2,'Среда':3,'Четверг':4,'Пятница':5,'Суббота':6};
+var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var WDN = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+/* ---------- даты: целые номера дней, без часовых поясов ---------- */
+function pad(n){ return String(n).padStart(2,'0'); }
+function dn(s){ var p = s.split('-').map(Number); return Math.round(Date.UTC(p[0],p[1]-1,p[2]) / DAY); }
+function iso(n){ var d = new Date(n*DAY); return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
+function wd(n){ return new Date(n*DAY).getUTCDay(); }
+function todayN(){ var t = new Date(); return Math.round(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()) / DAY); }
+function fmt(n){ var d = new Date(n*DAY); return pad(d.getUTCDate())+'.'+pad(d.getUTCMonth()+1); }
+function fmtY(n){ return fmt(n)+'.'+new Date(n*DAY).getUTCFullYear(); }
+function nextWdAfter(n, W){ var x = n+1; while (wd(x) !== W) x++; return x; }
+function nextWdOnOrAfter(n, W){ var x = n; while (wd(x) !== W) x++; return x; }
+function wdName(n){ return ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][wd(n)]; }
+
+function toast(t, ms){
+  var e = $('toast'); e.textContent = t; e.style.opacity = 1;
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ e.style.opacity = 0; }, ms || 3200);
+}
+
+/* ---------- хранилище: график лежит внутри профиля ---------- */
+var profiles = [], idx = 0, prof = null, sch = null, W = 6;
+function load(){
+  try { profiles = JSON.parse(localStorage.getItem('driver_profiles')) || []; } catch(e){ profiles = []; }
+  var i = parseInt(localStorage.getItem('active_profile_index'), 10);
+  idx = (i >= 0 && profiles[i]) ? i : 0;
+  prof = profiles[idx] || null;
+  if (!prof) return false;
+  sch = Object.assign({work:4, home:2, cadences:[], vacations:[], plan:null}, prof.schedule || {});
+  if (!Array.isArray(sch.cadences)) sch.cadences = [];
+  if (!Array.isArray(sch.vacations)) sch.vacations = [];
+  prof.schedule = sch;
+  W = DAYS[prof.day] !== undefined ? DAYS[prof.day] : 6;
+  return true;
+}
+function save(){
+  profiles[idx] = prof;
+  try { localStorage.setItem('driver_profiles', JSON.stringify(profiles)); } catch(e){ toast('⚠️ Не удалось сохранить'); }
+}
+
+/* ---------- расчёт графика ---------- */
+function buildTimeline(over){
+  over = over || {};
+  var N = sch.work, M = sch.home, T = todayN();
+  var cad = sch.cadences.map(function(c){ return {s:dn(c.start), e:c.end ? dn(c.end) : null}; }).sort(function(a,b){ return a.s-b.s; });
+  var vac = sch.vacations.map(function(v){ return {s:dn(v.start), e:dn(v.end)}; });
+  var st = new Map(), blocks = [];
+  if (!cad.length) return {empty:true, st:st, blocks:blocks, vacSet:new Set(), vacWarn:[]};
+  function mark(a, b, t){ if (b < a) return; for (var x = a; x <= b; x++) st.set(x, t); blocks.push({t:t, s:a, e:b}); }
+
+  var endOvUsed = false, lastEnd = null;
+  for (var i = 0; i < cad.length; i++){
+    var c = cad[i], nxt = cad[i+1], e = c.e;
+    if (e === null){
+      e = c.s + N*7;
+      if (!nxt){
+        if (over.end != null && !endOvUsed){ e = over.end; endOvUsed = true; }
+        else if (T > e) e = nextWdOnOrAfter(T, W);
+      }
+    }
+    if (nxt) e = Math.min(e, nxt.s - 1);
+    if (e < c.s) e = c.s;
+    mark(c.s, e, 'w');
+    if (nxt) mark(e+1, nxt.s-1, 'h'); else lastEnd = e;
+  }
+
+  function attach(a, endDay){
+    var changed = true;
+    while (changed){
+      changed = false;
+      for (var k = 0; k < vac.length; k++){
+        var v = vac[k];
+        if (v.e >= a && v.s <= a+6 && v.e > endDay){
+          var na = nextWdAfter(v.e, W);
+          if (na > a){ a = na; changed = true; }
+        }
+      }
+    }
+    return a;
+  }
+
+  var horizon = Math.max(T, lastEnd) + 365*3 + 60, end = lastEnd, arrOv = over.arrival;
+  while (true){
+    var a = (arrOv != null && arrOv > end) ? arrOv : attach(end + M*7, end);
+    arrOv = null;
+    if (a > horizon){ mark(end+1, horizon, 'h'); break; }
+    mark(end+1, a-1, 'h');
+    var e2 = a + N*7;
+    if (over.end != null && !endOvUsed && over.end >= a){ e2 = over.end; endOvUsed = true; }
+    mark(a, e2, 'w');
+    end = e2;
+  }
+
+  var vacSet = new Set();
+  vac.forEach(function(v){ for (var x = v.s; x <= v.e; x++) vacSet.add(x); });
+  var vacWarn = vac.map(function(v){ for (var x = v.s; x <= v.e; x++){ if (st.get(x) === 'w') return true; } return false; });
+  return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn};
+}
+function dayStatus(tl, x){ return tl.vacSet.has(x) ? 'v' : (tl.st.get(x) || ''); }
+
+/* ---------- сценарий «сдвиг»: просмотр и сохранённый план ---------- */
+var preview = null;
+function activeOver(){
+  var src = preview || sch.plan;
+  if (!src) return {};
+  return {end: src.end ? dn(src.end) : null, arrival: src.arrival ? dn(src.arrival) : null};
+}
+
+/* ---------- окна ---------- */
+function openDlg(title, note, bodyHtml, buttons){
+  $('dTitle').textContent = title;
+  $('dBody').innerHTML = (note ? '<div class="note">'+note+'</div>' : '') + bodyHtml;
+  var bb = $('dBtns'); bb.innerHTML = '';
+  buttons.forEach(function(b){
+    var el = document.createElement('button');
+    el.className = 'btn ' + (b.cls || 'plain'); el.textContent = b.text;
+    el.onclick = function(){ var r = b.fn ? b.fn() : null; if (r !== false) closeDlg(); };
+    bb.appendChild(el);
+  });
+  $('ov').classList.add('show');
+}
+function closeDlg(){ $('ov').classList.remove('show'); }
+function askConfirm(text, fn){
+  openDlg(text, '', '', [{text:'Да', cls:'out', fn:fn}, {text:'Нет'}]);
+}
+
+/* ---------- действия ---------- */
+function openStart(){
+  var def = iso(todayN());
+  openDlg('Начало каденции', 'Первый рабочий день вахты (день заезда).',
+    '<label class="lab" for="f1">Дата заезда</label><input type="date" id="f1" value="'+def+'">',
+    [{text:'Сохранить', cls:'main', fn:function(){
+      var v = $('f1').value; if (!v){ toast('Выберите дату'); return false; }
+      var n = dn(v);
+      sch.cadences = sch.cadences.filter(function(c){ return c.start !== v; });
+      sch.cadences.push({start:v, end:null});
+      sch.cadences.sort(function(a,b){ return a.start < b.start ? -1 : 1; });
+      if (sch.plan){ sch.plan.arrival = null; if (!sch.plan.end) sch.plan = null; }
+      save(); render();
+      toast(wd(n) !== W ? 'Сохранено. Это не '+(prof.day||'Суббота').toLowerCase()+', проверьте дату' : '✅ Каденция начата: '+fmtY(n));
+    }}, {text:'Отмена'}]);
+}
+function openEnd(){
+  var open = null;
+  for (var i = sch.cadences.length-1; i >= 0; i--){ if (!sch.cadences[i].end){ open = sch.cadences[i]; break; } }
+  if (!open){ toast('Нет открытой каденции. Сначала «Начало каденции»'); return; }
+  var def = Math.max(todayN(), dn(open.start));
+  openDlg('Конец каденции', 'Последний рабочий день вахты, начатой '+fmtY(dn(open.start))+'.',
+    '<label class="lab" for="f1">Последний рабочий день</label><input type="date" id="f1" value="'+iso(def)+'">',
+    [{text:'Сохранить', cls:'main', fn:function(){
+      var v = $('f1').value; if (!v){ toast('Выберите дату'); return false; }
+      if (v < open.start){ toast('Конец раньше начала'); return false; }
+      open.end = v;
+      if (sch.plan){ sch.plan.end = null; if (!sch.plan.arrival) sch.plan = null; }
+      save(); render();
+      toast(wd(dn(v)) !== W ? 'Сохранено. Это не '+(prof.day||'Суббота').toLowerCase()+', проверьте дату' : '✅ Каденция закончена: '+fmtY(dn(v)));
+    }}, {text:'Отмена'}]);
+}
+function openVac(){
+  var d = iso(todayN());
+  openDlg('Отпуск', 'Отпуск продлевает дни дома. Заезд переносится на ближайший '+(prof.day||'Суббота').toLowerCase()+' после его конца.',
+    '<label class="lab" for="f1">Начало отпуска</label><input type="date" id="f1" value="'+d+'">' +
+    '<label class="lab" for="f2">Конец отпуска</label><input type="date" id="f2" value="'+d+'">',
+    [{text:'Сохранить', cls:'main', fn:function(){
+      var a = $('f1').value, b = $('f2').value;
+      if (!a || !b){ toast('Укажите обе даты'); return false; }
+      if (b < a){ toast('Конец раньше начала'); return false; }
+      var clash = sch.vacations.some(function(v){ return a <= v.end && b >= v.start; });
+      if (clash){ toast('Пересекается с другим отпуском'); return false; }
+      sch.vacations.push({start:a, end:b});
+      sch.vacations.sort(function(x,y){ return x.start < y.start ? -1 : 1; });
+      save(); render(); toast('✅ Отпуск добавлен');
+    }}, {text:'Отмена'}]);
+}
+function openShift(){
+  var tl = buildTimeline({});
+  if (tl.empty){ toast('Сначала укажите дату заезда'); return; }
+  var T = todayN(), cur = null, nextArr = null;
+  tl.blocks.forEach(function(b){ if (b.t === 'w'){ if (!cur && b.e >= T) cur = b; else if (cur && !nextArr && b.s > cur.e) nextArr = b.s; } });
+  var mode = 'end';
+  var defEnd = cur ? cur.e : T, defArr = nextArr || T;
+  var html = '<div class="seg"><div class="sb on" id="m1">Закончу работу</div><div class="sb" id="m2">Начну работу</div></div>' +
+    '<label class="lab" for="f1" id="fl">Новый последний рабочий день</label><input type="date" id="f1" value="'+iso(defEnd)+'">';
+  openDlg('Сдвиг', 'Посмотрите, что изменится в графике. Ничего не сохранится, пока вы сами не нажмёте «Сохранить как план».', html, [
+    {text:'Посмотреть', cls:'out', fn:function(){ return applyShift(mode, false); }},
+    {text:'Как план', cls:'main', fn:function(){ return applyShift(mode, true); }},
+    {text:'Отмена'}]);
+  function setMode(m){
+    mode = m;
+    $('m1').classList.toggle('on', m === 'end'); $('m2').classList.toggle('on', m === 'arr');
+    $('fl').textContent = m === 'end' ? 'Новый последний рабочий день' : 'Новая дата заезда';
+    $('f1').value = iso(m === 'end' ? defEnd : defArr);
+  }
+  $('m1').onclick = function(){ setMode('end'); };
+  $('m2').onclick = function(){ setMode('arr'); };
+}
+function applyShift(mode, saveIt){
+  var v = $('f1').value; if (!v){ toast('Выберите дату'); return false; }
+  var p = {end: mode === 'end' ? v : null, arrival: mode === 'arr' ? v : null};
+  if (saveIt){
+    sch.plan = {end: p.end || (sch.plan && sch.plan.end) || null, arrival: p.arrival || (sch.plan && sch.plan.arrival) || null};
+    preview = null; save(); toast('✅ План сохранён');
+  } else { preview = p; }
+  render();
+}
+
+/* ---------- отрисовка ---------- */
+function vacCount(year){
+  var s = new Set();
+  sch.vacations.forEach(function(v){
+    for (var x = dn(v.start); x <= dn(v.end); x++){ if (new Date(x*DAY).getUTCFullYear() === year) s.add(x); }
+  });
+  return s.size;
+}
+function render(){
+  var year = parseInt($('yearSel').value, 10), T = todayN();
+  $('tplLine').textContent = 'График ' + sch.work + '/' + sch.home + ' · день заезда: ' + (prof.day || 'Суббота').toLowerCase();
+
+  var over = activeOver(), tl = buildTimeline(over);
+
+  // баннер плана / просмотра
+  var bn = $('banner'); bn.innerHTML = '';
+  function bannerText(o){
+    var t = [];
+    if (o.end) t.push('закончу работу ' + fmtY(dn(o.end)));
+    if (o.arrival) t.push('начну работу ' + fmtY(dn(o.arrival)));
+    return t.join(', ');
+  }
+  var conflicts = tl.vacWarn.reduce(function(acc, w, i){ if (w) acc.push(sch.vacations[i]); return acc; }, []);
+  if (preview || sch.plan){
+    var src = preview || sch.plan;
+    var div = document.createElement('div');
+    div.className = 'banner ' + (preview ? 'pv' : 'pl');
+    div.innerHTML = '<div style="font-weight:600;margin-bottom:4px">' + (preview ? 'Просмотр: ' : 'План: ') + bannerText(src) + '</div>' +
+      '<div class="mut">' + (preview ? 'Ничего не сохранено.' : 'Показан в календаре как прогноз.') + '</div>' +
+      (conflicts.length ? '<div class="warn" style="margin-top:4px">⚠ Пересекается с отпуском: ' + conflicts.map(function(v){ return fmt(dn(v.start))+'–'+fmt(dn(v.end)); }).join(', ') + '</div>' : '') +
+      '<div class="btns" style="margin-top:8px"></div>';
+    var bt = div.querySelector('.btns');
+    function mk(text, cls, fn){ var b = document.createElement('button'); b.className = 'btn ' + cls; b.style.padding = '9px 4px'; b.textContent = text; b.onclick = fn; bt.appendChild(b); }
+    if (preview){
+      mk('Сохранить как план', 'main', function(){ sch.plan = {end: preview.end || (sch.plan && sch.plan.end) || null, arrival: preview.arrival || (sch.plan && sch.plan.arrival) || null}; preview = null; save(); render(); });
+      mk('Сбросить', 'plain', function(){ preview = null; render(); });
+    } else {
+      mk('Убрать план', 'plain', function(){ askConfirm('Убрать план?', function(){ sch.plan = null; save(); render(); }); });
+    }
+    bn.appendChild(div);
+  }
+
+  // пустое состояние / инфо
+  $('emptyState').classList.toggle('hidden', !tl.empty);
+  $('info').classList.toggle('hidden', tl.empty);
+  $('calCard').classList.toggle('hidden', tl.empty);
+  if (!tl.empty){
+    var cur = null, arrN = null;
+    tl.blocks.forEach(function(b){ if (b.t === 'w'){ if (!cur && b.e >= T) cur = b; else if (cur && !arrN && b.s > cur.e) arrN = b.s; } });
+    $('infoEnd').innerHTML = cur ? fmt(cur.e) + ' <span class="mut">' + wdName(cur.e) + '</span>' : '—';
+    $('infoArr').innerHTML = arrN ? fmt(arrN) + ' <span class="mut">' + wdName(arrN) + '</span>' : '—';
+    var s = dayStatus(tl, T);
+    $('infoNow').textContent = 'Сегодня: ' + (s === 'w' ? 'на работе' : s === 'h' ? 'дома' : s === 'v' ? 'отпуск' : '—');
+  }
+
+  // отпуска
+  $('vacYear').textContent = year;
+  var cnt = vacCount(year);
+  $('vacCnt').textContent = cnt + ' / ' + VAC_LIMIT + ' дней';
+  $('vacCnt').style.color = cnt > VAC_LIMIT ? '#fb7185' : '';
+  var vl = $('vacList'); vl.innerHTML = '';
+  if (!sch.vacations.length){ vl.innerHTML = '<div class="mut" style="margin-top:8px">Нет добавленных отпусков</div>'; }
+  sch.vacations.forEach(function(v, i){
+    var r = document.createElement('div'); r.className = 'vrow';
+    var warn = (!tl.empty && tl.vacWarn[i]) ? ' <span class="warn">⚠ пересекается с работой</span>' : '';
+    r.innerHTML = '<span style="color:#c7c2ff">' + fmtY(dn(v.start)) + ' — ' + fmtY(dn(v.end)) + warn + '</span><button class="x" aria-label="Удалить">✕</button>';
+    r.querySelector('.x').onclick = function(){ askConfirm('Удалить отпуск?', function(){ sch.vacations.splice(i, 1); save(); render(); }); };
+    vl.appendChild(r);
+  });
+
+  // каденции (факты)
+  var cl = $('cadList'); cl.innerHTML = '';
+  if (!sch.cadences.length){ cl.innerHTML = '<div class="mut" style="margin-top:8px">Пока нет отметок</div>'; }
+  sch.cadences.slice().reverse().forEach(function(c){
+    var r = document.createElement('div'); r.className = 'vrow';
+    r.innerHTML = '<span>' + fmtY(dn(c.start)) + ' → ' + (c.end ? fmtY(dn(c.end)) : '<span class="mut">идёт</span>') + '</span><button class="x" aria-label="Удалить">✕</button>';
+    r.querySelector('.x').onclick = function(){ askConfirm('Удалить отметку?', function(){ sch.cadences = sch.cadences.filter(function(x){ return x !== c; }); save(); render(); }); };
+    cl.appendChild(r);
+  });
+
+  // календарь
+  var host = $('cal'); host.innerHTML = '';
+  if (tl.empty) return;
+  for (var m = 0; m < 12; m++){
+    var box = document.createElement('div'); box.className = 'mo';
+    var h = '<div class="mt">' + MONTHS[m] + '</div><div class="wd">' + WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('') + '</div><div class="gd">';
+    var firstN = Math.round(Date.UTC(year, m, 1) / DAY), shift = (wd(firstN) + 6) % 7;
+    for (var k = 0; k < shift; k++) h += '<div></div>';
+    var dim = new Date(Date.UTC(year, m+1, 0)).getUTCDate();
+    for (var d = 1; d <= dim; d++){
+      var x = firstN + d - 1, s2 = dayStatus(tl, x), past = x <= T, cls = 'c';
+      if (s2 === 'v') cls += ' vc';
+      else if (s2 === 'w') cls += past ? ' wp' : ' wf';
+      else if (s2 === 'h') cls += past ? ' hp' : ' hf';
+      if (x === T) cls += ' td';
+      h += '<div class="' + cls + '">' + d + '</div>';
+    }
+    box.innerHTML = h + '</div>'; host.appendChild(box);
+  }
+}
+
+/* ---------- запуск ---------- */
+(function(){
+  if (!load()){ $('main').classList.add('hidden'); $('noProfile').classList.remove('hidden'); return; }
+  var ys = $('yearSel'), cy = new Date().getFullYear();
+  for (var y = cy - 1; y <= cy + 2; y++){ var o = document.createElement('option'); o.value = y; o.textContent = y; if (y === cy) o.selected = true; ys.appendChild(o); }
+  ys.onchange = render;
+  $('bStart').onclick = openStart; $('bEnd').onclick = openEnd; $('bShift').onclick = openShift; $('bVac').onclick = openVac;
+  $('bFirst').onclick = openStart;
+  $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
+  render();
+})();
+</script>
+</body>
+</html>
