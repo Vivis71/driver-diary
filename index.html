@@ -29,12 +29,12 @@
     --color-rose-400: oklch(71.2% 0.194 13.428);
     --color-rose-500: oklch(64.5% 0.246 16.439);
     --color-rose-600: oklch(58.6% 0.253 17.585);
-    --color-gray-100: oklch(96.7% 0.003 264.542);
-    --color-gray-200: oklch(92.8% 0.006 264.531);
-    --color-gray-300: oklch(87.2% 0.01 258.338);
-    --color-gray-400: oklch(70.7% 0.022 261.325);
-    --color-gray-500: oklch(55.1% 0.027 264.364);
-    --color-gray-800: oklch(27.8% 0.033 256.848);
+    --color-gray-100: #e9ecf4;
+    --color-gray-200: #dde1ec;
+    --color-gray-300: #c9cfdf;
+    --color-gray-400: #a3acc2;
+    --color-gray-500: #7d86a0;
+    --color-gray-800: #2f3550;
     --color-gray-950: oklch(13% 0.028 261.692);
     --color-black: #000;
     --color-white: #fff;
@@ -527,11 +527,11 @@
   .border-\[\#2a2b32\] {
     border-color: #2a2b32;
   }
-  .border-\[\#3d3e4a\] {
-    border-color: #3d3e4a;
+  .border-\[\#454d6b\] {
+    border-color: #454d6b;
   }
-  .border-\[\#4b5563\] {
-    border-color: #4b5563;
+  .border-\[\#454d6b\] {
+    border-color: #454d6b;
   }
   .border-\[\#9f1239\]\/40 {
     border-color: color-mix(in oklab, #9f1239 40%, transparent);
@@ -539,8 +539,8 @@
   .border-\[\#15803d\]\/40 {
     border-color: color-mix(in oklab, #15803d 40%, transparent);
   }
-  .border-\[\#33343d\] {
-    border-color: #33343d;
+  .border-\[\#343a52\] {
+    border-color: #343a52;
   }
   .border-amber-400\/30 {
     border-color: color-mix(in srgb, oklch(82.8% 0.189 84.429) 30%, transparent);
@@ -572,14 +572,14 @@
       border-color: color-mix(in oklab, var(--color-white) 10%, transparent);
     }
   }
-  .bg-\[\#1e1e24\] {
-    background-color: #1e1e24;
+  .bg-\[\#1c2030\] {
+    background-color: #1c2030;
   }
-  .bg-\[\#1e1f29\] {
-    background-color: #1e1f29;
+  .bg-\[\#262b3d\] {
+    background-color: #262b3d;
   }
-  .bg-\[\#2d3748\] {
-    background-color: #2d3748;
+  .bg-\[\#2f3550\] {
+    background-color: #2f3550;
   }
   .bg-\[\#7f1d1d\]\/40 {
     background-color: color-mix(in oklab, #7f1d1d 40%, transparent);
@@ -593,11 +593,11 @@
   .bg-\[\#065f46\]\/40 {
     background-color: color-mix(in oklab, #065f46 40%, transparent);
   }
-  .bg-\[\#191a21\] {
-    background-color: #191a21;
+  .bg-\[\#222738\] {
+    background-color: #222738;
   }
-  .bg-\[\#14151a\] {
-    background-color: #14151a;
+  .bg-\[\#1c2030\] {
+    background-color: #1c2030;
   }
   .bg-\[\#15803d\] {
     background-color: #15803d;
@@ -605,26 +605,26 @@
   .bg-\[\#15803d\]\/50 {
     background-color: color-mix(in oklab, #15803d 50%, transparent);
   }
-  .bg-\[\#25262c\] {
-    background-color: #25262c;
+  .bg-\[\#262b3d\] {
+    background-color: #262b3d;
   }
-  .bg-\[\#32333d\] {
-    background-color: #32333d;
+  .bg-\[\#2f3550\] {
+    background-color: #2f3550;
   }
-  .bg-\[\#101116\] {
-    background-color: #101116;
+  .bg-\[\#161a28\] {
+    background-color: #161a28;
   }
-  .bg-\[\#121216\] {
-    background-color: #121216;
+  .bg-\[\#161a28\] {
+    background-color: #161a28;
   }
-  .bg-\[\#242631\] {
-    background-color: #242631;
+  .bg-\[\#2b3045\] {
+    background-color: #2b3045;
   }
-  .bg-\[\#ff9f0a\] {
-    background-color: #ff9f0a;
+  .bg-\[\#f5a524\] {
+    background-color: #f5a524;
   }
-  .bg-\[\#ff9f0a\]\/20 {
-    background-color: color-mix(in oklab, #ff9f0a 20%, transparent);
+  .bg-\[\#f5a524\]\/20 {
+    background-color: color-mix(in oklab, #f5a524 20%, transparent);
   }
   .bg-amber-500\/30 {
     background-color: color-mix(in srgb, oklch(76.9% 0.188 70.08) 30%, transparent);
@@ -645,7 +645,7 @@
     }
   }
   .bg-gray-800\/80 {
-    background-color: color-mix(in srgb, oklch(27.8% 0.033 256.848) 80%, transparent);
+    background-color: color-mix(in srgb, #2f3550 80%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-gray-800) 80%, transparent);
     }
@@ -820,8 +820,8 @@
     --tw-tracking: var(--tracking-wider);
     letter-spacing: var(--tracking-wider);
   }
-  .text-\[\#ff9f0a\] {
-    color: #ff9f0a;
+  .text-\[\#f5a524\] {
+    color: #f5a524;
   }
   .text-amber-400 {
     color: var(--color-amber-400);
@@ -880,8 +880,8 @@
   .underline {
     text-decoration-line: underline;
   }
-  .accent-\[\#ff9f0a\] {
-    accent-color: #ff9f0a;
+  .accent-\[\#f5a524\] {
+    accent-color: #f5a524;
   }
   .opacity-70 {
     opacity: 70%;
@@ -933,26 +933,26 @@
     user-select: none;
   }
   @media (hover: hover) {
-    .hover\:border-\[\#ff9f0a\]\/50:hover {
-      border-color: color-mix(in oklab, #ff9f0a 50%, transparent);
+    .hover\:border-\[\#f5a524\]\/50:hover {
+      border-color: color-mix(in oklab, #f5a524 50%, transparent);
     }
-    .hover\:bg-\[\#2d2e37\]:hover {
-      background-color: #2d2e37;
+    .hover\:bg-\[\#323852\]:hover {
+      background-color: #323852;
     }
-    .hover\:bg-\[\#2e313f\]:hover {
-      background-color: #2e313f;
+    .hover\:bg-\[\#323852\]:hover {
+      background-color: #323852;
     }
-    .hover\:bg-\[\#3d3e4a\]:hover {
-      background-color: #3d3e4a;
+    .hover\:bg-\[\#454d6b\]:hover {
+      background-color: #454d6b;
     }
-    .hover\:bg-\[\#252733\]:hover {
-      background-color: #252733;
+    .hover\:bg-\[\#2b3045\]:hover {
+      background-color: #2b3045;
     }
-    .hover\:bg-\[\#374151\]:hover {
-      background-color: #374151;
+    .hover\:bg-\[\#3a4262\]:hover {
+      background-color: #3a4262;
     }
-    .hover\:bg-\[\#e89109\]:hover {
-      background-color: #e89109;
+    .hover\:bg-\[\#dd9420\]:hover {
+      background-color: #dd9420;
     }
     .hover\:bg-rose-500:hover {
       background-color: var(--color-rose-500);
@@ -975,8 +975,8 @@
       color: var(--color-white);
     }
   }
-  .focus\:border-\[\#ff9f0a\]:focus {
-    border-color: #ff9f0a;
+  .focus\:border-\[\#f5a524\]:focus {
+    border-color: #f5a524;
   }
   .focus\:border-amber-400:focus {
     border-color: var(--color-amber-400);
@@ -985,8 +985,8 @@
     --tw-outline-style: none;
     outline-style: none;
   }
-  .active\:bg-\[\#4b5563\]:active {
-    background-color: #4b5563;
+  .active\:bg-\[\#454d6b\]:active {
+    background-color: #454d6b;
   }
 }
 @property --tw-space-y-reverse {
@@ -1287,21 +1287,21 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         }
     </style>
 </head>
-<body class="bg-[#121216] text-gray-100 font-sans flex justify-center items-center min-h-screen m-0 p-2">
+<body class="bg-[#161a28] text-gray-100 font-sans flex justify-center items-center min-h-screen m-0 p-2">
     <!-- Скрытый инпут для загрузки архива профиля -->
     <input type="file" id="importArchiveFile" accept=".json" class="hidden" onchange="handleArchiveFile(event)">
 
     <!-- Корпус телефона -->
-    <div class="w-full max-w-sm bg-[#1e1e24] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-3 min-h-[580px] justify-between">
+    <div class="w-full max-w-sm bg-[#1c2030] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-3 min-h-[580px] justify-between">
         
         <!-- ================= ЭКРАН 0: СТАРТОВЫЙ (ВЫБОР / УПРАВЛЕНИЕ ПРОФИЛЯМИ) ================= -->
         <div id="selectorScreen" class="space-y-3 flex flex-col justify-between h-full">
             <div class="space-y-3">
                 <!-- Шапка: логотип по центру, под ним название; кнопка «Назад» в углу, когда профили уже есть -->
-                <div id="selHeader" class="bg-[#25262c] rounded-xl border border-[#33343d]" style="position:relative;text-align:center;padding:18px 10px 14px;">
-                    <button id="selBackBtn" onclick="showScreen('mainScreen')" style="display:none;position:absolute;left:10px;top:10px;width:36px;height:36px;border-radius:10px;border:1px solid #4b5563;background:#2d3748;color:#f3f4f6;font-size:18px;" aria-label="Назад">&larr;</button>
+                <div id="selHeader" class="bg-[#262b3d] rounded-xl border border-[#343a52]" style="position:relative;text-align:center;padding:18px 10px 14px;">
+                    <button id="selBackBtn" onclick="showScreen('mainScreen')" style="display:none;position:absolute;left:10px;top:10px;width:36px;height:36px;border-radius:10px;border:1px solid #454d6b;background:#2f3550;color:#e9ecf4;font-size:18px;" aria-label="Назад">&larr;</button>
                     <img class="logoImg" alt="" style="height:130px;width:auto;margin:0 auto;display:block;">
-                    <div style="font-size:19px;font-weight:600;color:#ff9f0a;margin-top:8px;">Дневник водителя</div>
+                    <div style="font-size:19px;font-weight:600;color:#f5a524;margin-top:8px;">Дневник водителя</div>
                     <div id="selHint" class="text-[11px] text-gray-400" style="margin-top:6px;">Создайте профиль, чтобы начать</div>
                 </div>
                 <!-- Список профилей из памяти -->
@@ -1313,8 +1313,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 </div>
                 <!-- Две плитки -->
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
-                    <button onclick="goToSetup()" style="background:transparent;border:1.5px solid #ff9f0a;color:#ff9f0a;border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span id="newProfileLabel">Создать профиль</span></button>
-                    <button onclick="triggerArchiveImport()" class="bg-[#2d3748] hover:bg-[#374151] border border-[#4b5563] text-gray-100" style="border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 21l-8 -4.5v-9l8 -4.5l8 4.5v4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/><path d="M22 18h-7"/><path d="M18 15l-3 3l3 3"/></svg>Из архива</button>
+                    <button onclick="goToSetup()" style="background:transparent;border:1.5px solid #f5a524;color:#f5a524;border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span id="newProfileLabel">Создать профиль</span></button>
+                    <button onclick="triggerArchiveImport()" class="bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-100" style="border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 21l-8 -4.5v-9l8 -4.5l8 4.5v4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/><path d="M22 18h-7"/><path d="M18 15l-3 3l3 3"/></svg>Из архива</button>
                 </div>
             </div>
             <!-- Подвал со скромной авторской пометкой -->
@@ -1327,25 +1327,25 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         <!-- ================= ЭКРАН 1: ФОРМА СОЗДАНИЯ ПРОФИЛЯ ================= -->
         <div id="setupScreen" class="space-y-4 flex flex-col justify-between h-full hidden">
             <div class="space-y-3">
-                <div class="bg-[#25262c] p-3 rounded-xl border border-[#33343d] text-center relative">
+                <div class="bg-[#262b3d] p-3 rounded-xl border border-[#343a52] text-center relative">
                     <button onclick="backToSelector()" class="absolute left-3 top-3 text-xs text-gray-400 hover:text-white">&larr; Назад</button>
-                    <h1 class="text-sm font-bold text-[#ff9f0a]">Новый профиль</h1>
+                    <h1 class="text-sm font-bold text-[#f5a524]">Новый профиль</h1>
                     <p class="text-[11px] text-gray-400 mt-0.5">Данные водителя (латиницей)</p>
                 </div>
-                <div class="bg-[#25262c] p-3 rounded-xl border border-[#33343d] space-y-2.5">
+                <div class="bg-[#262b3d] p-3 rounded-xl border border-[#343a52] space-y-2.5">
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">Фамилия</label>
                         <input type="text" id="inputLastName" placeholder="" 
-                            class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 uppercase focus:outline-none focus:border-[#ff9f0a]">
+                            class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 uppercase focus:outline-none focus:border-[#f5a524]">
                     </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">Имя</label>
                         <input type="text" id="inputFirstName" placeholder="" 
-                            class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 uppercase focus:outline-none focus:border-[#ff9f0a]">
+                            class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 uppercase focus:outline-none focus:border-[#f5a524]">
                     </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">День съезда домой</label>
-                        <select id="selectHomeDay" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                        <select id="selectHomeDay" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                             <option value="Понедельник">Понедельник</option>
                             <option value="Вторник">Вторник</option>
                             <option value="Среда">Среда</option>
@@ -1357,24 +1357,24 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">График вахты</label>
-                        <select id="setupSched" onchange="toggleCustomSched('setup')" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                        <select id="setupSched" onchange="toggleCustomSched('setup')" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                             <option value="4-2">4 / 2 (4 недели работы, 2 дома)</option>
                             <option value="3-1">3 / 1 (3 недели работы, 1 дома)</option>
                             <option value="custom">Свой</option>
                         </select>
                         <div id="setupSchedCustom" style="display:none;gap:8px;margin-top:6px;">
-                            <input type="number" id="setupSchedWork" min="1" max="12" value="4" placeholder="Работа, недель" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]" style="flex:1;min-width:0;">
-                            <input type="number" id="setupSchedHome" min="1" max="12" value="2" placeholder="Дома, недель" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]" style="flex:1;min-width:0;">
+                            <input type="number" id="setupSchedWork" min="1" max="12" value="4" placeholder="Работа, недель" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]" style="flex:1;min-width:0;">
+                            <input type="number" id="setupSchedHome" min="1" max="12" value="2" placeholder="Дома, недель" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]" style="flex:1;min-width:0;">
                         </div>
                     </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">Направление съезда (город)</label>
                         <input type="text" id="inputDestination" placeholder="" 
-                            class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                            class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                     </div>
                 </div>
             </div>
-            <button onclick="saveNewProfile()" class="w-full bg-[#ff9f0a] hover:bg-[#e89109] text-gray-950 font-bold py-2.5 px-3 rounded-xl shadow transition text-xs">
+            <button onclick="saveNewProfile()" class="w-full bg-[#f5a524] hover:bg-[#dd9420] text-gray-950 font-bold py-2.5 px-3 rounded-xl shadow transition text-xs">
                 Сохранить и войти &rarr;
             </button>
         </div>
@@ -1382,86 +1382,85 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         <div id="mainScreen" class="space-y-2.5 hidden">
             
             <!-- 1. Строка профиля с кнопкой Шестеренки ⚙️ -->
-            <div class="bg-[#25262c] px-3 py-2 rounded-xl flex items-center justify-between border border-[#33343d]">
+            <div class="bg-[#262b3d] px-3 py-2 rounded-xl flex items-center justify-between border border-[#343a52]">
                 <div class="flex items-center space-x-2 overflow-hidden">
-                    <span class="text-sm flex-shrink-0">&#128100;</span>
+                    <span class="flex-shrink-0" style="width:30px;height:30px;border-radius:50%;background:#2f3550;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg></span>
                     <span id="displayProfileInfo" class="text-xs font-semibold text-gray-200 truncate">HULEUSKI SIARHEI</span>
                 </div>
-                <button onclick="openProfileSettingsModal()" class="text-sm bg-[#32333d] hover:bg-[#3d3e4a] p-1 rounded flex-shrink-0 ml-2" title="Настройки профиля">
-                    ⚙️
+                <button onclick="openProfileSettingsModal()" class="text-sm bg-[#2f3550] hover:bg-[#454d6b] p-1 rounded flex-shrink-0 ml-2" title="Настройки профиля" aria-label="Настройки профиля" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
                 </button>
             </div>
             <!-- 2. Дата и текущая неделя -->
-            <div class="bg-[#25262c] px-3 py-2 rounded-xl border border-[#33343d] flex justify-between items-center">
+            <div class="bg-[#262b3d] px-3 py-2 rounded-xl border border-[#343a52] flex justify-between items-center">
                 <div class="flex items-center space-x-1.5">
-                    <span class="text-base">&#128197;</span>
+                    <span style="display:flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></svg></span>
                     <span class="font-medium text-xs text-gray-300" id="currentMinskDateDisplay">03.11.2026</span>
                 </div>
-                <div id="weekNumberDisplay" style="background:rgba(255,159,10,.2);color:#ff9f0a;border-radius:8px;padding:3px 10px;font-size:15px;font-weight:600;">
+                <div id="weekNumberDisplay" style="background:rgba(245,165,36,.2);color:#f5a524;border-radius:8px;padding:3px 10px;font-size:15px;font-weight:600;">
                     Неделя --
                 </div>
             </div>
             <!-- 3. Информационный блок статусов -->
-            <div class="bg-[#25262c] px-3 py-2 rounded-xl border border-[#33343d]" style="position:relative;padding-right:58px;">
-            <button onclick="openJournal()" aria-label="Журнал недель и смен" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;border:1px solid #ff9f0a;background:transparent;color:#ff9f0a;display:flex;align-items:center;justify-content:center;"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.5 5.3 8.2 4.7 4 5v12.5c4.2-.3 6.5.3 8 1.5"/><path d="M12 6.5c1.5-1.2 3.8-1.8 8-1.5v12.5c-4.2-.3-6.5.3-8 1.5"/><path d="M12 6.5V19"/></svg></button>
+            <div class="bg-[#262b3d] px-3 py-2 rounded-xl border border-[#343a52]" style="position:relative;padding-right:58px;">
+            <button onclick="openJournal()" aria-label="Журнал недель и смен" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;border:1px solid #454d6b;background:#2f3550;color:#a3acc2;display:flex;align-items:center;justify-content:center;"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.5 5.3 8.2 4.7 4 5v12.5c4.2-.3 6.5.3 8 1.5"/><path d="M12 6.5c1.5-1.2 3.8-1.8 8-1.5v12.5c-4.2-.3-6.5.3-8 1.5"/><path d="M12 6.5V19"/></svg></button>
             
-                <div id="displayWeekStart" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#9ca3af;">Неделя: не начата</div>
-                <div id="displayShiftStart" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#9ca3af;border-top:1px solid #33343d;">Смена началась: —</div>
-                <div id="displayShiftEnd" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#9ca3af;border-top:1px solid #33343d;">Смена закончена: —</div>
+                <div id="displayWeekStart" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#a3acc2;">Неделя: не начата</div>
+                <div id="displayShiftStart" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#a3acc2;border-top:1px solid #343a52;">Смена началась: —</div>
+                <div id="displayShiftEnd" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#a3acc2;border-top:1px solid #343a52;">Смена закончена: —</div>
             </div>
             <!-- Блок смен: три кнопки в ряд -->
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;">
-                <button onclick="confirmStartWeek()" style="background:transparent;border:1.5px solid #ff9f0a;color:#ff9f0a;border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
+                <button onclick="confirmStartWeek()" style="background:#f5a524;border:1.5px solid #f5a524;color:#2a1c00;border-radius:12px;padding:8px 2px;font-size:12px;font-weight:700;line-height:1.25;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M16 19h6"/><path d="M19 16v6"/></svg>Начало недели
                 </button>
-                <button onclick="startShiftAction()" class="bg-[#2d3748] hover:bg-[#374151] active:bg-[#4b5563] border border-[#4b5563] text-gray-100" style="border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
-                    <span style="display:block;font-size:20px;margin-bottom:2px;color:#34d399;">&#9654;</span>Начало смены
+                <button onclick="startShiftAction()" class="bg-[#2f3550] hover:bg-[#3a4262] active:bg-[#454d6b] border border-[#454d6b] text-gray-100" style="border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
+                    <span style="display:block;font-size:20px;margin-bottom:2px;color:#3fbf8a;">&#9654;</span>Начало смены
                 </button>
-                <button onclick="endShiftAction()" class="bg-[#2d3748] hover:bg-[#374151] active:bg-[#4b5563] border border-[#4b5563] text-gray-100" style="border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
-                    <span style="display:block;width:15px;height:15px;background:#fb7185;border-radius:3px;margin:3px auto 6px;"></span>Конец смены
+                <button onclick="endShiftAction()" class="bg-[#2f3550] hover:bg-[#3a4262] active:bg-[#454d6b] border border-[#454d6b] text-gray-100" style="border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
+                    <span style="display:block;width:15px;height:15px;background:#f0707a;border-radius:3px;margin:3px auto 6px;"></span>Конец смены
                 </button>
             </div>
             <!-- Блок диспетчера -->
-            <div class="bg-[#25262c] p-2.5 rounded-xl border border-[#33343d] space-y-2">
-                <div class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">
-                    &#128230; Диспетчеру (PL)
+            <div class="bg-[#262b3d] p-2.5 rounded-xl border border-[#343a52] space-y-2">
+                <div class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold" style="display:flex;align-items:center;gap:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/></svg> Диспетчеру (PL)
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-                    <button onclick="goSub('trailer.html')" style="background:#2d3748;border:1px solid #4b5563;border-radius:12px;padding:10px 2px 8px;color:#f3f4f6;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
-                    <button onclick="showToast('Раздел пока в разработке')" style="background:#2d3748;border:1px solid #4b5563;border-radius:12px;padding:10px 2px 8px;color:#f3f4f6;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
-                    <button onclick="openPauseModal()" style="background:#2d3748;border:1px solid #4b5563;border-radius:12px;padding:10px 2px 8px;color:#f3f4f6;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
-                    <button onclick="copyHomeMessage()" style="background:#2d3748;border:1px solid #4b5563;border-radius:12px;padding:10px 2px 8px;color:#f3f4f6;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
+                    <button onclick="goSub('trailer.html')" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="#f5a524" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
+                    <button onclick="showToast('Раздел пока в разработке')" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
+                    <button onclick="openPauseModal()" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
+                    <button onclick="copyHomeMessage()" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
                 </div>
             </div>
             <!-- Ряд разделов: Кошелёк, График, Пребывание и одно свободное место -->
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-                <button onclick="showToast('Кошелёк пока в разработке')" class="bg-[#2d3748] border border-[#4b5563]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#f3f4f6;"><span style="color:#ff9f0a;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/></svg></span>Кошелёк</button>
-                <button onclick="goSub('schedule.html')" class="bg-[#2d3748] border border-[#4b5563]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#f3f4f6;"><span style="color:#ff9f0a;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"/><path d="M18 14v4h4"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/></svg></span>График</button>
-                <button onclick="goSub('stay.html')" class="bg-[#2d3748] border border-[#4b5563]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#f3f4f6;"><span style="color:#ff9f0a;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Пребывание</button>
-                <div style="border:1px dashed #4b5563;border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#6b7280;text-align:center;">
+                <button onclick="showToast('Кошелёк пока в разработке')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/></svg></span>Кошелёк</button>
+                <button onclick="goSub('schedule.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"/><path d="M18 14v4h4"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/></svg></span>График</button>
+                <button onclick="goSub('stay.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Пребывание</button>
+                <div style="border:1px dashed #454d6b;border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#7d86a0;text-align:center;">
                     <span style="display:block;font-size:24px;line-height:26px;margin-bottom:3px;">+</span>Скоро
                 </div>
             </div>
             <!-- Дни пребывания: В РБ / Вне РБ -->
-            <div class="bg-[#25262c] p-2.5 rounded-xl border border-[#33343d]">
-                <div style="font-size:11px;letter-spacing:.06em;color:#9ca3af;font-weight:600;margin-bottom:10px;">ДНИ ПРЕБЫВАНИЯ</div>
+            <div class="bg-[#262b3d] p-2.5 rounded-xl border border-[#343a52]">
+                <div style="font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:10px;">ДНИ ПРЕБЫВАНИЯ</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
-                        <div style="border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);border-radius:12px;padding:10px 4px;text-align:center;">
-                            <div style="font-size:11px;color:#9ca3af;">В РБ</div>
-                            <div style="font-size:30px;font-weight:800;color:#34d399;line-height:1.1;" id="mainDaysBY">—</div>
+                        <div style="border:1px solid rgba(63,191,138,.35);background:rgba(63,191,138,.08);border-radius:12px;padding:10px 4px;text-align:center;">
+                            <div style="font-size:11px;color:#a3acc2;">В РБ</div>
+                            <div style="font-size:30px;font-weight:800;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
                         </div>
-                        <button onclick="confirmBorder('Въезд в РБ')" style="margin-top:8px;width:100%;background:rgba(6,95,70,.4);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
+                        <button onclick="confirmBorder('Въезд в РБ')" style="margin-top:8px;width:100%;background:rgba(6,95,70,.4);border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
                     </div>
                     <div>
-                        <div style="border:1px solid rgba(251,113,133,.35);background:rgba(251,113,133,.08);border-radius:12px;padding:10px 4px;text-align:center;">
-                            <div style="font-size:11px;color:#9ca3af;">Вне РБ</div>
-                            <div style="font-size:30px;font-weight:800;color:#fb7185;line-height:1.1;" id="mainDaysOut">—</div>
+                        <div id="outBox" style="border:1px solid #454d6b;background:#2f3550;border-radius:12px;padding:10px 4px;text-align:center;">
+                            <div style="font-size:11px;color:#a3acc2;">Вне РБ</div>
+                            <div style="font-size:30px;font-weight:800;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
                         </div>
-                        <button onclick="confirmBorder('Выезд из РБ')" style="margin-top:8px;width:100%;background:rgba(127,29,29,.4);border:1px solid rgba(251,113,133,.35);color:#fda4af;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
+                        <button onclick="confirmBorder('Выезд из РБ')" style="margin-top:8px;width:100%;background:rgba(127,29,29,.4);border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
                     </div>
                 </div>
-                <div style="text-align:center;margin-top:10px;font-size:12px;color:#9ca3af;">Минск: <b id="minskLiveTime" style="color:#fff;">--:--:--</b></div>
+                <div style="text-align:center;margin-top:10px;font-size:12px;color:#a3acc2;">Минск: <b id="minskLiveTime" style="color:#fff;">--:--:--</b></div>
             </div>
             <!-- Подвал со скромной авторской пометкой -->
             <div class="flex justify-between items-center text-[10px] text-gray-500 pt-1 px-1">
@@ -1472,12 +1471,12 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
     </div>
         <!-- Модалка Настроек Профиля (Шестеренка ⚙️) -->
     <div id="profileSettingsModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4">
-        <div class="bg-[#25262c] border border-[#3d3e4a] p-4 rounded-2xl max-w-xs w-full space-y-3 text-left shadow-xl">
-            <div class="text-sm font-bold text-[#ff9f0a] text-center">Настройки профиля</div>
+        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-left shadow-xl">
+            <div class="text-sm font-bold text-[#f5a524] text-center">Настройки профиля</div>
             <div class="space-y-2 text-xs">
                 <div>
                     <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">День съезда домой</label>
-                    <select id="editHomeDay" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                    <select id="editHomeDay" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                         <option value="Понедельник">Понедельник</option>
                         <option value="Вторник">Вторник</option>
                         <option value="Среда">Среда</option>
@@ -1489,44 +1488,44 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">График вахты</label>
-                        <select id="editSched" onchange="toggleCustomSched('edit')" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                        <select id="editSched" onchange="toggleCustomSched('edit')" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                             <option value="4-2">4 / 2 (4 недели работы, 2 дома)</option>
                             <option value="3-1">3 / 1 (3 недели работы, 1 дома)</option>
                             <option value="custom">Свой</option>
                         </select>
                         <div id="editSchedCustom" style="display:none;gap:8px;margin-top:6px;">
-                            <input type="number" id="editSchedWork" min="1" max="12" value="4" placeholder="Работа, недель" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]" style="flex:1;min-width:0;">
-                            <input type="number" id="editSchedHome" min="1" max="12" value="2" placeholder="Дома, недель" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]" style="flex:1;min-width:0;">
+                            <input type="number" id="editSchedWork" min="1" max="12" value="4" placeholder="Работа, недель" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]" style="flex:1;min-width:0;">
+                            <input type="number" id="editSchedHome" min="1" max="12" value="2" placeholder="Дома, недель" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2.5 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]" style="flex:1;min-width:0;">
                         </div>
                     </div>
                 <div>
                     <label class="text-[10px] uppercase text-gray-400 font-semibold block mb-1">Город съезда</label>
-                    <input type="text" id="editDestination" class="w-full bg-[#1e1e24] border border-[#3d3e4a] rounded-lg px-2 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#ff9f0a]">
+                    <input type="text" id="editDestination" class="w-full bg-[#1c2030] border border-[#454d6b] rounded-lg px-2 py-1.5 text-xs text-gray-100 focus:outline-none focus:border-[#f5a524]">
                 </div>
             </div>
-            <button onclick="saveProfileSettings()" class="w-full bg-[#ff9f0a] text-gray-950 font-bold py-2 rounded-lg text-xs mt-1">
+            <button onclick="saveProfileSettings()" class="w-full bg-[#f5a524] text-gray-950 font-bold py-2 rounded-lg text-xs mt-1">
                 Сохранить настройки
             </button>
-            <button onclick="exportCurrentProfileArchive()" class="w-full bg-[#2d3748] hover:bg-[#374151] border border-[#4b5563] text-gray-200 font-semibold py-2 rounded-lg text-xs">
-                📦 Сделать архив профиля
+            <button onclick="exportCurrentProfileArchive()" class="w-full bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-200 font-semibold py-2 rounded-lg text-xs">
+                Сделать архив профиля
             </button>
-            <div class="border-t border-[#33343d] pt-2 text-center">
+            <div class="border-t border-[#343a52] pt-2 text-center">
                 <button onclick="closeProfileSettingsModal(); backToSelector();" class="text-xs text-gray-400 hover:text-white underline">
-                    🔄 Сменить профиль
+                    Сменить профиль
                 </button>
             </div>
-            <button onclick="closeProfileSettingsModal()" class="w-full bg-[#32333d] text-gray-300 py-1.5 rounded-lg text-xs">Закрыть</button>
+            <button onclick="closeProfileSettingsModal()" class="w-full bg-[#2f3550] text-gray-300 py-1.5 rounded-lg text-xs">Закрыть</button>
         </div>
     </div>
 
     <!-- Модалка удаления профиля -->
     <div id="deleteProfileModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4 z-[70]">
-        <div class="bg-[#25262c] border border-[#3d3e4a] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
+        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
             <div class="text-base font-bold text-yellow-400">Удалить профиль?</div>
             <p class="text-xs text-gray-300" id="deleteProfileText">Вы действительно хотите удалить этот профиль?</p>
             <p class="text-[10px] text-gray-500">Все данные профиля будут стёрты. Это действие нельзя отменить.</p>
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button type="button" onclick="closeDeleteProfileModal(false)" class="bg-[#32333d] text-gray-300 py-2 rounded-xl text-xs font-semibold">Нет</button>
+                <button type="button" onclick="closeDeleteProfileModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Нет</button>
                 <button type="button" onclick="closeDeleteProfileModal(true)" class="bg-rose-600 hover:bg-rose-500 text-white py-2 rounded-xl text-xs font-bold">Да, удалить</button>
             </div>
         </div>
@@ -1534,53 +1533,53 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
 
         <!-- Модалка Паузы -->
     <div id="pauseModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4">
-        <div class="bg-[#25262c] border border-[#3d3e4a] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
+        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
             <div class="text-base font-bold text-yellow-400">Еженедельная пауза</div>
             <p class="text-xs text-gray-300">Выберите тип паузы:</p>
             <div class="grid grid-cols-2 gap-2 my-2">
-                <label class="flex items-center justify-center space-x-1 bg-[#1e1e24] border border-[#3d3e4a] py-2 rounded-lg cursor-pointer text-xs">
-                    <input type="radio" name="modal_pause" value="24" class="accent-[#ff9f0a]">
+                <label class="flex items-center justify-center space-x-1 bg-[#1c2030] border border-[#454d6b] py-2 rounded-lg cursor-pointer text-xs">
+                    <input type="radio" name="modal_pause" value="24" class="accent-[#f5a524]">
                     <span>Пауза 24</span>
                 </label>
-                <label class="flex items-center justify-center space-x-1 bg-[#1e1e24] border border-[#3d3e4a] py-2 rounded-lg cursor-pointer text-xs">
-                    <input type="radio" name="modal_pause" value="45" checked class="accent-[#ff9f0a]">
+                <label class="flex items-center justify-center space-x-1 bg-[#1c2030] border border-[#454d6b] py-2 rounded-lg cursor-pointer text-xs">
+                    <input type="radio" name="modal_pause" value="45" checked class="accent-[#f5a524]">
                     <span>Пауза 45</span>
                 </label>
             </div>
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="closePauseModal(false)" class="bg-[#32333d] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
-                <button onclick="closePauseModal(true)" class="bg-[#ff9f0a] text-gray-950 py-2 rounded-xl text-xs font-bold">ОК</button>
+                <button onclick="closePauseModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
+                <button onclick="closePauseModal(true)" class="bg-[#f5a524] text-gray-950 py-2 rounded-xl text-xs font-bold">ОК</button>
             </div>
         </div>
     </div>
 
     <!-- Модалка Границы -->
     <div id="confirmModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4">
-        <div class="bg-[#25262c] border border-[#3d3e4a] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
+        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
             <div class="text-base font-bold text-yellow-400" id="modalTitle">Подтверждение</div>
             <p class="text-xs text-gray-300" id="modalText">Фиксируем событие?</p>
-            <div class="text-[10px] text-gray-400">⏰ Минск: <span class="minskLiveTimeCopy font-bold text-gray-100">--:--:--</span></div>
+            <div class="text-[10px] text-gray-400">Минск: <span class="minskLiveTimeCopy font-bold text-gray-100">--:--:--</span></div>
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="closeBorderModal(false)" class="bg-[#32333d] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
-                <button onclick="closeBorderModal(true)" class="bg-[#ff9f0a] text-gray-950 py-2 rounded-xl text-xs font-bold">Подтвердить</button>
+                <button onclick="closeBorderModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
+                <button onclick="closeBorderModal(true)" class="bg-[#f5a524] text-gray-950 py-2 rounded-xl text-xs font-bold">Подтвердить</button>
             </div>
         </div>
     </div>
 
     <!-- Модалка Подтверждения Старта Недели -->
     <div id="weekModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4">
-        <div class="bg-[#25262c] border border-[#3d3e4a] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
+        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
             <div class="text-base font-bold text-yellow-400">Начало недели</div>
             <p class="text-xs text-gray-300">Вы действительно хотите начать новую неделю и смену?</p>
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="closeWeekModal(false)" class="bg-[#32333d] text-gray-300 py-2 rounded-xl text-xs font-semibold">Нет</button>
-                <button onclick="closeWeekModal(true)" class="bg-[#ff9f0a] text-gray-950 py-2 rounded-xl text-xs font-bold">Да, начать</button>
+                <button onclick="closeWeekModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Нет</button>
+                <button onclick="closeWeekModal(true)" class="bg-[#f5a524] text-gray-950 py-2 rounded-xl text-xs font-bold">Да, начать</button>
             </div>
         </div>
     </div>
 
     <!-- Всплывающее уведомление (вместо alert) -->
-    <div id="toast" onclick="this.style.opacity=0" style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);max-width:90%;background:#32333d;color:#f3f4f6;border:1px solid #4b5563;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.4;text-align:center;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .25s;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,.5)"></div>
+    <div id="toast" onclick="this.style.opacity=0" style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);max-width:90%;background:#2f3550;color:#e9ecf4;border:1px solid #454d6b;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.4;text-align:center;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .25s;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,.5)"></div>
 
     <script src="shifts.js"></script>
     <script>
@@ -1718,9 +1717,9 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 const isCur = index === currentProfileIndex;
                 const html = `
                     <div onclick="selectProfile(${index})"
-                         class="bg-[#25262c] hover:bg-[#2d2e37] border border-[#33343d] p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between"${isCur ? ' style="border-color:#ff9f0a;"' : ''}>
+                         class="bg-[#262b3d] hover:bg-[#323852] border border-[#343a52] p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between"${isCur ? ' style="border-color:#f5a524;"' : ''}>
                         <div class="flex items-center space-x-2.5 overflow-hidden">
-                            <div class="w-8 h-8 rounded-full bg-[#ff9f0a]/20 text-[#ff9f0a] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-[#f5a524]/20 text-[#f5a524] flex items-center justify-center font-bold text-xs flex-shrink-0">
                                 ${initials}
                             </div>
                             <div class="truncate">
@@ -1729,7 +1728,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 flex-shrink-0">
-                            ${isCur ? '<span class="text-[10px]" style="color:#ff9f0a;">текущий</span>' : ''}
+                            ${isCur ? '<span class="text-[10px]" style="color:#f5a524;">текущий</span>' : ''}
                             <button onclick="event.stopPropagation(); deleteProfile(${index})" class="text-gray-500 hover:text-rose-400 text-[10px] px-1" title="Удалить">✕</button>
                         </div>
                     </div>
@@ -1994,14 +1993,22 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             const byEl = document.getElementById('mainDaysBY');
             const outEl = document.getElementById('mainDaysOut');
             const dayWord = ' <span style="font-size:14px;">дн.</span>';
+            const outBox = document.getElementById('outBox');
+            const paintOut = (zero) => {
+                outEl.style.color = zero ? '#a3acc2' : '#f0707a';
+                outBox.style.background = zero ? '#2f3550' : 'rgba(240,112,122,.08)';
+                outBox.style.borderColor = zero ? '#454d6b' : 'rgba(240,112,122,.35)';
+            };
             if (!stJan1(parseInt(cy, 10))) {
                 byEl.innerHTML = "—";
                 outEl.innerHTML = "—";
+                paintOut(true);
                 return;
             }
             const totals = calcDaysForYear(cy);
             byEl.innerHTML = totals.by + dayWord;
             outEl.innerHTML = totals.out + dayWord;
+            paintOut(totals.out === 0);
         }
 
         function updateWeekNumber() {

@@ -140,29 +140,29 @@ function jShiftRow(wi, si, w, isCurWeek) {
     if (b !== null && a !== null) tail = durStr(a, b);
     else if (isCurWeek && lastShift) tail = 'идёт';
     const endTxt = s.end ? noYearStr(s.end) : '<span style="color:#fbbf24;">—</span>';
-    return `<div style="display:flex;align-items:center;gap:8px;padding:8px 2px;border-top:1px solid #33343d;font-size:14px;">
-        <span style="width:18px;color:#6b7280;font-size:12px;">${si + 1}</span>
-        <span style="flex:1;color:#f3f4f6;">${noYearStr(s.start)} → ${endTxt}</span>
-        <span style="color:#9ca3af;font-size:12px;min-width:36px;text-align:right;">${tail}</span>
-        <button onclick="editShift(${wi},${si})" aria-label="Изменить" style="width:28px;height:28px;border-radius:8px;border:1px solid #3d3e4a;background:transparent;color:#9ca3af;font-size:13px;">&#9998;</button>
+    return `<div style="display:flex;align-items:center;gap:8px;padding:8px 2px;border-top:1px solid #343a52;font-size:14px;">
+        <span style="width:18px;color:#7d86a0;font-size:12px;">${si + 1}</span>
+        <span style="flex:1;color:#e9ecf4;">${noYearStr(s.start)} → ${endTxt}</span>
+        <span style="color:#a3acc2;font-size:12px;min-width:36px;text-align:right;">${tail}</span>
+        <button onclick="editShift(${wi},${si})" aria-label="Изменить" style="width:28px;height:28px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#a3acc2;font-size:13px;">&#9998;</button>
     </div>`;
 }
 function renderJournal() {
     const weeks = userProfile.weeks;
     const box = document.getElementById('journalBody');
     if (!weeks.length) {
-        box.innerHTML = '<div style="color:#9ca3af;font-size:13px;padding:14px 4px;text-align:center;">Записей пока нет. Нажмите «Начало недели».</div>';
+        box.innerHTML = '<div style="color:#a3acc2;font-size:13px;padding:14px 4px;text-align:center;">Записей пока нет. Нажмите «Начало недели».</div>';
         return;
     }
     const ci = weeks.length - 1, cw = weeks[ci];
-    let h = `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#1e1f26;border:1px solid #33343d;border-radius:10px;margin-bottom:4px;">
-        <span style="font-size:14px;font-weight:600;color:#ff9f0a;">Неделя · с ${noYearStr(cw.start)}</span>
-        <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:${weekExpired(cw, Date.now()) ? '#fbbf24' : '#34d399'};">${weekExpired(cw, Date.now()) ? '144 ч прошло' : 'идёт'}</span>
-        <button onclick="editWeek(${ci})" aria-label="Изменить неделю" style="width:28px;height:28px;border-radius:8px;border:1px solid #3d3e4a;background:transparent;color:#9ca3af;font-size:13px;">&#9998;</button></span></div>`;
-    if (!cw.shifts.length) h += '<div style="color:#9ca3af;font-size:13px;padding:8px 4px;">Смен пока нет</div>';
+    let h = `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#262b3d;border:1px solid #343a52;border-radius:10px;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:600;color:#f5a524;">Неделя · с ${noYearStr(cw.start)}</span>
+        <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:${weekExpired(cw, Date.now()) ? '#fbbf24' : '#3fbf8a'};">${weekExpired(cw, Date.now()) ? '144 ч прошло' : 'идёт'}</span>
+        <button onclick="editWeek(${ci})" aria-label="Изменить неделю" style="width:28px;height:28px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#a3acc2;font-size:13px;">&#9998;</button></span></div>`;
+    if (!cw.shifts.length) h += '<div style="color:#a3acc2;font-size:13px;padding:8px 4px;">Смен пока нет</div>';
     cw.shifts.forEach((s, si) => { h += jShiftRow(ci, si, cw, true); });
     if (ci > 0) {
-        h += '<div style="color:#9ca3af;font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin:14px 2px 4px;">Прошлые недели</div>';
+        h += '<div style="color:#a3acc2;font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin:14px 2px 4px;">Прошлые недели</div>';
         for (let wi = ci - 1; wi >= 0; wi--) {
             const w = weeks[wi];
             let total = 0;
@@ -170,12 +170,12 @@ function renderJournal() {
             const mins = Math.round(total / 60000);
             const endTxt = w.end ? noYearStr(w.end).split(' ')[0] : '—';
             const open = !!jOpen[wi];
-            h += `<div onclick="jToggle(${wi})" style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#1e1f26;border:1px solid #33343d;border-radius:10px;margin-top:6px;font-size:13px;color:#f3f4f6;">
+            h += `<div onclick="jToggle(${wi})" style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#262b3d;border:1px solid #343a52;border-radius:10px;margin-top:6px;font-size:13px;color:#e9ecf4;">
                 <span>${noYearStr(w.start).split(' ')[0]} → ${endTxt}</span>
-                <span style="color:#9ca3af;font-size:12px;">${w.shifts.length} смен · ${Math.floor(mins / 60)}:${jPad(mins % 60)} ч ${open ? '&#8964;' : '&#8250;'}</span></div>`;
+                <span style="color:#a3acc2;font-size:12px;">${w.shifts.length} смен · ${Math.floor(mins / 60)}:${jPad(mins % 60)} ч ${open ? '&#8964;' : '&#8250;'}</span></div>`;
             if (open) {
                 h += `<div style="padding:0 4px 4px;">`;
-                h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 2px;font-size:12px;color:#9ca3af;"><span>Начало недели: ${noYearStr(w.start)}</span><button onclick="editWeek(${wi})" aria-label="Изменить неделю" style="width:28px;height:28px;border-radius:8px;border:1px solid #3d3e4a;background:transparent;color:#9ca3af;font-size:13px;">&#9998;</button></div>`;
+                h += `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 2px;font-size:12px;color:#a3acc2;"><span>Начало недели: ${noYearStr(w.start)}</span><button onclick="editWeek(${wi})" aria-label="Изменить неделю" style="width:28px;height:28px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#a3acc2;font-size:13px;">&#9998;</button></div>`;
                 w.shifts.forEach((s, si) => { h += jShiftRow(wi, si, w, false); });
                 h += '</div>';
             }
@@ -218,19 +218,19 @@ function renderTimeEdit() {
     let h = `<div style="font-size:17px;font-weight:600;margin-bottom:8px;">${t.title}</div>`;
     t.f.forEach((f, i) => {
         const on = i === t.active;
-        h += `<div style="color:#9ca3af;font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin:8px 0 4px;">${f.label}<span style="color:#6b7280;"> · год ${f.year}${f.optional ? ' · можно пусто' : ''}</span></div>
-            <div onclick="tmPick(${i})" style="background:#16171c;border:1.5px solid ${on ? '#ff9f0a' : '#3d3e4a'};border-radius:10px;padding:9px;text-align:center;font-size:24px;font-weight:700;letter-spacing:.05em;min-height:50px;">${f.digits ? tmFmt(f.digits) : '<span style="color:#4b5563;">ДД.ММ ЧЧ:ММ</span>'}</div>`;
+        h += `<div style="color:#a3acc2;font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin:8px 0 4px;">${f.label}<span style="color:#7d86a0;"> · год ${f.year}${f.optional ? ' · можно пусто' : ''}</span></div>
+            <div onclick="tmPick(${i})" style="background:#1c2030;border:1.5px solid ${on ? '#f5a524' : '#454d6b'};border-radius:10px;padding:9px;text-align:center;font-size:24px;font-weight:700;letter-spacing:.05em;min-height:50px;">${f.digits ? tmFmt(f.digits) : '<span style="color:#454d6b;">ДД.ММ ЧЧ:ММ</span>'}</div>`;
     });
     h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;">';
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '&#9003;'].forEach(k => {
-        h += `<button onclick="tmKey('${k}')" style="background:#2d3748;border:1px solid #4b5563;border-radius:10px;color:#e5e7eb;font-size:21px;font-weight:600;padding:10px 0;">${k}</button>`;
+        h += `<button onclick="tmKey('${k}')" style="background:#2f3550;border:1px solid #454d6b;border-radius:10px;color:#e9ecf4;font-size:21px;font-weight:600;padding:10px 0;">${k}</button>`;
     });
-    h += `</div><div style="min-height:30px;margin-top:8px;font-size:13px;text-align:center;color:#fb7185;">${t.msg}</div>
+    h += `</div><div style="min-height:30px;margin-top:8px;font-size:13px;text-align:center;color:#f0707a;">${t.msg}</div>
         <div style="display:flex;gap:8px;margin-top:6px;">
-            <button onclick="tmSave()" style="flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;background:#ff9f0a;border:1.5px solid #ff9f0a;color:#1f1300;">Сохранить</button>
-            <button onclick="tmClose()" style="flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;background:transparent;border:1.5px solid #4b5563;color:#e5e7eb;">Отмена</button>
+            <button onclick="tmSave()" style="flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;background:#f5a524;border:1.5px solid #f5a524;color:#1f1300;">Сохранить</button>
+            <button onclick="tmClose()" style="flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;background:transparent;border:1.5px solid #454d6b;color:#e9ecf4;">Отмена</button>
         </div>`;
-    if (t.onDelete) h += `<button onclick="tmDelete()" style="width:100%;margin-top:8px;border-radius:12px;padding:10px;font-size:13px;font-weight:600;background:transparent;border:1px solid rgba(251,113,133,.5);color:#fb7185;">Удалить запись</button>`;
+    if (t.onDelete) h += `<button onclick="tmDelete()" style="width:100%;margin-top:8px;border-radius:12px;padding:10px;font-size:13px;font-weight:600;background:transparent;border:1px solid rgba(240,112,122,.5);color:#f0707a;">Удалить запись</button>`;
     document.getElementById('timeBody').innerHTML = h;
 }
 function tmPick(i) { tmState.active = i; renderTimeEdit(); }
@@ -303,21 +303,21 @@ function renderShiftInfo() {
         const expired = weekExpired(curWeek(), Date.now());
         weekInfo.innerHTML = expired
             ? `<span style="color:#fbbf24;">Неделя: ${noYear(userProfile.weekStart)} → ${noYear(endStr)}</span><span style="display:block;font-size:12px;line-height:1.3;color:#fbbf24;padding-bottom:5px;">Прошло 144 ч, начните новую неделю</span>`
-            : `Неделя: <span style="color:#f3f4f6;">${noYear(userProfile.weekStart)}</span> → <span style="color:#fbbf24;">${noYear(endStr)}</span>`;
+            : `Неделя: <span style="color:#e9ecf4;">${noYear(userProfile.weekStart)}</span> → <span style="color:#fbbf24;">${noYear(endStr)}</span>`;
     } else {
         weekInfo.innerText = "Неделя: не начата";
     }
 
     const shiftInfo = document.getElementById('displayShiftStart');
     if (userProfile.shiftStart) {
-        shiftInfo.innerHTML = `Смена началась: <span style="color:#f3f4f6;">${noYear(userProfile.shiftStart)}</span>`;
+        shiftInfo.innerHTML = `Смена началась: <span style="color:#e9ecf4;">${noYear(userProfile.shiftStart)}</span>`;
     } else {
         shiftInfo.innerText = "Смена началась: —";
     }
 
     const shiftEndInfo = document.getElementById('displayShiftEnd');
     if (userProfile.shiftEnd) {
-        shiftEndInfo.innerHTML = `Смена закончена: <span style="color:#f3f4f6;">${noYear(userProfile.shiftEnd)}</span>`;
+        shiftEndInfo.innerHTML = `Смена закончена: <span style="color:#e9ecf4;">${noYear(userProfile.shiftEnd)}</span>`;
     } else {
         shiftEndInfo.innerText = "Смена закончена: —";
     }
@@ -328,26 +328,26 @@ function renderShiftInfo() {
 (function () {
     const html = `    <!-- Универсальное подтверждение (недели и смены) -->
     <div id="flowModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px;z-index:80;">
-        <div style="background:#25262c;border:1px solid #3d3e4a;border-radius:16px;padding:16px;max-width:320px;width:100%;text-align:center;">
+        <div style="background:#262b3d;border:1px solid #454d6b;border-radius:16px;padding:16px;max-width:320px;width:100%;text-align:center;">
             <div id="flowTitle" style="font-size:16px;font-weight:700;color:#facc15;"></div>
-            <p id="flowText" style="font-size:12px;color:#d1d5db;margin:10px 0 14px;line-height:1.45;white-space:pre-line;"></p>
+            <p id="flowText" style="font-size:12px;color:#c9cfdf;margin:10px 0 14px;line-height:1.45;white-space:pre-line;"></p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <button onclick="flowClose(false)" style="background:#32333d;color:#d1d5db;border-radius:12px;padding:10px;font-size:12px;font-weight:600;">Отмена</button>
-                <button id="flowYes" onclick="flowClose(true)" style="background:#ff9f0a;color:#1f1300;border-radius:12px;padding:10px;font-size:12px;font-weight:700;">Да</button>
+                <button onclick="flowClose(false)" style="background:#2f3550;color:#c9cfdf;border-radius:12px;padding:10px;font-size:12px;font-weight:600;">Отмена</button>
+                <button id="flowYes" onclick="flowClose(true)" style="background:#f5a524;color:#1f1300;border-radius:12px;padding:10px;font-size:12px;font-weight:700;">Да</button>
             </div>
         </div>
     </div>
     <!-- Журнал недель и смен -->
     <div id="journalModal" onclick="if(event.target===this)closeJournal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);align-items:flex-end;justify-content:center;padding:12px;z-index:60;">
-        <div style="background:#26272f;border:1px solid #33343d;border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:88vh;display:flex;flex-direction:column;">
+        <div style="background:#262b3d;border:1px solid #343a52;border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:88vh;display:flex;flex-direction:column;">
             <div style="font-size:17px;font-weight:600;margin-bottom:10px;">Журнал</div>
             <div id="journalBody" style="overflow-y:auto;"></div>
-            <button onclick="closeJournal()" style="margin-top:12px;border:1.5px solid #4b5563;background:transparent;color:#e5e7eb;border-radius:12px;padding:12px;font-size:14px;font-weight:600;">Закрыть</button>
+            <button onclick="closeJournal()" style="margin-top:12px;border:1.5px solid #454d6b;background:transparent;color:#e9ecf4;border-radius:12px;padding:12px;font-size:14px;font-weight:600;">Закрыть</button>
         </div>
     </div>
     <!-- Правка времени -->
     <div id="timeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:flex-end;justify-content:center;padding:12px;z-index:70;">
-        <div id="timeBody" style="background:#26272f;border:1px solid #33343d;border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:94vh;overflow-y:auto;"></div>
+        <div id="timeBody" style="background:#262b3d;border:1px solid #343a52;border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:94vh;overflow-y:auto;"></div>
     </div>
 
 `;
