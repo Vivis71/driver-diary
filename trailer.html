@@ -282,16 +282,16 @@ $('clear').onclick = () => askConfirm('Очистить рапорт?', () => { 
 
 /* ---------- формирование текста ---------- */
 function buildText(){
-  let head = S.num + ' rozladowana';
+  let head = S.num + ' rozładowana';
   if(S.state) head += ' , ' + STATES[S.state];
   const lines = [head];
 
   const mats = [];
   ITEMS.forEach(it => { if(S.qty[it.id] > 0) mats.push(it.pl + ' - ' + S.qty[it.id]); });
-  if(S.sciana) mats.push('Sciana');
+  if(S.sciana) mats.push('Ściana');
   S.others.forEach(x => mats.push(x.qty > 0 ? x.name + ' - ' + x.qty : x.name));
 
-  if(mats.length){ lines.push('Materialy :'); mats.forEach(m => lines.push(m)); }
+  if(mats.length){ lines.push('Materiały :'); mats.forEach(m => lines.push(m)); }
   if(S.zwrot) lines.push('Zwrot');
   return lines.join('\n');
 }
