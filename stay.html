@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Пребывание</title>
+<style>
+:root{--bg:#121216;--card:#1e1f26;--line:#33343d;--txt:#e5e7eb;--mut:#9ca3af;--acc:#ff9f0a;--green:#34d399;--red:#fb7185}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;padding:12px;display:flex;justify-content:center}
+.app{width:100%;max-width:480px;padding-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cap{color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.mut{color:var(--mut);font-size:12px}
+.title{font-size:17px;font-weight:600}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid #4b5563;color:var(--txt);text-decoration:none;font-size:20px;display:flex;align-items:center;justify-content:center;background:#2d3748;flex-shrink:0}
+.yr{background:transparent;border:1px solid var(--acc);color:var(--acc);border-radius:10px;padding:6px 8px;font-size:14px;font-weight:600;font-family:inherit}
+.yr option{background:#25262c;color:#e5e7eb}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.sbox{border:1px solid;border-radius:12px;padding:10px 4px;text-align:center}
+.sbox .n{font-size:30px;font-weight:800;line-height:1.1}
+.sbox .n small{font-size:14px;font-weight:700}
+.sbox.by{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.08)}.sbox.by .n{color:var(--green)}
+.sbox.out{border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.08)}.sbox.out .n{color:var(--red)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.tbtn{border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
+.tbtn.by{background:rgba(6,95,70,.4);border-color:rgba(52,211,153,.4);color:#6ee7b7}
+.tbtn.out{background:rgba(127,29,29,.4);border-color:rgba(251,113,133,.4);color:#fda4af}
+.smallbtn{border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
+.vrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:7px 0 0;margin-top:7px;font-size:13px}
+.x{width:30px;height:30px;border-radius:8px;border:1px solid #3d3e4a;background:transparent;color:#fb7185;font-size:14px;cursor:pointer;padding:0;flex-shrink:0}
+.mo{background:#1a1b21;border:1px solid var(--line);border-radius:8px;padding:4px 3px}
+.mt{font-size:11px;font-weight:600;color:var(--acc);text-align:center;margin-bottom:3px}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;font-size:7px;color:#6b7280;text-align:center;margin-bottom:1px}
+.gd{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.c{height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#6b7280;border:1px solid transparent}
+.cb{background:rgba(52,211,153,.45);color:#d1fae5;font-weight:600}
+.co{background:rgba(251,113,133,.42);color:#ffe4e8;font-weight:600}
+.td{outline:1.5px solid #fff;outline-offset:-1px}
+.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-bottom:8px}
+.lg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.l1::before{background:rgba(52,211,153,.7)}.l2::before{background:rgba(251,113,133,.7)}
+.btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
+.btn.main{background:var(--acc);border-color:var(--acc);color:#1f1300}
+.btn.out{background:transparent;border-color:var(--acc);color:var(--acc)}
+.btn.plain{background:transparent;border-color:#4b5563;color:var(--txt)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+.ov.show{display:flex}
+.dlg{background:#26272f;border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px}
+.dlg h3{margin:0 0 6px;font-size:16px;font-weight:600}
+.dlg .note{color:var(--mut);font-size:12px;margin-bottom:10px;line-height:1.4}
+.lab{display:block;margin:8px 0 4px;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+input[type=date]{width:100%;background:#16171c;border:1px solid #3d3e4a;border-radius:8px;color:var(--txt);padding:10px;font-size:16px;font-family:inherit;color-scheme:dark}
+.btns{display:flex;gap:8px;margin-top:12px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.sb{border:1.5px solid #4b5563;border-radius:10px;padding:10px 4px;text-align:center;font-size:13px;color:#d1d5db;cursor:pointer}
+.sb.on.by{border-color:var(--green);background:rgba(52,211,153,.18);color:var(--green);font-weight:600}
+.sb.on.out{border-color:var(--red);background:rgba(251,113,133,.18);color:var(--red);font-weight:600}
+.dd{background:#16171c;border:1px solid #3d3e4a;border-radius:10px;padding:10px;text-align:center;font-size:28px;font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums;min-height:56px}
+.dd .ph{color:#4b5563}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.pad button{background:#2d3748;border:1px solid #4b5563;border-radius:10px;color:var(--txt);font-size:22px;font-weight:600;padding:11px 0;font-family:inherit;cursor:pointer}
+.pad button:active{background:#3b4658}
+.prev{min-height:34px;margin-top:8px;font-size:13px;line-height:1.4;text-align:center}
+.empty{text-align:center;padding:22px 10px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:#32333d;color:#f3f4f6;border:1px solid #4b5563;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="card row">
+    <span style="display:flex;align-items:center;gap:10px"><a class="back" href="index.html" aria-label="Назад">←</a><span class="title">Пребывание</span></span>
+    <select id="yearSel" class="yr" aria-label="Год"></select>
+  </div>
+
+  <div id="noProfile" class="card empty hidden">
+    <div class="title">Профиль не найден</div>
+    <div class="mut" style="margin-top:6px">Вернитесь на главную и выберите профиль</div>
+  </div>
+
+  <div id="main">
+    <div class="sum">
+      <div class="sbox by"><div class="mut">В РБ</div><div class="n" id="nBy">—</div></div>
+      <div class="sbox out"><div class="mut">Вне РБ</div><div class="n" id="nOut">—</div></div>
+    </div>
+
+    <button class="btn main" id="bAdd" style="width:100%;flex:none;margin-bottom:8px">+ Добавить пересечение</button>
+
+    <div class="card row">
+      <span><span class="cap">Статус на 1 января</span><br><span id="jan1" style="font-weight:600">—</span></span>
+      <button class="smallbtn" id="bJan1">Изменить</button>
+    </div>
+
+    <div class="card row">
+      <span><span class="cap">Пересечения границы</span> <span class="mut" id="evCnt"></span></span>
+      <button class="smallbtn" id="bEvList">Список ›</button>
+    </div>
+
+    <div class="card" id="calCard">
+      <div class="lg"><span class="l1">В РБ</span><span class="l2">Вне РБ</span></div>
+      <div id="cal" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"></div>
+    </div>
+
+    <div class="mut" style="padding:0 6px;line-height:1.5">Даты по времени Минска. День выезда из РБ ещё считается в РБ, день въезда в РБ ещё считается вне РБ: новый статус начинается со следующего дня.</div>
+  </div>
+</div>
+
+<div class="ov" id="ov"><div class="dlg"><h3 id="dTitle"></h3><div id="dBody"></div><div class="btns" id="dBtns"></div></div></div>
+<div id="toast"></div>
+
+<script>
+var $ = function(id){ return document.getElementById(id); };
+var DAY = 86400000;
+var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var WDN = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+var IN = 'Въезд в РБ', OUT = 'Выезд из РБ';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function dn(s){ var p = s.split('-').map(Number); return Math.round(Date.UTC(p[0],p[1]-1,p[2]) / DAY); }
+function iso(n){ var d = new Date(n*DAY); return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
+function wd(n){ return new Date(n*DAY).getUTCDay(); }
+function fmtY(s){ var p = s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+
+/* Сегодняшняя дата строго по Минску, независимо от часового пояса телефона */
+function minskIso(){
+  var p = {};
+  new Intl.DateTimeFormat('en-CA', {timeZone:'Europe/Minsk', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date()).forEach(function(x){ p[x.type] = x.value; });
+  return p.year+'-'+p.month+'-'+p.day;
+}
+
+function toast(t, ms){
+  var e = $('toast'); e.textContent = t; e.style.opacity = 1;
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ e.style.opacity = 0; }, ms || 3200);
+}
+
+/* ---------- хранилище: yearsData внутри профиля ---------- */
+var profiles = [], idx = 0, prof = null;
+function load(){
+  try { profiles = JSON.parse(localStorage.getItem('driver_profiles')) || []; } catch(e){ profiles = []; }
+  var i = parseInt(localStorage.getItem('active_profile_index'), 10);
+  idx = (i >= 0 && profiles[i]) ? i : 0;
+  prof = profiles[idx] || null;
+  if (!prof) return false;
+  if (!prof.yearsData || typeof prof.yearsData !== 'object') prof.yearsData = {};
+  return true;
+}
+function save(){
+  profiles[idx] = prof;
+  try { localStorage.setItem('driver_profiles', JSON.stringify(profiles)); } catch(e){ toast('⚠️ Не удалось сохранить'); }
+}
+function yd(y){
+  if (!prof.yearsData[y]) prof.yearsData[y] = {january1:'', events:[]};
+  if (!Array.isArray(prof.yearsData[y].events)) prof.yearsData[y].events = [];
+  return prof.yearsData[y];
+}
+function hasYear(y){ return !!prof.yearsData[y]; }
+
+/* ---------- расчёт ----------
+   Статус дня D = статус после всех событий с датой раньше D.
+   Выезд из РБ: этот день ещё В РБ. Въезд в РБ: этот день ещё ВНЕ РБ. */
+function sortedEvents(y){
+  return (hasYear(y) ? yd(y).events : []).slice().sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+}
+function endStatus(y){
+  var j = jan1(y); if (!j.s) return '';
+  var st = j.s;
+  sortedEvents(y).forEach(function(e){ st = e.action === IN ? 'BY' : 'OUT'; });
+  return st;
+}
+function jan1(y){
+  if (hasYear(y) && yd(y).january1) return {s:yd(y).january1, auto:false};
+  if (hasYear(y-1)){ var e = endStatus(y-1); if (e) return {s:e, auto:true}; }
+  return {s:'', auto:false};
+}
+function yearMap(y, todayIso){
+  var map = {}, j = jan1(y); if (!j.s) return map;
+  var evs = sortedEvents(y), ei = 0, st = j.s;
+  for (var n = dn(y+'-01-01'); n < dn((y+1)+'-01-01'); n++){
+    var d = iso(n);
+    map[d] = d > todayIso ? 'future' : st;
+    while (ei < evs.length && evs[ei].date <= d){ st = evs[ei].action === IN ? 'BY' : 'OUT'; ei++; }
+  }
+  return map;
+}
+function totals(y){
+  var m = yearMap(y, minskIso()), by = 0, out = 0;
+  Object.keys(m).forEach(function(k){ if (m[k] === 'BY') by++; else if (m[k] === 'OUT') out++; });
+  return {by:by, out:out, known:Object.keys(m).length > 0};
+}
+
+/* ---------- диалоги ---------- */
+function openDlg(title, note, bodyHtml, buttons){
+  $('dTitle').textContent = title;
+  $('dBody').innerHTML = (note ? '<div class="note">'+note+'</div>' : '') + bodyHtml;
+  var bb = $('dBtns'); bb.innerHTML = '';
+  buttons.forEach(function(b){
+    var el = document.createElement('button');
+    el.className = 'btn ' + (b.cls || 'plain'); el.textContent = b.text;
+    el.onclick = function(){ var r = b.fn ? b.fn() : null; if (r !== false) closeDlg(); };
+    bb.appendChild(el);
+  });
+  $('ov').classList.add('show');
+}
+function closeDlg(){ $('ov').classList.remove('show'); }
+function askConfirm(text, fn){ openDlg(text, '', '', [{text:'Да', cls:'out', fn:fn}, {text:'Нет'}]); }
+
+function curYear(){ return parseInt($('yearSel').value, 10); }
+
+function openJan1(){
+  var y = curYear(), cur = hasYear(y) ? yd(y).january1 : '';
+  var j = jan1(y);
+  var html = '<div class="seg" id="jSeg"><div class="sb by'+(cur==='BY'?' on':'')+'" data-v="BY">В РБ</div><div class="sb out'+(cur==='OUT'?' on':'')+'" data-v="OUT">Вне РБ</div></div>';
+  var note = j.auto ? 'Сейчас взято из конца прошлого года. Выберите, чтобы задать вручную.' : '';
+  var val = cur;
+  openDlg('Статус на 1 января '+y, note, html, [{text:'Сохранить', cls:'main', fn:function(){
+    if (!val){ toast('Выберите статус'); return false; }
+    yd(y).january1 = val; save(); render(); toast('✅ Сохранено');
+  }}, {text:'Отмена'}]);
+  [].forEach.call(document.querySelectorAll('#jSeg .sb'), function(b){
+    b.onclick = function(){ val = b.getAttribute('data-v'); [].forEach.call(document.querySelectorAll('#jSeg .sb'), function(o){ o.classList.toggle('on', o === b); }); };
+  });
+}
+
+function addEvent(action, dateIso){
+  var y = parseInt(dateIso.slice(0,4), 10);
+  var d = yd(y);
+  if (d.events.some(function(e){ return e.date === dateIso && e.action === action; })){ toast('Такая запись уже есть'); return false; }
+  d.events.push({action:action, date:dateIso});
+  d.events.sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  save(); render();
+  if (!jan1(y).s) toast('⚠️ Укажите статус на 1 января '+y+', иначе дни не посчитаются', 4500);
+  else toast('✅ Записано: '+action+' '+fmtY(dateIso));
+}
+
+function openAdd(){
+  var y = curYear(), act = '', digits = '';
+  var html = '<div class="seg" id="aSeg"><div class="sb by" data-v="'+IN+'">Въезд в РБ</div><div class="sb out" data-v="'+OUT+'">Выезд из РБ</div></div>'
+    + '<label class="lab">Дата, год '+y+'</label><div class="dd" id="dd"></div>'
+    + '<div class="pad" id="pad"></div><div class="prev" id="prev"></div>';
+  openDlg('Добавить пересечение', '', html, [{text:'Добавить', cls:'main', fn:function(){
+    var d = parsed(); if (!act){ toast('Выберите: въезд или выезд'); return false; }
+    if (!d){ toast('Введите дату цифрами'); return false; }
+    if (addEvent(act, d) === false) return false;
+  }}, {text:'Отмена'}]);
+
+  function fmtDigits(){
+    var t = digits.slice(0,2), m = digits.slice(2,4);
+    return digits.length > 2 ? t + '.' + m : t;
+  }
+  // дата из 4 цифр ДДММ + год со страницы; null если некорректна
+  function parsed(){
+    if (digits.length < 4) return null;
+    var d = parseInt(digits.slice(0,2),10), m = parseInt(digits.slice(2,4),10);
+    if (m < 1 || m > 12) return null;
+    var dim = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    if (d < 1 || d > dim) return null;
+    return y + '-' + pad(m) + '-' + pad(d);
+  }
+  function upd(){
+    $('dd').innerHTML = digits ? fmtDigits() : '<span class="ph">ДД.ММ</span>';
+    var pv = $('prev'), d = parsed();
+    if (digits.length === 4 && !d){
+      var m = parseInt(digits.slice(2,4),10);
+      pv.innerHTML = '<span style="color:var(--red)">' + ((m < 1 || m > 12) ? 'Месяц должен быть 01–12' : 'В этом месяце нет такого дня') + '</span>';
+    } else if (d && act){
+      pv.innerHTML = 'Добавить: <b style="color:' + (act === IN ? 'var(--green)' : 'var(--red)') + '">' + act + '</b> ' + fmtY(d);
+    } else if (d){
+      pv.innerHTML = '<span class="mut">Дата: ' + fmtY(d) + '. Выберите въезд или выезд</span>';
+    } else pv.innerHTML = '';
+  }
+  var pad_ = $('pad');
+  ['1','2','3','4','5','6','7','8','9','C','0','⌫'].forEach(function(k){
+    var b = document.createElement('button'); b.textContent = k; b.type = 'button';
+    b.onclick = function(){
+      if (k === 'C') digits = '';
+      else if (k === '⌫') digits = digits.slice(0,-1);
+      else if (digits.length < 4) digits += k;
+      upd();
+    };
+    pad_.appendChild(b);
+  });
+  [].forEach.call(document.querySelectorAll('#aSeg .sb'), function(b){
+    b.onclick = function(){ act = b.getAttribute('data-v'); [].forEach.call(document.querySelectorAll('#aSeg .sb'), function(o){ o.classList.toggle('on', o === b); }); upd(); };
+  });
+  upd();
+}
+
+function openEvList(){
+  var y = curYear(), evs = sortedEvents(y);
+  if (!evs.length){ toast('В '+y+' году пока нет записей'); return; }
+  openDlg('Пересечения '+y, '', '<div id="evBox" style="max-height:50vh;overflow-y:auto"></div>', [{text:'Закрыть', cls:'plain'}]);
+  var box = $('evBox');
+  evs.forEach(function(e, i){
+    var r = document.createElement('div'); r.className = 'vrow'; if (i === 0){ r.style.borderTop = '0'; r.style.marginTop = '0'; }
+    var col = e.action === IN ? 'var(--green)' : 'var(--red)';
+    r.innerHTML = '<span>'+fmtY(e.date)+' <b style="color:'+col+'">'+e.action+'</b></span><button class="x" aria-label="Удалить">✕</button>';
+    r.querySelector('.x').onclick = function(){
+      askConfirm('Удалить запись?', function(){
+        var d = yd(y); var k = d.events.indexOf(e);
+        if (k < 0) k = d.events.findIndex(function(z){ return z.date === e.date && z.action === e.action; });
+        if (k >= 0) d.events.splice(k, 1);
+        save(); render();
+        if (sortedEvents(y).length) setTimeout(openEvList, 0);
+      });
+    };
+    box.appendChild(r);
+  });
+}
+
+/* ---------- отрисовка ---------- */
+function ensureYearOption(y){
+  var s = $('yearSel');
+  for (var i = 0; i < s.options.length; i++) if (parseInt(s.options[i].value, 10) === y) return;
+  var o = document.createElement('option'); o.value = y; o.textContent = y; s.appendChild(o);
+  var arr = [].slice.call(s.options).sort(function(a,b){ return b.value - a.value; });
+  arr.forEach(function(x){ s.appendChild(x); });
+}
+
+function render(){
+  var y = curYear(), T = minskIso();
+  var t = totals(y);
+  $('nBy').innerHTML = t.known ? t.by + ' <small>дн.</small>' : '—';
+  $('nOut').innerHTML = t.known ? t.out + ' <small>дн.</small>' : '—';
+  var j = jan1(y);
+  $('jan1').textContent = j.s ? (j.s === 'BY' ? 'В РБ' : 'Вне РБ') + (j.auto ? ' (из прошлого года)' : '') : 'не указан';
+  $('jan1').style.color = j.s === 'BY' ? 'var(--green)' : j.s === 'OUT' ? 'var(--red)' : 'var(--mut)';
+  $('evCnt').textContent = '· ' + sortedEvents(y).length;
+
+  var host = $('cal'); host.innerHTML = '';
+  if (!j.s){
+    host.style.display = 'block';
+    host.innerHTML = '<div class="mut" style="text-align:center;padding:14px 6px">Укажите статус на 1 января, и появится календарь</div>';
+    return;
+  }
+  host.style.display = 'grid';
+  var map = yearMap(y, T);
+  for (var m = 0; m < 12; m++){
+    var box = document.createElement('div'); box.className = 'mo';
+    var h = '<div class="mt">'+MONTHS[m]+'</div><div class="wd">'+WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div><div class="gd">';
+    var firstN = Math.round(Date.UTC(y, m, 1) / DAY), shift = (wd(firstN) + 6) % 7;
+    for (var k = 0; k < shift; k++) h += '<div></div>';
+    var dim = new Date(Date.UTC(y, m+1, 0)).getUTCDate();
+    for (var d = 1; d <= dim; d++){
+      var key = iso(firstN + d - 1), s2 = map[key], cls = 'c';
+      if (s2 === 'BY') cls += ' cb'; else if (s2 === 'OUT') cls += ' co';
+      if (key === T) cls += ' td';
+      h += '<div class="'+cls+'">'+d+'</div>';
+    }
+    box.innerHTML = h + '</div>'; host.appendChild(box);
+  }
+}
+
+/* ---------- запуск ---------- */
+(function(){
+  if (!load()){ $('main').classList.add('hidden'); $('noProfile').classList.remove('hidden'); return; }
+  var cy = parseInt(minskIso().slice(0,4), 10);
+  var years = {}; years[cy] = 1;
+  Object.keys(prof.yearsData).forEach(function(k){ if (/^\d{4}$/.test(k)) years[k] = 1; });
+  var ys = $('yearSel');
+  Object.keys(years).map(Number).sort(function(a,b){ return b-a; }).forEach(function(y){
+    var o = document.createElement('option'); o.value = y; o.textContent = y; if (y === cy) o.selected = true; ys.appendChild(o);
+  });
+  ys.onchange = render;
+  $('bAdd').onclick = openAdd;
+  $('bJan1').onclick = openJan1;
+  $('bEvList').onclick = openEvList;
+  $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
+  render();
+})();
+</script>
+<script>
+/* «←» в разделе = то же, что кнопка «Назад» телефона: возврат на главную без лишних записей в истории */
+document.querySelectorAll('a.back').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var ok = false; try { ok = sessionStorage.getItem('navFromIndex') === '1'; } catch(x){}
+    if (ok && history.length > 1) history.back(); else location.replace('index.html');
+  });
+});
+</script>
+</body>
+</html>
