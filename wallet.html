@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Кошелёк</title>
+<style>
+:root{--bg:#161a28;--card:#262b3d;--line:#343a52;--txt:#e9ecf4;--mut:#a3acc2;--acc:#f5a524;--green:#3fbf8a;--red:#f0707a;--btn:#2f3550;--bline:#454d6b;--bar:#4f5a85}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;padding:12px;display:flex;justify-content:center}
+.app{width:100%;max-width:480px;padding-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cap{color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.mut{color:var(--mut);font-size:12px}
+.title{font-size:17px;font-weight:600}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid var(--bline);color:var(--txt);text-decoration:none;font-size:20px;display:flex;align-items:center;justify-content:center;background:var(--btn);flex-shrink:0}
+.chips{display:flex;gap:4px}
+.chip{border:1px solid var(--bline);background:transparent;color:var(--mut);border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer}
+.chip.on{background:var(--btn);color:var(--txt);border-color:var(--acc)}
+.mrow{display:flex;align-items:center;gap:8px;padding:5px 2px;border-radius:8px;cursor:pointer}
+.mrow .ml{width:46px;font-size:12px;color:var(--mut);flex-shrink:0}
+.mrow .bt{flex:1;height:14px;border-radius:4px;background:#1c2030;overflow:hidden;min-width:0}
+.mrow .bt i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.mrow .mv{width:86px;text-align:right;font-size:12px;color:var(--mut);flex-shrink:0;font-variant-numeric:tabular-nums}
+.mrow.on{background:rgba(245,165,36,.1)}
+.mrow.on .ml{color:var(--txt);font-weight:600}
+.mrow.on .bt i{background:var(--acc)}
+.mrow.on .mv{color:var(--txt);font-weight:600}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.sbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 4px;text-align:center;min-width:0}
+.sbox .n{font-size:17px;font-weight:700;line-height:1.2;margin-top:2px;word-break:break-word}
+.sbox.zero .n{color:var(--mut);font-weight:600}
+.btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
+.btn.main{background:var(--acc);border-color:var(--acc);color:#2a1c00}
+.btn.out{background:transparent;border-color:var(--acc);color:var(--acc)}
+.btn.plain{background:transparent;border-color:var(--bline);color:var(--txt)}
+.smallbtn{border:1px solid var(--bline);background:var(--btn);color:var(--txt);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
+.crow{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px}
+.crow .cn{width:112px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crow .bt{flex:1;height:10px;border-radius:3px;background:#1c2030;overflow:hidden;min-width:0}
+.crow .bt i{display:block;height:100%;background:var(--green);border-radius:3px;opacity:.85}
+.crow .cv{width:84px;text-align:right;font-size:12px;color:var(--mut);flex-shrink:0;font-variant-numeric:tabular-nums}
+.vrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:8px 0 0;margin-top:8px;font-size:13px}
+.vrow:first-child{border-top:0;margin-top:0;padding-top:0}
+.amt{font-weight:600;text-align:right}
+.x{width:30px;height:30px;border-radius:8px;border:1px solid var(--bline);background:transparent;color:var(--red);font-size:14px;cursor:pointer;padding:0;flex-shrink:0}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+.ov.show{display:flex}
+.dlg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:94vh;overflow-y:auto}
+.dlg h3{margin:0 0 8px;font-size:16px;font-weight:600}
+.btns{display:flex;gap:8px;margin-top:12px}
+.dd{background:#1c2030;border:1px solid var(--bline);border-radius:10px;padding:6px 12px;text-align:right;font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;min-height:52px;display:flex;align-items:baseline;justify-content:flex-end;gap:8px}
+.dd small{font-size:18px;color:var(--mut);font-weight:600}
+.dd .ph{color:#4a5272}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.pad button{background:var(--btn);border:1px solid var(--bline);border-radius:10px;color:var(--txt);font-size:21px;font-weight:600;padding:8px 0;font-family:inherit;cursor:pointer}
+.pad button:active{background:#3a4262}
+.pk{margin-top:8px}
+.pk-head,.drow{display:flex;align-items:center;gap:8px;background:#1c2030;border:1px solid var(--bline);border-radius:10px;padding:0 12px;min-height:42px;font-size:14px;cursor:pointer}
+.pk-head .pl,.drow .pl{color:var(--mut);font-size:12px;width:68px;flex-shrink:0}
+.pk-head .pv{flex:1;font-weight:600;color:var(--acc)}
+.pk-head svg{flex-shrink:0;transition:transform .15s}
+.pk-head.open svg{transform:rotate(180deg)}
+.pk-list{display:grid;gap:6px;margin-top:6px}
+.pk-opt{border:1px solid var(--bline);border-radius:10px;padding:9px 6px;text-align:center;font-size:13px;color:#c9cfdf;cursor:pointer;background:transparent}
+.pk-opt:active{background:var(--btn)}
+.drow{cursor:default}
+.drow input{flex:1;min-width:0;background:transparent;border:0;color:var(--txt);font-size:15px;font-family:inherit;padding:8px 0;color-scheme:dark;text-align:right}
+.empty{text-align:center;padding:18px 10px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:var(--btn);color:var(--txt);border:1px solid var(--bline);padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="card row" style="justify-content:flex-start;gap:12px">
+    <a class="back" href="index.html" aria-label="Назад">←</a><span class="title">Кошелёк</span>
+  </div>
+
+  <div id="noProfile" class="card empty hidden">
+    <div class="title">Профиль не найден</div>
+    <div class="mut" style="margin-top:6px">Вернитесь на главную и выберите профиль</div>
+  </div>
+
+  <div id="main">
+    <button class="btn main" id="bAdd" style="width:100%;flex:none;margin-bottom:8px">+ Добавить чек</button>
+
+    <div class="card">
+      <div class="row" style="margin-bottom:6px">
+        <span class="cap">Расходы по месяцам</span>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="mut" id="sumLabel" style="padding:0 4px 6px"></div>
+    <div class="sum" id="sum"></div>
+
+    <div class="card">
+      <div class="cap" style="margin-bottom:6px" id="catCap">По категориям</div>
+      <div id="catList"></div>
+    </div>
+
+    <div class="card row">
+      <span>Чеки месяца <span class="mut" id="rCnt"></span></span>
+      <button class="smallbtn" id="bList">Список ›</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="ov"><div class="dlg"><h3 id="dTitle"></h3><div id="dBody"></div><div class="btns" id="dBtns"></div></div></div>
+<div id="toast"></div>
+
+<script>
+var $ = function(id){ return document.getElementById(id); };
+/* Три валюты. Чтобы заменить, достаточно поправить этот список; первая в списке — по умолчанию */
+var CURS = [{c:'EUR', s:'€'}, {c:'PLN', s:'zł'}, {c:'BYN', s:'Br'}];
+var CATS = ['Прочее','Продукты','Одежда','Интернет','Мобильная связь','Здоровье','Бытовая химия','Логистика'];
+var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var MSHORT = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
+var CHEV = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg>';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function todayIso(){ var t = new Date(); return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate()); }
+function fmtDay(s){ var p = s.split('-'); return p[2]+'.'+p[1]; }
+function sym(c){ for (var i = 0; i < CURS.length; i++) if (CURS[i].c === c) return CURS[i].s; return c; }
+function money(cents){ return (cents/100).toLocaleString('ru-RU', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function mIndex(key){ var p = key.split('-'); return parseInt(p[0],10)*12 + parseInt(p[1],10) - 1; }
+function mKey(i){ return Math.floor(i/12) + '-' + pad(i%12 + 1); }
+
+function toast(t, ms){
+  var e = $('toast'); e.textContent = t; e.style.opacity = 1;
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ e.style.opacity = 0; }, ms || 3000);
+}
+
+/* ---------- хранилище: чеки лежат внутри профиля (prof.wallet.receipts) ---------- */
+var profiles = [], idx = 0, prof = null, W = null;
+function load(){
+  try { profiles = JSON.parse(localStorage.getItem('driver_profiles')) || []; } catch(e){ profiles = []; }
+  var i = parseInt(localStorage.getItem('active_profile_index'), 10);
+  idx = (i >= 0 && profiles[i]) ? i : 0;
+  prof = profiles[idx] || null;
+  if (!prof) return false;
+  if (!prof.wallet || typeof prof.wallet !== 'object') prof.wallet = {};
+  if (!Array.isArray(prof.wallet.receipts)) prof.wallet.receipts = [];
+  W = prof.wallet;
+  return true;
+}
+function save(){
+  profiles[idx] = prof;
+  try { localStorage.setItem('driver_profiles', JSON.stringify(profiles)); } catch(e){ toast('⚠️ Не удалось сохранить'); }
+}
+
+/* ---------- выбранный месяц и валюта диаграммы ---------- */
+var now0 = new Date();
+var curKey = now0.getFullYear() + '-' + pad(now0.getMonth() + 1);
+var selKey = curKey;
+function chartCur(){
+  for (var i = 0; i < CURS.length; i++) if (CURS[i].c === W.chartCur) return W.chartCur;
+  return CURS[0].c;
+}
+function monthReceipts(key){
+  return W.receipts.filter(function(r){ return r.d.slice(0,7) === key; })
+    .sort(function(a,b){ return a.d < b.d ? 1 : a.d > b.d ? -1 : b.id - a.id; });
+}
+
+/* ---------- диалоги ---------- */
+function openDlg(title, bodyHtml, buttons){
+  $('dTitle').textContent = title;
+  $('dBody').innerHTML = bodyHtml;
+  var bb = $('dBtns'); bb.innerHTML = '';
+  buttons.forEach(function(b){
+    var el = document.createElement('button');
+    el.className = 'btn ' + (b.cls || 'plain'); el.textContent = b.text;
+    el.onclick = function(){ var r = b.fn ? b.fn() : null; if (r !== false) closeDlg(); };
+    bb.appendChild(el);
+  });
+  $('ov').classList.add('show');
+}
+function closeDlg(){ $('ov').classList.remove('show'); }
+function askConfirm(text, fn){ openDlg(text, '', [{text:'Да', cls:'out', fn:fn}, {text:'Нет'}]); }
+
+/* ---------- сворачиваемый выбор: сверху текущее значение, остальные раскрываются под ним ---------- */
+var pickers = [];
+function mkPicker(host, label, items, initial, cols, onPick){
+  var val = initial, open = false;
+  var p = { close: function(){ open = false; draw(); } };
+  function cur(){ for (var i = 0; i < items.length; i++) if (items[i].v === val) return items[i]; return items[0]; }
+  function draw(){
+    host.innerHTML = '';
+    var h = document.createElement('div'); h.className = 'pk-head' + (open ? ' open' : '');
+    h.innerHTML = '<span class="pl">' + label + '</span><span class="pv">' + esc(cur().t) + '</span>' + CHEV;
+    h.onclick = function(){ var was = open; pickers.forEach(function(q){ q.close(); }); open = !was; draw(); };
+    host.appendChild(h);
+    if (open){
+      var l = document.createElement('div'); l.className = 'pk-list';
+      l.style.gridTemplateColumns = 'repeat(' + cols + ',minmax(0,1fr))';
+      items.forEach(function(it){
+        if (it.v === val) return;
+        var o = document.createElement('div'); o.className = 'pk-opt'; o.textContent = it.t;
+        o.onclick = function(){ val = it.v; open = false; draw(); onPick(it.v); };
+        l.appendChild(o);
+      });
+      host.appendChild(l);
+    }
+  }
+  pickers.push(p); draw();
+  return p;
+}
+
+/* ---------- добавить чек: сумма, потом при необходимости валюта и категория ---------- */
+function openAdd(){
+  var amt = '', cur = CURS[0].c, cat = CATS[0];
+  pickers = [];
+  var html = '<div class="dd" id="dd"></div><div class="pad" id="pad"></div>'
+    + '<div class="pk" id="pkCur"></div><div class="pk" id="pkCat"></div>'
+    + '<div class="pk"><div class="drow"><span class="pl">Дата</span><input type="date" id="fd" value="' + todayIso() + '"></div></div>';
+  openDlg('Добавить чек', html, [{text:'Добавить', cls:'main', fn:function(){
+    var cents = Math.round(parseFloat(amt || '0') * 100);
+    if (!(cents > 0)){ toast('Введите сумму'); return false; }
+    var d = $('fd').value || todayIso();
+    W.receipts.push({id: Date.now(), d: d, a: cents, c: cur, k: cat});
+    save();
+    selKey = d.slice(0,7);
+    render();
+    toast('✅ Добавлено: ' + money(cents) + ' ' + sym(cur) + ' · ' + cat);
+  }}, {text:'Отмена'}]);
+
+  function upd(){
+    $('dd').innerHTML = (amt ? esc(amt) : '<span class="ph">0</span>') + '<small>' + sym(cur) + '</small>';
+  }
+  ['1','2','3','4','5','6','7','8','9','.','0','⌫'].forEach(function(k){
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = k;
+    b.onclick = function(){
+      if (k === '⌫') amt = amt.slice(0, -1);
+      else if (k === '.'){ if (amt.indexOf('.') < 0) amt = (amt || '0') + '.'; }
+      else {
+        var dot = amt.indexOf('.');
+        if (dot >= 0 && amt.length - dot > 2) return;
+        if (dot < 0 && amt.length >= 7) return;
+        amt = (amt === '0') ? k : amt + k;
+      }
+      upd();
+    };
+    $('pad').appendChild(b);
+  });
+  mkPicker($('pkCur'), 'Валюта', CURS.map(function(x){ return {v:x.c, t:x.s + ' ' + x.c}; }), cur, 2, function(v){ cur = v; upd(); });
+  mkPicker($('pkCat'), 'Категория', CATS.map(function(k){ return {v:k, t:k}; }), cat, 2, function(v){ cat = v; });
+  upd();
+}
+
+/* ---------- список чеков месяца ---------- */
+function openList(){
+  var list = monthReceipts(selKey);
+  if (!list.length){ toast('В этом месяце чеков нет'); return; }
+  openDlg('Чеки · ' + MONTHS[parseInt(selKey.slice(5),10) - 1] + ' ' + selKey.slice(0,4), '<div id="rBox" style="max-height:55vh;overflow-y:auto"></div>', [{text:'Закрыть', cls:'plain'}]);
+  var box = $('rBox');
+  list.forEach(function(r){
+    var row = document.createElement('div'); row.className = 'vrow';
+    row.innerHTML = '<span><span class="mut">' + fmtDay(r.d) + '</span> ' + esc(r.k) + '</span>' +
+      '<span style="display:flex;align-items:center;gap:8px"><span class="amt">' + money(r.a) + ' ' + sym(r.c) + '</span>' +
+      '<button class="x" aria-label="Удалить">✕</button></span>';
+    row.querySelector('.x').onclick = function(){
+      askConfirm('Удалить чек?', function(){
+        W.receipts = W.receipts.filter(function(x){ return x.id !== r.id; });
+        save(); render();
+        if (monthReceipts(selKey).length) setTimeout(openList, 0);
+      });
+    };
+    box.appendChild(row);
+  });
+}
+
+/* ---------- отрисовка ---------- */
+function render(){
+  var cc = chartCur();
+
+  // переключатель валюты диаграммы
+  $('chips').innerHTML = CURS.map(function(x){ return '<button class="chip' + (x.c === cc ? ' on' : '') + '" data-c="' + x.c + '">' + x.c + '</button>'; }).join('');
+  [].forEach.call($('chips').children, function(b){
+    b.onclick = function(){ W.chartCur = b.getAttribute('data-c'); save(); render(); };
+  });
+
+  // суммы по месяцам в выбранной валюте
+  var byM = {}, lo = mIndex(curKey), hi = mIndex(curKey);
+  W.receipts.forEach(function(r){
+    var k = r.d.slice(0,7), i = mIndex(k);
+    if (i < lo) lo = i; if (i > hi) hi = i;
+    if (r.c === cc) byM[k] = (byM[k] || 0) + r.a;
+  });
+  var sel = mIndex(selKey);
+  var floor = Math.min(hi - 11, sel);                // до 12 месяцев, но выбранный месяц виден всегда
+  if (lo < floor) lo = floor;
+  var max = 0, i;
+  for (i = lo; i <= hi; i++) max = Math.max(max, byM[mKey(i)] || 0);
+  var ch = '';
+  for (i = hi; i >= lo; i--){
+    var k = mKey(i), v = byM[k] || 0, y = k.slice(0,4), m = parseInt(k.slice(5),10) - 1;
+    var lab = MSHORT[m] + (y !== curKey.slice(0,4) ? " '" + y.slice(2) : '');
+    ch += '<div class="mrow' + (k === selKey ? ' on' : '') + '" data-k="' + k + '"><span class="ml">' + lab + '</span>' +
+      '<span class="bt"><i style="width:' + (max ? Math.max(v ? 2 : 0, v / max * 100) : 0) + '%"></i></span>' +
+      '<span class="mv">' + (v ? money(v) + ' ' + sym(cc) : '—') + '</span></div>';
+  }
+  $('chart').innerHTML = ch;
+  [].forEach.call($('chart').querySelectorAll('.mrow'), function(r){
+    r.onclick = function(){ selKey = r.getAttribute('data-k'); render(); };
+  });
+
+  // выбранный месяц: суммы во всех трёх валютах
+  var list = monthReceipts(selKey), sm = parseInt(selKey.slice(5),10) - 1;
+  $('sumLabel').textContent = MONTHS[sm] + ' ' + selKey.slice(0,4) + ' · всего';
+  var tot = {}; CURS.forEach(function(x){ tot[x.c] = 0; });
+  list.forEach(function(r){ tot[r.c] = (tot[r.c] || 0) + r.a; });
+  $('sum').innerHTML = CURS.map(function(x){
+    return '<div class="sbox' + (tot[x.c] ? '' : ' zero') + '"><div class="mut">' + x.c + '</div><div class="n">' + money(tot[x.c] || 0) + ' ' + x.s + '</div></div>';
+  }).join('');
+
+  // категории выбранного месяца в валюте диаграммы
+  var by = {};
+  list.forEach(function(r){ if (r.c === cc) by[r.k] = (by[r.k] || 0) + r.a; });
+  var keys = Object.keys(by).sort(function(a,b){ return by[b] - by[a]; });
+  var cmax = keys.length ? by[keys[0]] : 0;
+  $('catCap').textContent = 'По категориям · ' + cc;
+  $('catList').innerHTML = keys.map(function(k){
+    return '<div class="crow"><span class="cn">' + esc(k) + '</span><span class="bt"><i style="width:' + (by[k] / cmax * 100) + '%"></i></span><span class="cv">' + money(by[k]) + ' ' + sym(cc) + '</span></div>';
+  }).join('') || '<div class="mut" style="text-align:center;padding:6px 0">В ' + cc + ' за этот месяц трат нет</div>';
+
+  $('rCnt').textContent = list.length ? '· ' + list.length : '· 0';
+}
+
+/* ---------- запуск ---------- */
+(function(){
+  if (!load()){ $('main').classList.add('hidden'); $('noProfile').classList.remove('hidden'); return; }
+  $('bAdd').onclick = openAdd;
+  $('bList').onclick = openList;
+  $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
+  render();
+})();
+</script>
+<script>
+/* «←» в разделе = то же, что кнопка «Назад» телефона: возврат на главную без лишних записей в истории */
+document.querySelectorAll('a.back').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var ok = false; try { ok = sessionStorage.getItem('navFromIndex') === '1'; } catch(x){}
+    if (ok && history.length > 1) history.back(); else location.replace('index.html');
+  });
+});
+</script>
+</body>
+</html>
