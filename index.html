@@ -1381,20 +1381,6 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 <!-- ================= ЭКРАН 2: ГЛАВНЫЙ РАБОЧИЙ ПУЛЬТ ================= -->
         <div id="mainScreen" class="space-y-2.5 hidden">
             
-            <!-- Напоминание о резервной копии: показывается, если данные изменились, а копии больше суток -->
-            <div id="backupBar" class="hidden" style="background:#262b3d;border:1px solid #454d6b;border-radius:12px;padding:8px 10px;">
-                <div style="display:flex;align-items:flex-start;gap:8px;">
-                    <div style="flex:1;min-width:0;">
-                        <div id="backupText" style="font-size:12px;font-weight:600;color:#e9ecf4;"></div>
-                        <div style="font-size:11px;color:#a3acc2;margin-top:2px;">Файл останется на телефоне, даже если очистить данные браузера</div>
-                    </div>
-                    <button onclick="snoozeBackup()" aria-label="Напомнить позже" style="width:28px;height:28px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#a3acc2;font-size:13px;flex-shrink:0;">&#10005;</button>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">
-                    <button onclick="exportFullBackup()" style="background:#f5a524;color:#2a1c00;border-radius:10px;padding:8px 4px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></svg> Сохранить</button>
-                    <button onclick="shareFullBackup()" style="background:#2f3550;border:1px solid #454d6b;color:#e9ecf4;border-radius:10px;padding:8px 4px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 9l5 -5l5 5"/><path d="M12 4v12"/></svg> Отправить…</button>
-                </div>
-            </div>
             <!-- 1. Строка профиля с кнопкой Шестеренки ⚙️ -->
             <div class="bg-[#262b3d] px-3 py-2 rounded-xl flex items-center justify-between border border-[#343a52]">
                 <div class="flex items-center space-x-2 overflow-hidden">
@@ -2202,17 +2188,14 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
     </script>
 
 <script>
-/* ===== Резервная копия всех данных: файл вне браузера, напоминание, «Поделиться» ===== */
+/* ===== Резервная копия всех данных: кнопки в настройках профиля (шестерёнка), без автоматических напоминаний ===== */
 (function () {
     var K_PROF = 'driver_profiles', K_IDX = 'active_profile_index', K_TR = 'trailerReport_v1';
-    var K_AT = 'backup_last_at', K_HASH = 'backup_last_hash', K_SNOOZE = 'backup_snooze_until';
-    var DAY = 86400000;   // напоминать, если копии больше суток (24 * 3600 * 1000)
+    var K_AT = 'backup_last_at';
 
     function ls(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
     function two(n) { return String(n).padStart(2, '0'); }
-    function hashStr(s) { var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return String(h); }
-    function dataHash() { return hashStr((ls(K_PROF) || '') + '|' + (ls(K_TR) || '')); }
     function hasData() { try { var p = JSON.parse(ls(K_PROF) || '[]'); return Array.isArray(p) && p.length > 0; } catch (e) { return false; } }
     function fmt(ms) { var d = new Date(ms); return two(d.getDate()) + '.' + two(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + two(d.getHours()) + ':' + two(d.getMinutes()); }
     function fileName() { var d = new Date(); return 'driver-diary_backup_' + d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()) + '.json'; }
@@ -2224,7 +2207,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         return JSON.stringify({ app: 'driver-diary-backup', version: 1, savedAt: new Date().toISOString(), profiles: profs, activeIndex: isNaN(idx) ? 0 : idx, trailerReport: tr }, null, 2);
     }
     function markDone() {
-        lsSet(K_AT, String(Date.now())); lsSet(K_HASH, dataHash()); lsSet(K_SNOOZE, '0');
+        lsSet(K_AT, String(Date.now()));
         window.refreshBackupBar();
     }
 
@@ -2263,32 +2246,19 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             var i = parseInt(b.activeIndex, 10); if (isNaN(i) || i < 0 || i >= b.profiles.length) i = 0;
             localStorage.setItem(K_IDX, String(i));
             if (b.trailerReport) localStorage.setItem(K_TR, JSON.stringify(b.trailerReport)); else localStorage.removeItem(K_TR);
-            lsSet(K_AT, String(Date.now())); lsSet(K_HASH, dataHash()); lsSet(K_SNOOZE, '0');
+            lsSet(K_AT, String(Date.now()));
         } catch (e) { showToast('❌ Не удалось восстановить данные.'); return; }
         location.reload();
     };
 
-    window.snoozeBackup = function () {
-        lsSet(K_SNOOZE, String(Date.now() + 12 * 3600000));
-        window.refreshBackupBar();
-        showToast('Напомню позже');
-    };
-
     window.refreshBackupBar = function () {
-        var bar = document.getElementById('backupBar'), info = document.getElementById('backupInfo');
-        var at = parseInt(ls(K_AT), 10) || 0, now = Date.now();
+        var info = document.getElementById('backupInfo');
+        var at = parseInt(ls(K_AT), 10) || 0;
         if (info) info.textContent = at ? 'Последняя копия: ' + fmt(at) : 'Копию ещё не делали';
-        if (!bar) return;
-        var show = hasData() && dataHash() !== ls(K_HASH) && (!at || now - at >= DAY) && now >= (parseInt(ls(K_SNOOZE), 10) || 0);
-        bar.classList.toggle('hidden', !show);
-        if (show) document.getElementById('backupText').textContent = at
-            ? 'Копия сделана ' + Math.floor((now - at) / DAY) + ' дн. назад, данные изменились'
-            : 'Копии данных ещё нет';
     };
 
     window.addEventListener('load', function () {
-        setTimeout(window.refreshBackupBar, 0);
-        setInterval(window.refreshBackupBar, 600000);
+        window.refreshBackupBar();
         // просим браузер не удалять данные самому при нехватке места (ручную очистку это не отменяет)
         try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
     });
