@@ -1506,13 +1506,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             <button onclick="saveProfileSettings()" class="w-full bg-[#f5a524] text-gray-950 font-bold py-2 rounded-lg text-xs mt-1">
                 Сохранить настройки
             </button>
-            <button onclick="exportCurrentProfileArchive()" class="w-full bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-200 font-semibold py-2 rounded-lg text-xs">
-                Сделать архив профиля
-            </button>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-                <button onclick="exportFullBackup()" class="bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-200 font-semibold py-2 rounded-lg text-xs" style="display:flex;align-items:center;justify-content:center;gap:5px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></svg> Копия всех данных</button>
-                <button onclick="shareFullBackup()" class="bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-200 font-semibold py-2 rounded-lg text-xs" style="display:flex;align-items:center;justify-content:center;gap:5px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 9l5 -5l5 5"/><path d="M12 4v12"/></svg> Отправить…</button>
-            </div>
+                <button onclick="exportFullBackup()" class="w-full bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-200 font-semibold py-2 rounded-lg text-xs" style="display:flex;align-items:center;justify-content:center;gap:5px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></svg> Сохранить все данные в файл</button>
             <div id="backupInfo" class="text-center text-[10px] text-gray-400"></div>
             <div class="border-t border-[#343a52] pt-2 text-center">
                 <button onclick="closeProfileSettingsModal(); backToSelector();" class="text-xs text-gray-400 hover:text-white underline">
