@@ -50,23 +50,27 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .dlg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px;max-height:94vh;overflow-y:auto}
 .dlg h3{margin:0 0 8px;font-size:16px;font-weight:600}
 .btns{display:flex;gap:8px;margin-top:12px}
-.dd{background:#1c2030;border:1px solid var(--bline);border-radius:10px;padding:6px 12px;text-align:right;font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;min-height:52px;display:flex;align-items:baseline;justify-content:flex-end;gap:8px}
-.dd small{font-size:18px;color:var(--mut);font-weight:600}
+.dlg.compact{padding:10px}
+.dlg.compact .btns{gap:6px;margin-top:8px}
+.dlg.compact .btn{padding:7px 4px;font-size:13px;border-radius:10px}
+.top{display:flex;gap:6px}
+.dd{flex:1;min-width:0;background:#1c2030;border:1px solid var(--bline);border-radius:9px;padding:0 10px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:500;height:36px;font-variant-numeric:tabular-nums}
+.dd .l{font-size:11px;color:var(--mut);font-weight:400}
+.dd small{font-size:13px;color:var(--mut);margin-left:6px;font-weight:400}
 .dd .ph{color:#4a5272}
-.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.pad button{background:var(--btn);border:1px solid var(--bline);border-radius:10px;color:var(--txt);font-size:21px;font-weight:600;padding:8px 0;font-family:inherit;cursor:pointer}
+.dt{position:relative;display:flex;align-items:center;gap:5px;background:#1c2030;border:1px solid var(--bline);border-radius:9px;padding:0 9px;height:36px;white-space:nowrap;cursor:pointer}
+.dt input{background:transparent;border:0;color:var(--txt);font-size:12px;font-family:inherit;color-scheme:dark;width:86px;padding:0}
+.dt input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
+.pad button{background:var(--btn);border:1px solid var(--bline);border-radius:8px;color:var(--txt);font-size:15px;font-weight:500;height:28px;padding:0;font-family:inherit;cursor:pointer}
 .pad button:active{background:#3a4262}
-.pk{margin-top:8px}
-.pk-head,.drow{display:flex;align-items:center;gap:8px;background:#1c2030;border:1px solid var(--bline);border-radius:10px;padding:0 12px;min-height:42px;font-size:14px;cursor:pointer}
-.pk-head .pl,.drow .pl{color:var(--mut);font-size:12px;width:68px;flex-shrink:0}
-.pk-head .pv{flex:1;font-weight:600;color:var(--acc)}
-.pk-head svg{flex-shrink:0;transition:transform .15s}
-.pk-head.open svg{transform:rotate(180deg)}
-.pk-list{display:grid;gap:6px;margin-top:6px}
-.pk-opt{border:1px solid var(--bline);border-radius:10px;padding:9px 6px;text-align:center;font-size:13px;color:#c9cfdf;cursor:pointer;background:transparent}
-.pk-opt:active{background:var(--btn)}
-.drow{cursor:default}
-.drow input{flex:1;min-width:0;background:transparent;border:0;color:var(--txt);font-size:15px;font-family:inherit;padding:8px 0;color-scheme:dark;text-align:right}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}
+.it{display:flex;align-items:center;gap:5px;background:#1c2030;border:1px solid var(--line);border-radius:7px;padding:0 6px;height:26px;font-size:12px;min-width:0;white-space:nowrap;cursor:pointer;color:var(--txt)}
+.bx{width:13px;height:13px;border-radius:4px;border:1.5px solid #6a7396;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cur .it.on{border-color:var(--acc);background:rgba(245,165,36,.1)}
+.cur .it.on .bx{background:var(--acc);border-color:var(--acc);color:#2a1c00}
+.cat .it.on{border-color:var(--green);background:rgba(63,191,138,.1)}
+.cat .it.on .bx{background:var(--green);border-color:var(--green);color:#0b2a1c}
 .empty{text-align:center;padding:18px 10px}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:var(--btn);color:var(--txt);border:1px solid var(--bline);padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
 .hidden{display:none}
@@ -116,16 +120,20 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 <script>
 var $ = function(id){ return document.getElementById(id); };
 /* Три валюты. Чтобы заменить, достаточно поправить этот список; первая в списке — по умолчанию */
-var CURS = [{c:'EUR', s:'€'}, {c:'PLN', s:'zł'}, {c:'BYN', s:'Br'}];
-var CATS = ['Прочее','Продукты','Одежда','Интернет','Мобильная связь','Здоровье','Бытовая химия','Логистика'];
+/* c — код в данных, s — знак в суммах, l — подпись в выборе */
+var CURS = [{c:'EUR', s:'€', l:'EUR'}, {c:'PLN', s:'zł', l:'zł'}, {c:'BYN', s:'Br', l:'BYN'}];
+var CATS = ['Прочее','Продукты','Одежда','Связь','Здоровье','Логистика','Бытовая химия'];
+var OLD_CATS = {'Интернет':'Связь','Мобильная связь':'Связь'};   // старые категории -> новая
 var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 var MSHORT = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
-var CHEV = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6l6 -6"/></svg>';
+var CHECK = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5l10 -10"/></svg>';
+var CAL = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></svg>';
 
 function pad(n){ return String(n).padStart(2,'0'); }
 function todayIso(){ var t = new Date(); return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate()); }
 function fmtDay(s){ var p = s.split('-'); return p[2]+'.'+p[1]; }
 function sym(c){ for (var i = 0; i < CURS.length; i++) if (CURS[i].c === c) return CURS[i].s; return c; }
+function curLab(c){ for (var i = 0; i < CURS.length; i++) if (CURS[i].c === c) return CURS[i].l; return c; }
 function money(cents){ return (cents/100).toLocaleString('ru-RU', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function mIndex(key){ var p = key.split('-'); return parseInt(p[0],10)*12 + parseInt(p[1],10) - 1; }
@@ -147,6 +155,9 @@ function load(){
   if (!prof.wallet || typeof prof.wallet !== 'object') prof.wallet = {};
   if (!Array.isArray(prof.wallet.receipts)) prof.wallet.receipts = [];
   W = prof.wallet;
+  var moved = false;
+  W.receipts.forEach(function(r){ if (OLD_CATS[r.k]){ r.k = OLD_CATS[r.k]; moved = true; } });
+  if (moved) save();
   return true;
 }
 function save(){
@@ -168,8 +179,10 @@ function monthReceipts(key){
 }
 
 /* ---------- диалоги ---------- */
-function openDlg(title, bodyHtml, buttons){
+function openDlg(title, bodyHtml, buttons, cls){
   $('dTitle').textContent = title;
+  $('dTitle').style.display = title ? '' : 'none';
+  $('ov').firstElementChild.className = 'dlg' + (cls ? ' ' + cls : '');
   $('dBody').innerHTML = bodyHtml;
   var bb = $('dBtns'); bb.innerHTML = '';
   buttons.forEach(function(b){
@@ -183,42 +196,30 @@ function openDlg(title, bodyHtml, buttons){
 function closeDlg(){ $('ov').classList.remove('show'); }
 function askConfirm(text, fn){ openDlg(text, '', [{text:'Да', cls:'out', fn:fn}, {text:'Нет'}]); }
 
-/* ---------- сворачиваемый выбор: сверху текущее значение, остальные раскрываются под ним ---------- */
-var pickers = [];
-function mkPicker(host, label, items, initial, cols, onPick){
-  var val = initial, open = false;
-  var p = { close: function(){ open = false; draw(); } };
-  function cur(){ for (var i = 0; i < items.length; i++) if (items[i].v === val) return items[i]; return items[0]; }
+/* ---------- квадратики с галочкой: выбран ровно один вариант ---------- */
+function mkChecks(host, items, val, onPick){
   function draw(){
     host.innerHTML = '';
-    var h = document.createElement('div'); h.className = 'pk-head' + (open ? ' open' : '');
-    h.innerHTML = '<span class="pl">' + label + '</span><span class="pv">' + esc(cur().t) + '</span>' + CHEV;
-    h.onclick = function(){ var was = open; pickers.forEach(function(q){ q.close(); }); open = !was; draw(); };
-    host.appendChild(h);
-    if (open){
-      var l = document.createElement('div'); l.className = 'pk-list';
-      l.style.gridTemplateColumns = 'repeat(' + cols + ',minmax(0,1fr))';
-      items.forEach(function(it){
-        if (it.v === val) return;
-        var o = document.createElement('div'); o.className = 'pk-opt'; o.textContent = it.t;
-        o.onclick = function(){ val = it.v; open = false; draw(); onPick(it.v); };
-        l.appendChild(o);
-      });
-      host.appendChild(l);
-    }
+    items.forEach(function(it){
+      var on = it.v === val, d = document.createElement('div');
+      d.className = 'it' + (on ? ' on' : '');
+      d.innerHTML = '<span class="bx">' + (on ? CHECK : '') + '</span>' + esc(it.t);
+      if (it.wide) d.style.gridColumn = 'span 2';
+      d.onclick = function(){ if (val === it.v) return; val = it.v; draw(); onPick(it.v); };
+      host.appendChild(d);
+    });
   }
-  pickers.push(p); draw();
-  return p;
+  draw();
 }
 
-/* ---------- добавить чек: сумма, потом при необходимости валюта и категория ---------- */
+/* ---------- добавить чек: сумма и дата сверху, потом валюта и категория ---------- */
 function openAdd(){
   var amt = '', cur = CURS[0].c, cat = CATS[0];
-  pickers = [];
-  var html = '<div class="dd" id="dd"></div><div class="pad" id="pad"></div>'
-    + '<div class="pk" id="pkCur"></div><div class="pk" id="pkCat"></div>'
-    + '<div class="pk"><div class="drow"><span class="pl">Дата</span><input type="date" id="fd" value="' + todayIso() + '"></div></div>';
-  openDlg('Добавить чек', html, [{text:'Добавить', cls:'main', fn:function(){
+  var html = '<div class="top"><div class="dd" id="dd"></div>'
+    + '<label class="dt">' + CAL + '<input type="date" id="fd" value="' + todayIso() + '"></label></div>'
+    + '<div class="pad" id="pad"></div>'
+    + '<div class="g3 cur" id="curBox" style="margin-top:8px"></div><div class="g3 cat" id="catBox"></div>';
+  openDlg('', html, [{text:'Добавить', cls:'main', fn:function(){
     var cents = Math.round(parseFloat(amt || '0') * 100);
     if (!(cents > 0)){ toast('Введите сумму'); return false; }
     var d = $('fd').value || todayIso();
@@ -227,12 +228,12 @@ function openAdd(){
     selKey = d.slice(0,7);
     render();
     toast('✅ Добавлено: ' + money(cents) + ' ' + sym(cur) + ' · ' + cat);
-  }}, {text:'Отмена'}]);
+  }}, {text:'Отмена'}], 'compact');
 
   function upd(){
-    $('dd').innerHTML = (amt ? esc(amt) : '<span class="ph">0</span>') + '<small>' + sym(cur) + '</small>';
+    $('dd').innerHTML = '<span class="l">Сумма</span><span>' + (amt ? esc(amt) : '<span class="ph">0</span>') + '<small>' + esc(curLab(cur)) + '</small></span>';
   }
-  ['1','2','3','4','5','6','7','8','9','.','0','⌫'].forEach(function(k){
+  ['1','2','3','⌫','4','5','6','.','7','8','9','0'].forEach(function(k){
     var b = document.createElement('button'); b.type = 'button'; b.textContent = k;
     b.onclick = function(){
       if (k === '⌫') amt = amt.slice(0, -1);
@@ -247,8 +248,8 @@ function openAdd(){
     };
     $('pad').appendChild(b);
   });
-  mkPicker($('pkCur'), 'Валюта', CURS.map(function(x){ return {v:x.c, t:x.s + ' ' + x.c}; }), cur, 2, function(v){ cur = v; upd(); });
-  mkPicker($('pkCat'), 'Категория', CATS.map(function(k){ return {v:k, t:k}; }), cat, 2, function(v){ cat = v; });
+  mkChecks($('curBox'), CURS.map(function(x){ return {v:x.c, t:x.l}; }), cur, function(v){ cur = v; upd(); });
+  mkChecks($('catBox'), CATS.map(function(k){ return {v:k, t:k, wide:k === 'Бытовая химия'}; }), cat, function(v){ cat = v; });
   upd();
 }
 
@@ -279,7 +280,7 @@ function render(){
   var cc = chartCur();
 
   // переключатель валюты диаграммы
-  $('chips').innerHTML = CURS.map(function(x){ return '<button class="chip' + (x.c === cc ? ' on' : '') + '" data-c="' + x.c + '">' + x.c + '</button>'; }).join('');
+  $('chips').innerHTML = CURS.map(function(x){ return '<button class="chip' + (x.c === cc ? ' on' : '') + '" data-c="' + x.c + '">' + esc(x.l) + '</button>'; }).join('');
   [].forEach.call($('chips').children, function(b){
     b.onclick = function(){ W.chartCur = b.getAttribute('data-c'); save(); render(); };
   });
@@ -315,7 +316,7 @@ function render(){
   var tot = {}; CURS.forEach(function(x){ tot[x.c] = 0; });
   list.forEach(function(r){ tot[r.c] = (tot[r.c] || 0) + r.a; });
   $('sum').innerHTML = CURS.map(function(x){
-    return '<div class="sbox' + (tot[x.c] ? '' : ' zero') + '"><div class="mut">' + x.c + '</div><div class="n">' + money(tot[x.c] || 0) + ' ' + x.s + '</div></div>';
+    return '<div class="sbox' + (tot[x.c] ? '' : ' zero') + '"><div class="mut">' + esc(x.l) + '</div><div class="n">' + money(tot[x.c] || 0) + ' ' + x.s + '</div></div>';
   }).join('');
 
   // категории выбранного месяца в валюте диаграммы
@@ -323,10 +324,10 @@ function render(){
   list.forEach(function(r){ if (r.c === cc) by[r.k] = (by[r.k] || 0) + r.a; });
   var keys = Object.keys(by).sort(function(a,b){ return by[b] - by[a]; });
   var cmax = keys.length ? by[keys[0]] : 0;
-  $('catCap').textContent = 'По категориям · ' + cc;
+  $('catCap').innerHTML = 'По категориям · <span style="text-transform:none">' + esc(curLab(cc)) + '</span>';
   $('catList').innerHTML = keys.map(function(k){
     return '<div class="crow"><span class="cn">' + esc(k) + '</span><span class="bt"><i style="width:' + (by[k] / cmax * 100) + '%"></i></span><span class="cv">' + money(by[k]) + ' ' + sym(cc) + '</span></div>';
-  }).join('') || '<div class="mut" style="text-align:center;padding:6px 0">В ' + cc + ' за этот месяц трат нет</div>';
+  }).join('') || '<div class="mut" style="text-align:center;padding:6px 0">В ' + esc(curLab(cc)) + ' за этот месяц трат нет</div>';
 
   $('rCnt').textContent = list.length ? '· ' + list.length : '· 0';
 }
