@@ -233,6 +233,16 @@ function buildTimeline(over){
   return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn};
 }
 function dayStatus(tl, x){ return tl.vacSet.has(x) ? 'v' : (tl.st.get(x) || ''); }
+function whereNow(tl, T){
+  var cur = null, prev = null, next = null;
+  tl.blocks.forEach(function(b){
+    if (b.t !== 'w') return;
+    if (b.s <= T && T <= b.e) cur = b;
+    else if (b.e < T) prev = b;
+    else if (b.s > T && !next) next = b;
+  });
+  return {cur:cur, prev:prev, next:next};
+}
 
 /* ---------- сценарий «сдвиг»: просмотр и сохранённый план ---------- */
 var preview = null;
@@ -447,10 +457,11 @@ function render(){
   $('info').classList.toggle('hidden', tl.empty);
   $('calCard').classList.toggle('hidden', tl.empty);
   if (!tl.empty){
-    var cur = null, arrN = null;
-    tl.blocks.forEach(function(b){ if (b.t === 'w'){ if (!cur && b.e >= T) cur = b; else if (cur && !arrN && b.s > cur.e) arrN = b.s; } });
-    $('infoEnd').innerHTML = cur ? fmt(cur.e) + ' <span class="mut">' + wdName(cur.e) + '</span>' : '—';
-    $('infoArr').innerHTML = arrN ? fmt(arrN) + ' <span class="mut">' + wdName(arrN) + '</span>' : '—';
+    var wn = whereNow(tl, T);
+    var lastWork = wn.cur ? wn.cur.e : (wn.prev ? wn.prev.e : null);
+    var arrive = wn.next ? wn.next.s : null;
+    $('infoEnd').innerHTML = lastWork != null ? fmt(lastWork) + ' <span class="mut">' + wdName(lastWork) + '</span>' : '—';
+    $('infoArr').innerHTML = arrive != null ? fmt(arrive) + ' <span class="mut">' + wdName(arrive) + '</span>' : '—';
     var s = dayStatus(tl, T);
     $('infoNow').textContent = 'Сегодня: ' + (s === 'w' ? 'на работе' : s === 'h' ? 'дома' : s === 'v' ? 'отпуск' : '—');
   }
