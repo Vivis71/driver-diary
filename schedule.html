@@ -39,6 +39,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .hf{background:transparent;color:rgba(63,191,138,.85);border:1px dashed rgba(63,191,138,.4)}
 .vc{background:rgba(139,124,246,.28);color:#a99dfa;font-weight:600}
 .td{outline:1.5px solid #e9ecf4;outline-offset:-1px;font-weight:700}
+.nyl{grid-column:1/-1;font-size:14px;font-weight:600;color:#4aa3df;display:flex;align-items:center;gap:10px;margin:6px 0 2px}.nyl::before,.nyl::after{content:'';flex:1;height:1.5px;background:rgba(74,163,223,.55);border-radius:1px}
 .vz{background:#e5484d !important;color:#fff !important;border-color:#e5484d !important;font-weight:700}
 .av{background-image:repeating-linear-gradient(135deg,rgba(233,236,244,.16) 0 2px,transparent 2px 5px)}
 .visa{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
@@ -52,6 +53,13 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .btn.plain{background:transparent;border-color:#454d6b;color:var(--txt)}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
 .ov.show{display:flex}
+.ov.top{align-items:flex-start;padding-top:14px}
+.dlg{max-height:94vh;overflow-y:auto}
+.dlg .note2{color:#c9cfdf;font-size:15px;line-height:1.45;margin-bottom:12px}
+.btns.col{flex-direction:column}
+.edt{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:10px 12px;border:1px solid #454d6b;border-radius:10px;font-size:14px;cursor:pointer}
+.edrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 4px 0 4px;font-size:14px}
+.edrow .sub{color:var(--mut);font-size:12px}
 .dlg{background:#262b3d;border:1px solid var(--line);border-radius:16px;padding:14px;width:100%;max-width:420px}
 .dlg h3{margin:0 0 6px;font-size:16px;font-weight:600}
 .dlg .note{color:var(--mut);font-size:12px;margin-bottom:10px;line-height:1.4}
@@ -170,7 +178,13 @@ function load(){
   idx = (i >= 0 && profiles[i]) ? i : 0;
   prof = profiles[idx] || null;
   if (!prof) return false;
-  sch = Object.assign({work:4, home:2, cadences:[], vacations:[], plan:null, vacLimits:{}}, prof.schedule || {});
+  sch = Object.assign({work:4, home:2, cadences:[], vacations:[], edits:[], vacLimits:{}}, prof.schedule || {});
+  if (!Array.isArray(sch.edits)) sch.edits = [];
+  if (sch.plan){   // старый формат: один выезд и один заезд
+    if (sch.plan.end) sch.edits.push({k:'end', d:sch.plan.end});
+    if (sch.plan.arrival) sch.edits.push({k:'arr', d:sch.plan.arrival});
+  }
+  delete sch.plan;
   if (!sch.vacLimits || typeof sch.vacLimits !== 'object') sch.vacLimits = {};
   if (!Array.isArray(sch.cadences)) sch.cadences = [];
   if (!Array.isArray(sch.vacations)) sch.vacations = [];
@@ -184,23 +198,38 @@ function save(){
 }
 
 /* ---------- расчёт графика ---------- */
+var EDIT_WIN = 21;   // правка относится к ближайшему выезду/заезду в пределах трёх недель
+function takeNear(list, target, min){
+  var bi = -1, bd = EDIT_WIN + 1;
+  for (var i = 0; i < list.length; i++){
+    if (list[i].used || list[i].n < min) continue;
+    var dd = Math.abs(list[i].n - target);
+    if (dd < bd){ bd = dd; bi = i; }
+  }
+  if (bi < 0) return null;
+  list[bi].used = true; return list[bi];
+}
 function buildTimeline(over){
   over = over || {};
+  var ends = (over.ends || []).map(function(x){ return {n:x.n, d:x.d, k:'end', used:false}; });
+  var arrs = (over.arrs || []).map(function(x){ return {n:x.n, d:x.d, k:'arr', used:false}; });
+  var applied = [];
   var N = sch.work, M = sch.home, T = todayN();
   var cad = sch.cadences.map(function(c){ return {s:dn(c.start), e:c.end ? dn(c.end) : null}; }).sort(function(a,b){ return a.s-b.s; });
   var vac = sch.vacations.map(function(v){ return {s:dn(v.start), e:dn(v.end)}; });
   var st = new Map(), blocks = [];
-  if (!cad.length) return {empty:true, st:st, blocks:blocks, vacSet:new Set(), vacWarn:[]};
+  if (!cad.length) return {empty:true, st:st, blocks:blocks, vacSet:new Set(), vacWarn:[], applied:[]};
   function mark(a, b, t){ if (b < a) return; for (var x = a; x <= b; x++) st.set(x, t); blocks.push({t:t, s:a, e:b}); }
 
-  var endOvUsed = false, lastEnd = null;
+  var lastEnd = null;
   for (var i = 0; i < cad.length; i++){
     var c = cad[i], nxt = cad[i+1], e = c.e;
     if (e === null){
       e = workEndFrom(c.s, N, W);
       if (!nxt){
-        if (over.end != null && !endOvUsed){ e = over.end; endOvUsed = true; }
-        else if (T > e) e = nextWdOnOrAfter(T, W);
+        if (T > e) e = nextWdOnOrAfter(T, W);
+        var oe = takeNear(ends, e, c.s);
+        if (oe){ applied.push({k:'end', d:oe.d, from:e}); e = oe.n; }
       }
     }
     if (nxt) e = Math.min(e, nxt.s - 1);
@@ -224,14 +253,16 @@ function buildTimeline(over){
     return a;
   }
 
-  var horizon = Math.max(T, lastEnd) + 365*3 + 60, end = lastEnd, arrOv = over.arrival;
+  var horizon = Math.max(T, lastEnd) + 365*3 + 60, end = lastEnd;
   while (true){
-    var a = (arrOv != null && arrOv > end) ? arrOv : attach(arrivalAfter(end, M, W), end);
-    arrOv = null;
+    var a = attach(arrivalAfter(end, M, W), end);
+    var ea = takeNear(arrs, a, end + 1);
+    if (ea){ applied.push({k:'arr', d:ea.d, from:a}); a = ea.n; }
     if (a > horizon){ mark(end+1, horizon, 'h'); break; }
     mark(end+1, a-1, 'h');
     var e2 = workEndFrom(a, N, W);
-    if (over.end != null && !endOvUsed && over.end >= a){ e2 = over.end; endOvUsed = true; }
+    var ee = takeNear(ends, e2, a);
+    if (ee){ applied.push({k:'end', d:ee.d, from:e2}); e2 = ee.n; }
     mark(a, e2, 'w');
     end = e2;
   }
@@ -239,7 +270,7 @@ function buildTimeline(over){
   var vacSet = new Set();
   vac.forEach(function(v){ for (var x = v.s; x <= v.e; x++) vacSet.add(x); });
   var vacWarn = vac.map(function(v){ for (var x = v.s; x <= v.e; x++){ if (st.get(x) === 'w') return true; } return false; });
-  return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn};
+  return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn, applied:applied};
 }
 function dayStatus(tl, x){ return tl.vacSet.has(x) ? 'v' : (tl.st.get(x) || ''); }
 function whereNow(tl, T){
@@ -254,12 +285,18 @@ function whereNow(tl, T){
 }
 
 /* ---------- сценарий «сдвиг»: просмотр и сохранённый план ---------- */
-var preview = null;
-function activeOver(){
-  var src = preview || sch.plan;
-  if (!src) return {};
-  return {end: src.end ? dn(src.end) : null, arrival: src.arrival ? dn(src.arrival) : null};
+var preview = null;   // {k:'end'|'arr', d:'YYYY-MM-DD'} — просмотр без сохранения
+function overFrom(withPreview){
+  var list = sch.edits.slice();
+  if (withPreview && preview){
+    var pn = dn(preview.d);
+    list = list.filter(function(x){ return !(x.k === preview.k && Math.abs(dn(x.d) - pn) <= EDIT_WIN); });
+    list.push({k:preview.k, d:preview.d});
+  }
+  function pick(k){ return list.filter(function(x){ return x.k === k; }).map(function(x){ return {n:dn(x.d), d:x.d}; }); }
+  return {ends:pick('end'), arrs:pick('arr')};
 }
+function activeOver(){ return overFrom(true); }
 
 /* ---------- окна ---------- */
 function openDlg(title, note, bodyHtml, buttons){
@@ -274,7 +311,7 @@ function openDlg(title, note, bodyHtml, buttons){
   });
   $('ov').classList.add('show');
 }
-function closeDlg(){ $('ov').classList.remove('show'); }
+function closeDlg(){ $('ov').classList.remove('show'); $('ov').classList.remove('top'); $('dBtns').classList.remove('col'); }
 function askConfirm(text, fn){
   openDlg(text, '', '', [{text:'Да', cls:'out', fn:fn}, {text:'Нет'}]);
 }
@@ -327,7 +364,7 @@ function openStart(){
       sch.cadences = sch.cadences.filter(function(c){ return c.start !== v; });
       sch.cadences.push({start:v, end:null});
       sch.cadences.sort(function(a,b){ return a.start < b.start ? -1 : 1; });
-      if (sch.plan){ sch.plan.arrival = null; if (!sch.plan.end) sch.plan = null; }
+      sch.edits = sch.edits.filter(function(x){ return !(x.k === 'arr' && Math.abs(dn(x.d) - n) <= EDIT_WIN); });
       save(); render();
       toast('✅ Каденция начата: '+fmtY(n) + (wd(n) !== W ? ' · график выровнен по дню заезда' : ''));
     }}, {text:'Отмена'}]);
@@ -347,7 +384,7 @@ function openEnd(){
       var c = pick(v);
       if (!c){ toast('Нет каденции, начатой до этой даты'); return false; }
       c.end = v;
-      if (sch.plan){ sch.plan.end = null; if (!sch.plan.arrival) sch.plan = null; }
+      sch.edits = sch.edits.filter(function(x){ return !(x.k === 'end' && Math.abs(dn(x.d) - dn(v)) <= EDIT_WIN); });
       save(); render();
       toast('✅ Каденция закончена: '+fmtY(dn(v)) + (wd(dn(v)) !== W ? ' · график выровнен по дню заезда' : ''));
     }}, {text:'Отмена'}]);
@@ -374,18 +411,22 @@ function openVac(){
     }}, {text:'Отмена'}]);
 }
 function openShift(){
-  var tl = buildTimeline({});
+  var tl = buildTimeline(overFrom(false));
   if (tl.empty){ toast('Сначала укажите дату заезда'); return; }
   var T = todayN(), cur = null, nextArr = null;
   tl.blocks.forEach(function(b){ if (b.t === 'w'){ if (!cur && b.e >= T) cur = b; else if (cur && !nextArr && b.s > cur.e) nextArr = b.s; } });
   var mode = 'end';
   var defEnd = cur ? cur.e : T, defArr = nextArr || T;
-  var html = '<div class="seg"><div class="sb on" id="m1">Закончу работу</div><div class="sb" id="m2">Начну работу</div></div>' +
-    '<label class="lab" for="f1" id="fl">Новый последний рабочий день</label><input type="date" id="f1" value="'+iso(defEnd)+'">';
-  openDlg('Сдвиг', 'Посмотрите, что изменится в графике. Ничего не сохранится, пока вы сами не нажмёте «Сохранить как план».', html, [
-    {text:'Посмотреть', cls:'out', fn:function(){ return applyShift(mode, false); }},
-    {text:'Как план', cls:'main', fn:function(){ return applyShift(mode, true); }},
+  var html = '<div class="note2">Выберите, что меняется, и посмотрите результат на календаре. Правка сохранится, только когда вы нажмёте «Применить».</div>' +
+    '<div class="seg"><div class="sb on" id="m1">Закончу работу</div><div class="sb" id="m2">Начну работу</div></div>' +
+    '<label class="lab" for="f1" id="fl">Новый последний рабочий день</label><input type="date" id="f1" value="'+iso(defEnd)+'">' +
+    '<div class="edt hidden" id="edT"><span id="edTxt"></span><span id="edCh">›</span></div><div id="edL" class="hidden"></div>';
+  openDlg('Сдвиг', '', html, [
+    {text:'Посмотреть на календаре', cls:'out', fn:function(){ return applyShift(mode, false); }},
+    {text:'Применить', cls:'main', fn:function(){ return applyShift(mode, true); }},
     {text:'Отмена'}]);
+  $('ov').classList.add('top'); $('dBtns').classList.add('col');
+
   function setMode(m){
     mode = m;
     $('m1').classList.toggle('on', m === 'end'); $('m2').classList.toggle('on', m === 'arr');
@@ -394,15 +435,46 @@ function openShift(){
   }
   $('m1').onclick = function(){ setMode('end'); };
   $('m2').onclick = function(){ setMode('arr'); };
+
+  var open = false;
+  function drawEdits(){
+    var n = sch.edits.length;
+    $('edT').classList.toggle('hidden', !n);
+    if (!n){ $('edL').classList.add('hidden'); return; }
+    $('edTxt').textContent = 'Правки плана · ' + n;
+    $('edCh').textContent = open ? '⌄' : '›';
+    $('edL').classList.toggle('hidden', !open);
+    var ap = buildTimeline(overFrom(false)).applied, h = '';
+    sch.edits.slice().sort(function(x, y){ return x.d < y.d ? -1 : 1; }).forEach(function(x){
+      var f = ap.filter(function(q){ return q.k === x.k && q.d === x.d; })[0], dd = dn(x.d);
+      h += '<div class="edrow"><div><div>' + (x.k === 'end' ? 'Выезд ' : 'Заезд ') + fmtY(dd) + ' <span class="mut">' + wdName(dd) + '</span></div>' +
+        '<div class="sub">' + (f ? 'вместо ' + fmt(f.from) : 'не попадает в график') + '</div></div>' +
+        '<button class="x" data-k="' + x.k + '" data-d="' + x.d + '" aria-label="Удалить">✕</button></div>';
+    });
+    $('edL').innerHTML = h;
+    [].forEach.call($('edL').querySelectorAll('.x'), function(bt){
+      bt.onclick = function(){
+        var k = bt.getAttribute('data-k'), d = bt.getAttribute('data-d');
+        sch.edits = sch.edits.filter(function(x){ return !(x.k === k && x.d === d); });
+        save(); render(); drawEdits(); toast('Правка удалена');
+      };
+    });
+  }
+  $('edT').onclick = function(){ open = !open; drawEdits(); };
+  drawEdits();
+}
+function scrollToCal(){ setTimeout(function(){ var c = $('calCard'); if (c) c.scrollIntoView({behavior:'smooth', block:'start'}); }, 60); }
+function addEdit(k, d){
+  var n = dn(d);
+  sch.edits = sch.edits.filter(function(x){ return !(x.k === k && Math.abs(dn(x.d) - n) <= EDIT_WIN); });
+  sch.edits.push({k:k, d:d});
 }
 function applyShift(mode, saveIt){
   var v = $('f1').value; if (!v){ toast('Выберите дату'); return false; }
-  var p = {end: mode === 'end' ? v : null, arrival: mode === 'arr' ? v : null};
-  if (saveIt){
-    sch.plan = {end: p.end || (sch.plan && sch.plan.end) || null, arrival: p.arrival || (sch.plan && sch.plan.arrival) || null};
-    preview = null; save(); toast('✅ План сохранён');
-  } else { preview = p; }
-  render();
+  var k = mode === 'end' ? 'end' : 'arr';
+  if (saveIt){ addEdit(k, v); preview = null; save(); toast('✅ Применено'); }
+  else { preview = {k:k, d:v}; }
+  render(); scrollToCal();
 }
 
 /* ---------- отрисовка ---------- */
@@ -446,29 +518,18 @@ function render(){
 
   // баннер плана / просмотра
   var bn = $('banner'); bn.innerHTML = '';
-  function bannerText(o){
-    var t = [];
-    if (o.end) t.push('закончу работу ' + fmtY(dn(o.end)));
-    if (o.arrival) t.push('начну работу ' + fmtY(dn(o.arrival)));
-    return t.join(', ');
-  }
   var conflicts = tl.vacWarn.reduce(function(acc, w, i){ if (w) acc.push(sch.vacations[i]); return acc; }, []);
-  if (preview || sch.plan){
-    var src = preview || sch.plan;
+  if (preview){
     var div = document.createElement('div');
-    div.className = 'banner ' + (preview ? 'pv' : 'pl');
-    div.innerHTML = '<div style="font-weight:600;margin-bottom:4px">' + (preview ? 'Просмотр: ' : 'План: ') + bannerText(src) + '</div>' +
-      '<div class="mut">' + (preview ? 'Ничего не сохранено.' : 'Показан в календаре как прогноз.') + '</div>' +
+    div.className = 'banner pv';
+    div.innerHTML = '<div style="font-weight:600;margin-bottom:4px">Просмотр: ' + (preview.k === 'end' ? 'закончу работу ' : 'начну работу ') + fmtY(dn(preview.d)) + '</div>' +
+      '<div class="mut">Ничего не сохранено.</div>' +
       (conflicts.length ? '<div class="warn" style="margin-top:4px">⚠ Пересекается с отпуском: ' + conflicts.map(function(v){ return fmt(dn(v.start))+'–'+fmt(dn(v.end)); }).join(', ') + '</div>' : '') +
       '<div class="btns" style="margin-top:8px"></div>';
     var bt = div.querySelector('.btns');
     function mk(text, cls, fn){ var b = document.createElement('button'); b.className = 'btn ' + cls; b.style.padding = '9px 4px'; b.textContent = text; b.onclick = fn; bt.appendChild(b); }
-    if (preview){
-      mk('Сохранить как план', 'main', function(){ sch.plan = {end: preview.end || (sch.plan && sch.plan.end) || null, arrival: preview.arrival || (sch.plan && sch.plan.arrival) || null}; preview = null; save(); render(); });
-      mk('Сбросить', 'plain', function(){ preview = null; render(); });
-    } else {
-      mk('Убрать план', 'plain', function(){ askConfirm('Убрать план?', function(){ sch.plan = null; save(); render(); }); });
-    }
+    mk('Применить', 'main', function(){ addEdit(preview.k, preview.d); preview = null; save(); render(); toast('✅ Применено'); });
+    mk('Сбросить', 'plain', function(){ preview = null; render(); });
     bn.appendChild(div);
   }
 
@@ -510,12 +571,17 @@ function render(){
   // календарь
   var host = $('cal'); host.innerHTML = '';
   if (tl.empty) return;
-  for (var m = 0; m < 12; m++){
-    var box = document.createElement('div'); box.className = 'mo';
+  for (var mi = 0; mi < 15; mi++){
+    var m = mi % 12, yr = year + (mi >= 12 ? 1 : 0);
+    if (mi === 12){
+      var sep = document.createElement('div'); sep.className = 'nyl'; sep.textContent = String(year + 1);
+      host.appendChild(sep);
+    }
+    var box = document.createElement('div'); box.className = 'mo' + (mi >= 12 ? ' ny' : '');
     var h = '<div class="mt">' + MONTHS[m] + '</div><div class="wd">' + WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('') + '</div><div class="gd">';
-    var firstN = Math.round(Date.UTC(year, m, 1) / DAY), shift = (wd(firstN) + 6) % 7;
+    var firstN = Math.round(Date.UTC(yr, m, 1) / DAY), shift = (wd(firstN) + 6) % 7;
     for (var k = 0; k < shift; k++) h += '<div></div>';
-    var dim = new Date(Date.UTC(year, m+1, 0)).getUTCDate();
+    var dim = new Date(Date.UTC(yr, m+1, 0)).getUTCDate();
     for (var d = 1; d <= dim; d++){
       var x = firstN + d - 1, s2 = dayStatus(tl, x), past = x <= T, cls = 'c';
       if (s2 === 'v') cls += ' vc';
