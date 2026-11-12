@@ -1,5 +1,5 @@
-const CACHE = 'driver-diary-v6';
-const CORE = ['./', './index.html', './trailer.html', './schedule.html','./stay.html','./shifts.js', './manifest.webmanifest'];
+const CACHE = 'driver-diary-v8';
+const CORE = ['./', './index.html', './trailer.html', './schedule.html','./stay.html','./wallet.html','./shifts.js', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -19,6 +19,7 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).origin !== self.location.origin) return;   // курсы валют и прочие внешние запросы не трогаем
   e.respondWith(
     fetch(e.request)
       .then(res => {

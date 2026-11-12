@@ -32,7 +32,12 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .crow .cn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .crow .cv{text-align:right;font-size:12px;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
 .crow .cv.has{color:var(--txt)}
-.crow.total{font-weight:600}
+.crow .cn{display:flex;align-items:center;gap:8px}
+.ci{width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ci svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.crow.total{font-weight:600;margin-top:6px;padding:7px 4px;border:1px solid rgba(245,165,36,.35);background:rgba(245,165,36,.12);border-radius:10px}
+.crow.total .cn{color:var(--acc)}
+.crow.total .ci{background:rgba(245,165,36,.2);color:var(--acc)}
 .crow.total .cv{color:var(--txt);font-weight:600}
 .btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
 .btn.main{background:var(--acc);border-color:var(--acc);color:#2a1c00}
@@ -56,6 +61,12 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .dd .l{font-size:11px;color:var(--mut);font-weight:400}
 .dd small{font-size:13px;color:var(--mut);margin-left:6px;font-weight:400}
 .dd .ph{color:#4a5272}
+.est{font-size:12px;color:var(--mut);margin:5px 2px 0;min-height:16px}
+.est.ap{color:var(--acc)}
+.lg{display:flex;gap:10px;justify-content:flex-end;font-size:11px;color:var(--mut);padding:0 4px 4px}
+.mbar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:#1c2030}
+.eur{display:flex;justify-content:space-between;align-items:baseline;padding:8px 4px 0}
+.eur b{font-size:18px;font-weight:600}
 .dt{position:relative;display:flex;align-items:center;gap:5px;background:#1c2030;border:1px solid var(--bline);border-radius:9px;padding:0 9px;height:36px;white-space:nowrap;cursor:pointer}
 .dt input{background:transparent;border:0;color:var(--txt);font-size:12px;font-family:inherit;color-scheme:dark;width:86px;padding:0}
 .dt input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
@@ -90,7 +101,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
     <button class="btn main" id="bAdd" style="width:100%;flex:none;margin-bottom:8px">+ Добавить чек</button>
 
     <div class="card">
-      <div class="cap" style="margin-bottom:6px">Расходы по месяцам</div>
+      <div class="cap" style="margin-bottom:6px">Расходы по месяцам, €</div>
       <div id="chart"></div>
       <button class="more hidden" id="bMore"></button>
     </div>
@@ -116,6 +127,29 @@ var $ = function(id){ return document.getElementById(id); };
 /* c — код в данных, s — знак в суммах, l — подпись, k — цвет в статистике */
 var CURS = [{c:'EUR', s:'€', l:'EUR', k:'#f5a524'}, {c:'PLN', s:'zł', l:'zł', k:'#8b7cf6'}, {c:'BYN', s:'Br', l:'BYN', k:'#4aa3df'}];
 var CATS = ['Прочее','Продукты','Одежда','Связь','Здоровье','Логистика','Бытовая химия'];
+var ICO = {
+  other:'<path d="M5 12h.01M12 12h.01M19 12h.01"/>',
+  cart:'<path d="M6 19a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0"/><path d="M15 19a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0"/><path d="M17 17h-11v-14h-2"/><path d="M6 5l14 1l-1 7h-13"/>',
+  shirt:'<path d="M15 4l6 2v5h-3v8a1 1 0 0 1-1 1h-10a1 1 0 0 1-1-1v-8h-3v-5l6-2a3 3 0 0 0 6 0"/>',
+  phone:'<path d="M6 5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-14"/><path d="M11 4h2"/><path d="M12 17v.01"/>',
+  health:'<path d="M5 3.5h14"/><path d="M5.5 3.5c0 3.6 2.8 6 6.5 6s6.5-2.4 6.5-6"/><path d="M12 9.5v10.5"/><path d="M8.5 21h7"/><path d="M12 19.6c-4.6-.4-4.6-3.7 0-4.3s4.6-3.4 0-4.2"/>',
+  bus:'<path d="M4 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M16 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/><path d="M4 17h-2v-11a1 1 0 0 1 1-1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8"/><path d="M16 5l1.5 7l4.5 0"/><path d="M2 10l15 0"/><path d="M7 5l0 5"/><path d="M12 5l0 5"/>',
+  spray:'<path d="M6 11h7v8.5a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M8 11v-3h3v3"/><path d="M8 8v-2h5"/><path d="M16 6h.01"/><path d="M17.5 8.5h.01"/><path d="M16 3.5h.01"/>',
+  sum:'<path d="M18 16v2a1 1 0 0 1-1 1h-11l6-7l-6-7h11a1 1 0 0 1 1 1v2"/>'
+};
+var CATI = {
+  'Прочее':{i:'other', c:'#a3acc2', b:'#1c2030'},
+  'Продукты':{i:'cart', c:'#3fbf8a', b:'rgba(63,191,138,.16)'},
+  'Одежда':{i:'shirt', c:'#8b7cf6', b:'rgba(139,124,246,.16)'},
+  'Связь':{i:'phone', c:'#4aa3df', b:'rgba(74,163,223,.16)'},
+  'Здоровье':{i:'health', c:'#f0707a', b:'rgba(240,112,122,.16)'},
+  'Логистика':{i:'bus', c:'#4aa3df', b:'rgba(74,163,223,.16)'},
+  'Бытовая химия':{i:'spray', c:'#3fbf8a', b:'rgba(63,191,138,.16)'}
+};
+function catIco(k){
+  var d = CATI[k] || CATI['Прочее'];
+  return '<span class="ci" style="color:' + d.c + ';background:' + d.b + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICO[d.i] + '</svg></span>';
+}
 var OLD_CATS = {'Интернет':'Связь','Мобильная связь':'Связь'};   // старые категории -> новая
 var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 var MSHORT = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];
@@ -167,6 +201,65 @@ function monthReceipts(key){
     .sort(function(a,b){ return a.d < b.d ? 1 : a.d > b.d ? -1 : b.id - a.id; });
 }
 
+/* ---------- курсы: BYN с НБРБ, PLN с НБП (Польша); в чеке хранится x = валюты за 1 EUR ---------- */
+var RK = 'wallet_rates_v1', rates = {};
+try { rates = JSON.parse(localStorage.getItem(RK)) || {}; } catch(e){ rates = {}; }
+function saveRates(){ try { localStorage.setItem(RK, JSON.stringify(rates)); } catch(e){} }
+function addDays(iso, n){ var t = new Date(iso + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0,10); }
+function fetchJson(url){
+  return new Promise(function(res, rej){
+    var done = false, ctl = window.AbortController ? new AbortController() : null;
+    var tm = setTimeout(function(){ if (ctl) ctl.abort(); if (!done){ done = true; rej(new Error('timeout')); } }, 7000);
+    fetch(url, ctl ? {signal: ctl.signal} : {}).then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function(j){ clearTimeout(tm); if (!done){ done = true; res(j); } },
+            function(e){ clearTimeout(tm); if (!done){ done = true; rej(e); } });
+  });
+}
+function netRate(cur, d){
+  if (cur === 'PLN') return fetchJson('https://api.nbp.pl/api/exchangerates/rates/a/eur/' + addDays(d, -10) + '/' + d + '/?format=json').then(function(j){
+    var a = j.rates || []; if (!a.length) throw new Error('empty');
+    var l = a[a.length - 1]; return {x: l.mid, src: 'НБП', rd: l.effectiveDate};
+  });
+  if (cur === 'BYN') return fetchJson('https://api.nbrb.by/exrates/rates/EUR?parammode=2&ondate=' + d).then(function(j){
+    if (!j || !j.Cur_OfficialRate) throw new Error('empty');
+    return {x: j.Cur_OfficialRate / (j.Cur_Scale || 1), src: 'НБРБ', rd: d};
+  });
+  return Promise.reject(new Error('cur'));
+}
+function cachedRate(cur, d){
+  var c = rates[cur] || {};
+  if (c[d]) return {x: c[d].x, src: c[d].src, rd: c[d].rd, ap: 0};
+  var ks = Object.keys(c).sort(); if (!ks.length) return null;
+  var best = ks[0]; ks.forEach(function(k){ if (k <= d) best = k; });
+  return {x: c[best].x, src: c[best].src, rd: best, ap: 1};
+}
+function getRate(cur, d){
+  if (cur === 'EUR') return Promise.resolve({x: 1, ap: 0});
+  var h = cachedRate(cur, d);
+  if (h && !h.ap) return Promise.resolve(h);
+  return netRate(cur, d).then(function(r){
+    (rates[cur] = rates[cur] || {})[d] = {x: r.x, src: r.src, rd: r.rd}; saveRates();
+    return {x: r.x, src: r.src, rd: r.rd, ap: 0};
+  }).catch(function(){ return h || null; });
+}
+function eurOf(r){ return r.c === 'EUR' ? r.a : (r.x > 0 ? Math.round(r.a / r.x) : null); }
+var fixing = false;
+function fixRates(){
+  if (fixing) return;
+  var todo = W.receipts.filter(function(r){ return r.c !== 'EUR' && (!(r.x > 0) || r.ap); });
+  if (!todo.length) return;
+  fixing = true; var changed = false;
+  (function next(i){
+    if (i >= todo.length){ fixing = false; if (changed){ save(); render(); } return; }
+    var r = todo[i];
+    getRate(r.c, r.d).then(function(g){
+      if (g && g.x > 0 && (!(r.x > 0) || !g.ap)){ r.x = g.x; if (g.ap) r.ap = 1; else delete r.ap; changed = true; }
+      next(i + 1);
+    });
+  })(0);
+}
+window.addEventListener('online', fixRates);
+
 /* ---------- диалоги ---------- */
 function openDlg(title, bodyHtml, buttons, cls){
   $('dTitle').textContent = title;
@@ -206,20 +299,37 @@ function openAdd(){
   var amt = '', cur = CURS[0].c, cat = CATS[0];
   var html = '<div class="top"><div class="dd" id="dd"></div>'
     + '<label class="dt">' + CAL + '<input type="date" id="fd" value="' + todayIso() + '"></label></div>'
-    + '<div class="pad" id="pad"></div>'
+    + '<div class="est" id="est"></div><div class="pad" id="pad"></div>'
     + '<div class="g3 cur" id="curBox" style="margin-top:8px"></div><div class="g3 cat" id="catBox"></div>';
   openDlg('', html, [{text:'Добавить', cls:'main', fn:function(){
     var cents = Math.round(parseFloat(amt || '0') * 100);
     if (!(cents > 0)){ toast('Введите сумму'); return false; }
     var d = $('fd').value || todayIso();
-    W.receipts.push({id: Date.now(), d: d, a: cents, c: cur, k: cat});
-    save();
+    var rc = {id: Date.now(), d: d, a: cents, c: cur, k: cat};
+    if (cur !== 'EUR'){ var h = cachedRate(cur, d); if (h){ rc.x = h.x; if (h.ap) rc.ap = 1; } }
+    W.receipts.push(rc);
+    save(); setTimeout(fixRates, 0);
     selKey = d.slice(0,7);
     render();
     toast('✅ Добавлено: ' + money(cents) + ' ' + sym(cur) + ' · ' + cat);
   }}, {text:'Отмена'}], 'compact');
 
+  var estTok = 0;
+  function updEst(){
+    var el = $('est'); if (!el) return;
+    var tok = ++estTok, cents = Math.round(parseFloat(amt || '0') * 100);
+    if (cur === 'EUR' || !(cents > 0)){ el.className = 'est'; el.textContent = ''; return; }
+    var d = $('fd').value || todayIso();
+    getRate(cur, d).then(function(g){
+      if (tok !== estTok) return;
+      if (!g){ el.className = 'est ap'; el.textContent = 'Нет сети: курс подтянется позже'; return; }
+      var e = Math.round(cents / g.x);
+      el.className = 'est' + (g.ap ? ' ap' : '');
+      el.textContent = '≈ ' + money(e) + ' € · ' + (g.ap ? 'курс неточный, уточнится позже' : 'курс ' + g.src + ' на ' + fmtDay(g.rd));
+    });
+  }
   function upd(){
+    updEst();
     $('dd').innerHTML = '<span class="l">Сумма</span><span>' + (amt ? esc(amt) : '<span class="ph">0</span>') + '<small>' + esc(curLab(cur)) + '</small></span>';
   }
   ['1','2','3','⌫','4','5','6','.','7','8','9','0'].forEach(function(k){
@@ -239,6 +349,7 @@ function openAdd(){
   });
   mkChecks($('curBox'), CURS.map(function(x){ return {v:x.c, t:x.l}; }), cur, function(v){ cur = v; upd(); });
   mkChecks($('catBox'), CATS.map(function(k){ return {v:k, t:k, wide:k === 'Бытовая химия'}; }), cat, function(v){ cat = v; });
+  $('fd').addEventListener('change', updEst);
   upd();
 }
 
@@ -250,8 +361,10 @@ function openList(){
   var box = $('rBox');
   list.forEach(function(r){
     var row = document.createElement('div'); row.className = 'vrow';
+    var ev = eurOf(r), sub = '';
+    if (r.c !== 'EUR') sub = ev === null ? '<span class="mut">без курса</span>' : '<span class="mut">' + (r.ap ? '~' : '≈') + ' ' + money(ev) + ' €</span>';
     row.innerHTML = '<span><span class="mut">' + fmtDay(r.d) + '</span> ' + esc(r.k) + '</span>' +
-      '<span style="display:flex;align-items:center;gap:8px"><span class="amt">' + money(r.a) + ' ' + sym(r.c) + '</span>' +
+      '<span style="display:flex;align-items:center;gap:8px">' + sub + '<span class="amt">' + money(r.a) + ' ' + sym(r.c) + '</span>' +
       '<button class="x" aria-label="Удалить">✕</button></span>';
     row.querySelector('.x').onclick = function(){
       askConfirm('Удалить чек?', function(){
@@ -272,12 +385,17 @@ function render(){
   W.receipts.forEach(function(r){ used[r.c] = 1; });
   var cols = CURS.filter(function(x){ return used[x.c]; });
   var cells = cols.map(function(){ return 'minmax(0,1fr)'; }).join(' ');
-  var tmplM = '46px ' + cells, tmplC = 'minmax(0,1.5fr) ' + cells;
+  var tmplC = 'minmax(0,2.5fr) ' + cells;
 
-  // суммы по месяцам и валютам
+  // суммы по месяцам в евро, с разбивкой по валютам (каждый чек по курсу своего дня)
   var byM = {}, sel = mIndex(selKey);
   W.receipts.forEach(function(r){
-    var k = r.d.slice(0,7), o = byM[k] || (byM[k] = {}); o[r.c] = (o[r.c] || 0) + r.a;
+    var k = r.d.slice(0,7), o = byM[k] || (byM[k] = {t:0, c:{}, ap:0, f:0, u:0});
+    var e = eurOf(r);
+    if (e === null){ o.u++; return; }
+    o.t += e; o.c[r.c] = (o.c[r.c] || 0) + e;
+    if (r.c !== 'EUR') o.f = 1;
+    if (r.ap) o.ap = 1;
   });
   // показываем только месяцы с чеками, плюс текущий и выбранный
   var set = {}; set[mIndex(curKey)] = 1; set[sel] = 1;
@@ -286,20 +404,24 @@ function render(){
   var shown = all.slice(0, showAll ? 24 : 6);
   if (shown.indexOf(sel) < 0) shown.push(sel);                  // выбранный месяц виден всегда
   shown.sort(function(a, b){ return b - a; });
-  var max = {}, i;
-  cols.forEach(function(x){ max[x.c] = 0; });
-  shown.forEach(function(n){ var o1 = byM[mKey(n)] || {}; cols.forEach(function(x){ max[x.c] = Math.max(max[x.c], o1[x.c] || 0); }); });
-  var ch = '<div class="mg mhead" style="grid-template-columns:' + tmplM + '"><span></span>' +
-    cols.map(function(x){ return '<span style="color:' + x.k + ';text-align:right">' + esc(x.l) + '</span>'; }).join('') + '</div>';
+  var max = 0, anyU = false;
+  shown.forEach(function(n){ var o1 = byM[mKey(n)]; if (o1){ max = Math.max(max, o1.t); if (o1.u) anyU = true; } });
+  var tmplM = '46px minmax(0,1fr) 74px';
+  var ch = cols.length > 1 ? '<div class="lg">' + cols.map(function(x){
+    return '<span><span style="color:' + x.k + '">●</span> ' + esc(x.l) + '</span>'; }).join('') + '</div>' : '';
   shown.forEach(function(n){
-    var k = mKey(n), o2 = byM[k] || {}, y = k.slice(0,4), m = parseInt(k.slice(5),10) - 1;
+    var k = mKey(n), o2 = byM[k] || {t:0, c:{}, ap:0, f:0, u:0}, y = k.slice(0,4), m = parseInt(k.slice(5),10) - 1;
     var mlab = MSHORT[m] + (y !== curKey.slice(0,4) ? "'" + y.slice(2) : '');
+    var w = max ? Math.max(o2.t ? 3 : 0, o2.t / max * 100) : 0;
+    var seg = cols.map(function(x){
+      var v = o2.c[x.c] || 0; return v ? '<i style="display:block;height:100%;width:' + (v / o2.t * 100) + '%;background:' + x.k + '"></i>' : '';
+    }).join('');
+    var val = o2.t ? ((o2.f || o2.ap) ? (o2.ap ? '~' : '≈') + ' ' : '') + money(o2.t) + (o2.u ? '*' : '') : (o2.u ? '*' : '—');
     ch += '<div class="mg mrow' + (k === selKey ? ' on' : '') + '" data-k="' + k + '" style="grid-template-columns:' + tmplM + '"><span class="ml">' + mlab + '</span>' +
-      cols.map(function(x){
-        var v = o2[x.c] || 0;
-        return '<span class="mc"><b>' + (v ? money(v) : '—') + '</b><span class="trk"><i style="width:' + (max[x.c] ? Math.max(v ? 3 : 0, v / max[x.c] * 100) : 0) + '%;background:' + x.k + '"></i></span></span>';
-      }).join('') + '</div>';
+      '<span class="mc"><span class="mbar" style="width:' + w + '%">' + seg + '</span></span>' +
+      '<span class="mc"><b>' + val + '</b></span></div>';
   });
+  if (anyU) ch += '<div class="mut" style="padding:4px 4px 0;font-size:11px">* чеки без курса пока не учтены</div>';
   $('chart').innerHTML = ch;
   [].forEach.call($('chart').querySelectorAll('.mrow'), function(r){
     r.onclick = function(){ selKey = r.getAttribute('data-k'); render(); };
@@ -326,11 +448,15 @@ function render(){
     var cl = '<div class="mg mhead" style="grid-template-columns:' + tmplC + '"><span></span>' +
       cols.map(function(x){ return '<span style="color:' + x.k + ';text-align:right">' + esc(x.l) + '</span>'; }).join('') + '</div>';
     keys.forEach(function(k, n){
-      cl += '<div class="crow' + (n === 0 ? ' first' : '') + '" style="grid-template-columns:' + tmplC + '"><span class="cn">' + esc(k) + '</span>' +
+      cl += '<div class="crow' + (n === 0 ? ' first' : '') + '" style="grid-template-columns:' + tmplC + '"><span class="cn">' + catIco(k) + esc(k) + '</span>' +
         cols.map(function(x){ var v = by[k][x.c] || 0; return '<span class="cv' + (v ? ' has' : '') + '">' + (v ? money(v) : '—') + '</span>'; }).join('') + '</div>';
     });
-    cl += '<div class="crow total" style="grid-template-columns:' + tmplC + '"><span class="cn">Всего</span>' +
-      cols.map(function(x){ return '<span class="cv">' + (tot[x.c] ? money(tot[x.c]) : '—') + '</span>'; }).join('') + '</div>';
+    cl += '<div class="crow total" style="grid-template-columns:' + tmplC + '"><span class="cn"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICO.sum + '</svg></span>Всего</span>' +
+      cols.map(function(x){ return '<span class="cv" style="color:' + x.k + '">' + (tot[x.c] ? money(tot[x.c]) : '—') + '</span>'; }).join('') + '</div>';
+    var eT = 0, eF = false, eAp = false, eU = 0;
+    list.forEach(function(r){ var e = eurOf(r); if (e === null) eU++; else eT += e; if (r.c !== 'EUR') eF = true; if (r.ap) eAp = true; });
+    if (eF) cl += '<div class="eur"><span class="mut" style="font-size:13px">Всего в евро</span><b>' + (eAp ? '~' : '≈') + ' ' + money(eT) + ' €</b></div>' +
+      (eU ? '<div class="mut" style="font-size:11px;text-align:right">без курса: ' + eU + ', не учтено</div>' : '');
     $('catList').innerHTML = cl;
   }
 
@@ -344,6 +470,7 @@ function render(){
   $('bList').onclick = openList;
   $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
   render();
+  fixRates();
 })();
 </script>
 <script>
