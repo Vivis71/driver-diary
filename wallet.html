@@ -242,6 +242,7 @@ function getRate(cur, d){
     return {x: r.x, src: r.src, rd: r.rd, ap: 0};
   }).catch(function(){ return h || null; });
 }
+function fmtRate(x){ return x.toLocaleString('ru-RU', {minimumFractionDigits:4, maximumFractionDigits:4}); }
 function eurOf(r){ return r.c === 'EUR' ? r.a : (r.x > 0 ? Math.round(r.a / r.x) : null); }
 var fixing = false;
 function fixRates(){
@@ -325,7 +326,7 @@ function openAdd(){
       if (!g){ el.className = 'est ap'; el.textContent = 'Нет сети: курс подтянется позже'; return; }
       var e = Math.round(cents / g.x);
       el.className = 'est' + (g.ap ? ' ap' : '');
-      el.textContent = '≈ ' + money(e) + ' € · ' + (g.ap ? 'курс неточный, уточнится позже' : 'курс ' + g.src + ' на ' + fmtDay(g.rd));
+      el.textContent = '≈ ' + money(e) + ' € · ' + (g.ap ? 'курс неточный, уточнится позже' : '1 € = ' + fmtRate(g.x) + ' ' + curLab(cur) + ' · ' + g.src + ' ' + fmtDay(g.rd));
     });
   }
   function upd(){
