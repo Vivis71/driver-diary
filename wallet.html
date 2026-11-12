@@ -61,6 +61,18 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .dd .l{font-size:11px;color:var(--mut);font-weight:400}
 .dd small{font-size:13px;color:var(--mut);margin-left:6px;font-weight:400}
 .dd .ph{color:#4a5272}
+.cols{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:112px}
+.col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;border-radius:8px;padding:2px 2px 0;cursor:pointer}
+.col .v{font-size:10px;color:var(--mut);margin-bottom:3px;white-space:nowrap}
+.col .st{width:100%;border-radius:4px;overflow:hidden;display:flex;flex-direction:column-reverse}
+.col .st i{display:block;width:100%}
+.col.on{background:rgba(245,165,36,.1)}
+.col.on .v{font-size:11px;font-weight:600;color:var(--txt)}
+.cl{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;font-size:11px;color:var(--mut);text-align:center;margin-top:5px}
+.cl .on{color:var(--txt);font-weight:600}
+.pg{display:flex;justify-content:space-between;margin-top:4px}
+.pg button{background:transparent;border:0;color:var(--mut);font-size:12px;font-family:inherit;padding:6px 2px;cursor:pointer}
+.msum{margin-top:8px;padding:8px 10px;background:#1c2030;border-radius:10px;display:flex;justify-content:space-between;align-items:baseline}
 .est{font-size:12px;color:var(--mut);margin:5px 2px 0;min-height:16px}
 .est.ap{color:var(--acc)}
 .lg{display:flex;gap:10px;justify-content:flex-end;font-size:11px;color:var(--mut);padding:0 4px 4px}
@@ -103,7 +115,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
     <div class="card">
       <div class="cap" style="margin-bottom:6px">Расходы по месяцам, €</div>
       <div id="chart"></div>
-      <button class="more hidden" id="bMore"></button>
+      <div class="pg"><button id="bPrev" class="hidden">‹ Раньше</button><span id="pgMid"></span><button id="bNext" class="hidden">Позже ›</button></div>
     </div>
 
     <div class="card">
@@ -125,7 +137,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 var $ = function(id){ return document.getElementById(id); };
 /* Три валюты. Чтобы заменить, достаточно поправить этот список; первая в списке — по умолчанию */
 /* c — код в данных, s — знак в суммах, l — подпись, k — цвет в статистике */
-var CURS = [{c:'EUR', s:'€', l:'EUR', k:'#f5a524'}, {c:'PLN', s:'zł', l:'zł', k:'#8b7cf6'}, {c:'BYN', s:'Br', l:'BYN', k:'#4aa3df'}];
+var CURS = [{c:'EUR', s:'€', l:'EUR', k:'#4aa3df'}, {c:'PLN', s:'zł', l:'zł', k:'#f0707a'}, {c:'BYN', s:'Br', l:'BYN', k:'#3fbf8a'}];
 var CATS = ['Прочее','Продукты','Одежда','Связь','Здоровье','Логистика','Бытовая химия'];
 var ICO = {
   other:'<path d="M5 12h.01M12 12h.01M19 12h.01"/>',
@@ -138,13 +150,13 @@ var ICO = {
   sum:'<path d="M18 16v2a1 1 0 0 1-1 1h-11l6-7l-6-7h11a1 1 0 0 1 1 1v2"/>'
 };
 var CATI = {
-  'Прочее':{i:'other', c:'#a3acc2', b:'#1c2030'},
-  'Продукты':{i:'cart', c:'#3fbf8a', b:'rgba(63,191,138,.16)'},
-  'Одежда':{i:'shirt', c:'#8b7cf6', b:'rgba(139,124,246,.16)'},
-  'Связь':{i:'phone', c:'#4aa3df', b:'rgba(74,163,223,.16)'},
-  'Здоровье':{i:'health', c:'#f0707a', b:'rgba(240,112,122,.16)'},
-  'Логистика':{i:'bus', c:'#4aa3df', b:'rgba(74,163,223,.16)'},
-  'Бытовая химия':{i:'spray', c:'#3fbf8a', b:'rgba(63,191,138,.16)'}
+  'Прочее':{i:'other', c:'#b4bcd0', b:'#1c2030'},
+  'Продукты':{i:'cart', c:'#b4bcd0', b:'#1c2030'},
+  'Одежда':{i:'shirt', c:'#b4bcd0', b:'#1c2030'},
+  'Связь':{i:'phone', c:'#b4bcd0', b:'#1c2030'},
+  'Здоровье':{i:'health', c:'#b4bcd0', b:'#1c2030'},
+  'Логистика':{i:'bus', c:'#b4bcd0', b:'#1c2030'},
+  'Бытовая химия':{i:'spray', c:'#b4bcd0', b:'#1c2030'}
 };
 function catIco(k){
   var d = CATI[k] || CATI['Прочее'];
@@ -379,7 +391,7 @@ function openList(){
 }
 
 /* ---------- отрисовка ---------- */
-var showAll = false;
+var winEnd = null;
 function render(){
   // колонки: только валюты, в которых есть чеки (первая, EUR, есть всегда)
   var used = {}; used[CURS[0].c] = 1;
@@ -389,7 +401,7 @@ function render(){
   var tmplC = 'minmax(0,2.5fr) ' + cells;
 
   // суммы по месяцам в евро, с разбивкой по валютам (каждый чек по курсу своего дня)
-  var byM = {}, sel = mIndex(selKey);
+  var byM = {}, sel = mIndex(selKey), curIdx = mIndex(curKey);
   W.receipts.forEach(function(r){
     var k = r.d.slice(0,7), o = byM[k] || (byM[k] = {t:0, c:{}, ap:0, f:0, u:0});
     var e = eurOf(r);
@@ -398,39 +410,39 @@ function render(){
     if (r.c !== 'EUR') o.f = 1;
     if (r.ap) o.ap = 1;
   });
-  // показываем только месяцы с чеками, плюс текущий и выбранный
-  var set = {}; set[mIndex(curKey)] = 1; set[sel] = 1;
-  Object.keys(byM).forEach(function(k){ set[mIndex(k)] = 1; });
-  var all = Object.keys(set).map(Number).sort(function(a, b){ return b - a; });
-  var shown = all.slice(0, showAll ? 24 : 6);
-  if (shown.indexOf(sel) < 0) shown.push(sel);                  // выбранный месяц виден всегда
-  shown.sort(function(a, b){ return b - a; });
-  var max = 0, anyU = false;
-  shown.forEach(function(n){ var o1 = byM[mKey(n)]; if (o1){ max = Math.max(max, o1.t); if (o1.u) anyU = true; } });
-  var tmplM = '46px minmax(0,1fr) 74px';
+  // окно из 6 месяцев; выбранный месяц всегда в окне
+  if (winEnd === null) winEnd = Math.max(curIdx, sel);
+  if (sel > winEnd) winEnd = sel;
+  if (sel < winEnd - 5) winEnd = sel + 5;
+  var winStart = winEnd - 5, max = 0, anyU = false, minIdx = curIdx;
+  Object.keys(byM).forEach(function(k){ minIdx = Math.min(minIdx, mIndex(k)); });
+  for (var n = winStart; n <= winEnd; n++){ var o1 = byM[mKey(n)]; if (o1){ max = Math.max(max, o1.t); if (o1.u) anyU = true; } }
   var ch = cols.length > 1 ? '<div class="lg">' + cols.map(function(x){
     return '<span><span style="color:' + x.k + '">●</span> ' + esc(x.l) + '</span>'; }).join('') + '</div>' : '';
-  shown.forEach(function(n){
-    var k = mKey(n), o2 = byM[k] || {t:0, c:{}, ap:0, f:0, u:0}, y = k.slice(0,4), m = parseInt(k.slice(5),10) - 1;
-    var mlab = MSHORT[m] + (y !== curKey.slice(0,4) ? "'" + y.slice(2) : '');
-    var w = max ? Math.max(o2.t ? 3 : 0, o2.t / max * 100) : 0;
+  var bars = '', labs = '';
+  for (var n2 = winStart; n2 <= winEnd; n2++){
+    var k2 = mKey(n2), o2 = byM[k2] || {t:0, c:{}, ap:0, f:0, u:0}, m2 = parseInt(k2.slice(5),10) - 1;
+    var h = max && o2.t ? Math.max(3, Math.round(o2.t / max * 74)) : 0;
     var seg = cols.map(function(x){
-      var v = o2.c[x.c] || 0; return v ? '<i style="display:block;height:100%;width:' + (v / o2.t * 100) + '%;background:' + x.k + '"></i>' : '';
+      var v = o2.c[x.c] || 0; return v ? '<i style="height:' + (v / o2.t * 100) + '%;background:' + x.k + '"></i>' : '';
     }).join('');
-    var val = o2.t ? ((o2.f || o2.ap) ? (o2.ap ? '~' : '≈') + ' ' : '') + money(o2.t) + (o2.u ? '*' : '') : (o2.u ? '*' : '—');
-    ch += '<div class="mg mrow' + (k === selKey ? ' on' : '') + '" data-k="' + k + '" style="grid-template-columns:' + tmplM + '"><span class="ml">' + mlab + '</span>' +
-      '<span class="mc"><span class="mbar" style="width:' + w + '%">' + seg + '</span></span>' +
-      '<span class="mc"><b>' + val + '</b></span></div>';
-  });
+    var val = o2.t ? Math.round(o2.t / 100) + (o2.u ? '*' : '') : (o2.u ? '*' : '');
+    bars += '<div class="col' + (k2 === selKey ? ' on' : '') + '" data-k="' + k2 + '"><span class="v">' + val + '</span><div class="st" style="height:' + h + 'px">' + seg + '</div></div>';
+    labs += '<span' + (k2 === selKey ? ' class="on"' : '') + '>' + MSHORT[m2] + '</span>';
+  }
+  ch += '<div class="cols">' + bars + '</div><div class="cl">' + labs + '</div>';
+  var so = byM[selKey] || {t:0, c:{}, ap:0, f:0, u:0}, sm0 = parseInt(selKey.slice(5),10) - 1;
+  ch += '<div class="msum"><span style="font-size:13px;font-weight:500">' + MONTHS[sm0] + ' ' + selKey.slice(0,4) + '</span><span style="font-size:16px;font-weight:600">' +
+    (so.t ? ((so.f || so.ap) ? (so.ap ? '~' : '≈') + ' ' : '') + money(so.t) + ' €' : '—') + '</span></div>';
   if (anyU) ch += '<div class="mut" style="padding:4px 4px 0;font-size:11px">* чеки без курса пока не учтены</div>';
   $('chart').innerHTML = ch;
-  [].forEach.call($('chart').querySelectorAll('.mrow'), function(r){
+  [].forEach.call($('chart').querySelectorAll('.col'), function(r){
     r.onclick = function(){ selKey = r.getAttribute('data-k'); render(); };
   });
-  var more = $('bMore');
-  more.classList.toggle('hidden', all.length <= 6);
-  more.textContent = showAll ? 'Свернуть' : 'Показать все месяцы (' + all.length + ')';
-  more.onclick = function(){ showAll = !showAll; render(); };
+  $('bPrev').classList.toggle('hidden', minIdx >= winStart);
+  $('bNext').classList.toggle('hidden', winEnd >= curIdx);
+  $('bPrev').onclick = function(){ winEnd -= 6; selKey = mKey(winEnd); render(); };
+  $('bNext').onclick = function(){ winEnd = Math.min(curIdx, winEnd + 6); selKey = mKey(winEnd); render(); };
 
   // выбранный месяц: категории сразу во всех валютах и строка «Всего»
   var list = monthReceipts(selKey), sm = parseInt(selKey.slice(5),10) - 1;
@@ -454,10 +466,6 @@ function render(){
     });
     cl += '<div class="crow total" style="grid-template-columns:' + tmplC + '"><span class="cn"><span class="ci"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICO.sum + '</svg></span>Всего</span>' +
       cols.map(function(x){ return '<span class="cv" style="color:' + x.k + '">' + (tot[x.c] ? money(tot[x.c]) : '—') + '</span>'; }).join('') + '</div>';
-    var eT = 0, eF = false, eAp = false, eU = 0;
-    list.forEach(function(r){ var e = eurOf(r); if (e === null) eU++; else eT += e; if (r.c !== 'EUR') eF = true; if (r.ap) eAp = true; });
-    if (eF) cl += '<div class="eur"><span class="mut" style="font-size:13px">Всего в евро</span><b>' + (eAp ? '~' : '≈') + ' ' + money(eT) + ' €</b></div>' +
-      (eU ? '<div class="mut" style="font-size:11px;text-align:right">без курса: ' + eU + ', не учтено</div>' : '');
     $('catList').innerHTML = cl;
   }
 
