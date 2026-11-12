@@ -39,9 +39,13 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .hf{background:transparent;color:rgba(63,191,138,.85);border:1px dashed rgba(63,191,138,.4)}
 .vc{background:rgba(139,124,246,.28);color:#a99dfa;font-weight:600}
 .td{outline:1.5px solid #e9ecf4;outline-offset:-1px;font-weight:700}
+.vz{background:#e5484d !important;color:#fff !important;border-color:#e5484d !important;font-weight:700}
+.av{background-image:repeating-linear-gradient(135deg,rgba(233,236,244,.16) 0 2px,transparent 2px 5px)}
+.visa{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+.visa .vt{display:flex;align-items:center;gap:8px;font-size:13px;min-width:0}
 .lg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-bottom:8px}
 .lg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.l1::before{background:rgba(245,165,36,.5)}.l2::before{background:rgba(63,191,138,.4)}.l3::before{background:rgba(139,124,246,.55)}.l4::before{border:1px dashed #a3acc2}
+.l1::before{background:rgba(245,165,36,.5)}.l2::before{background:rgba(63,191,138,.4)}.l3::before{background:rgba(139,124,246,.55)}.l4::before{border:1px dashed #a3acc2}.l5::before{background:#e5484d}.l6::before{background:repeating-linear-gradient(135deg,rgba(233,236,244,.55) 0 2px,transparent 2px 4px)}
 .btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
 .btn.main{background:var(--acc);border-color:var(--acc);color:#1f1300}
 .btn.out{background:transparent;border-color:var(--acc);color:var(--acc)}
@@ -106,6 +110,7 @@ a{color:var(--acc)}
         <div style="text-align:right"><div class="cap">Ближайший заезд</div><div class="big" id="infoArr" style="color:var(--green)">—</div></div>
       </div>
       <div class="mut" style="margin-top:8px" id="infoNow"></div>
+      <div class="visa"><span class="vt"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b7cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M7 9h4"/><path d="M7 13h2"/><path d="M15 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0"/></svg><span id="visaTxt"></span></span><button class="smallbtn" id="bVisa">Указать</button></div>
     </div>
 
     <div class="card">
@@ -120,7 +125,7 @@ a{color:var(--acc)}
     </div>
 
     <div class="card" id="calCard">
-      <div class="lg"><span class="l1">Работа</span><span class="l2">Дома</span><span class="l3">Отпуск</span><span class="l4">Прогноз</span></div>
+      <div class="lg"><span class="l1">Работа</span><span class="l2">Дома</span><span class="l3">Отпуск</span><span class="l4">Прогноз</span><span class="l5 hidden" id="lgVisa">Конец визы</span><span class="l6 hidden" id="lgAv">После визы</span></div>
       <div id="cal" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"></div>
     </div>
   </div>
@@ -146,6 +151,10 @@ function fmt(n){ var d = new Date(n*DAY); return pad(d.getUTCDate())+'.'+pad(d.g
 function fmtY(n){ return fmt(n)+'.'+new Date(n*DAY).getUTCFullYear(); }
 function nextWdAfter(n, W){ var x = n+1; while (wd(x) !== W) x++; return x; }
 function nextWdOnOrAfter(n, W){ var x = n; while (wd(x) !== W) x++; return x; }
+// конец работы, если заезд в день s: в контрольный день — N недель, иначе до ближайшей контрольной субботы и ещё N-1 неделя
+function workEndFrom(s, N, W){ return wd(s) === W ? s + N*7 : nextWdAfter(s, W) + (N-1)*7; }
+// заезд после выезда в день e: до ближайшей контрольной субботы (или сам день, если он контрольный) и ещё M недель
+function arrivalAfter(e, M, W){ return nextWdOnOrAfter(e, W) + M*7; }
 function wdName(n){ return ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][wd(n)]; }
 
 function toast(t, ms){
@@ -188,7 +197,7 @@ function buildTimeline(over){
   for (var i = 0; i < cad.length; i++){
     var c = cad[i], nxt = cad[i+1], e = c.e;
     if (e === null){
-      e = c.s + N*7;
+      e = workEndFrom(c.s, N, W);
       if (!nxt){
         if (over.end != null && !endOvUsed){ e = over.end; endOvUsed = true; }
         else if (T > e) e = nextWdOnOrAfter(T, W);
@@ -217,11 +226,11 @@ function buildTimeline(over){
 
   var horizon = Math.max(T, lastEnd) + 365*3 + 60, end = lastEnd, arrOv = over.arrival;
   while (true){
-    var a = (arrOv != null && arrOv > end) ? arrOv : attach(end + M*7, end);
+    var a = (arrOv != null && arrOv > end) ? arrOv : attach(arrivalAfter(end, M, W), end);
     arrOv = null;
     if (a > horizon){ mark(end+1, horizon, 'h'); break; }
     mark(end+1, a-1, 'h');
-    var e2 = a + N*7;
+    var e2 = workEndFrom(a, N, W);
     if (over.end != null && !endOvUsed && over.end >= a){ e2 = over.end; endOvUsed = true; }
     mark(a, e2, 'w');
     end = e2;
@@ -320,7 +329,7 @@ function openStart(){
       sch.cadences.sort(function(a,b){ return a.start < b.start ? -1 : 1; });
       if (sch.plan){ sch.plan.arrival = null; if (!sch.plan.end) sch.plan = null; }
       save(); render();
-      toast(wd(n) !== W ? 'Сохранено. Это не '+(prof.day||'Суббота').toLowerCase()+', проверьте дату' : '✅ Каденция начата: '+fmtY(n));
+      toast('✅ Каденция начата: '+fmtY(n) + (wd(n) !== W ? ' · график выровнен по дню заезда' : ''));
     }}, {text:'Отмена'}]);
 }
 function openEnd(){
@@ -340,7 +349,7 @@ function openEnd(){
       c.end = v;
       if (sch.plan){ sch.plan.end = null; if (!sch.plan.arrival) sch.plan = null; }
       save(); render();
-      toast(wd(dn(v)) !== W ? 'Сохранено. Это не '+(prof.day||'Суббота').toLowerCase()+', проверьте дату' : '✅ Каденция закончена: '+fmtY(dn(v)));
+      toast('✅ Каденция закончена: '+fmtY(dn(v)) + (wd(dn(v)) !== W ? ' · график выровнен по дню заезда' : ''));
     }}, {text:'Отмена'}]);
   function upd(){
     var v = $('f1').value, c = v ? pick(v) : null;
@@ -401,6 +410,17 @@ function vacLimit(year){
   var v = sch.vacLimits && sch.vacLimits[year];
   return (typeof v === 'number') ? v : VAC_LIMIT;
 }
+function openVisa(){
+  var cur = sch.visaEnd || '';
+  var btns = [{text:'Сохранить', cls:'main', fn:function(){
+    var v = $('f1').value;
+    if (!v){ toast('Укажите дату'); return false; }
+    sch.visaEnd = v; save(); render(); toast('✅ Виза до ' + fmtY(dn(v)));
+  }}];
+  if (cur) btns.push({text:'Убрать', cls:'out', fn:function(){ delete sch.visaEnd; save(); render(); toast('Дата визы убрана'); }});
+  btns.push({text:'Отмена'});
+  openDlg('Виза', '', '<label class="lab" for="f1">Действует до</label><input type="date" id="f1" value="' + (cur || iso(todayN())) + '">', btns);
+}
 function openVacLimit(){
   var year = parseInt($('yearSel').value, 10);
   openDlg('Дней отпуска в ' + year + ' году', 'Сколько дней отпуска у вас положено в этом году. Для каждого года задаётся отдельно.',
@@ -419,7 +439,7 @@ function vacCount(year){
   return s.size;
 }
 function render(){
-  var year = parseInt($('yearSel').value, 10), T = todayN();
+  var year = parseInt($('yearSel').value, 10), T = todayN(), vz = sch.visaEnd ? dn(sch.visaEnd) : null;
   $('tplLine').textContent = 'График ' + sch.work + '/' + sch.home + ' · день заезда: ' + (prof.day || 'Суббота').toLowerCase();
 
   var over = activeOver(), tl = buildTimeline(over);
@@ -464,6 +484,15 @@ function render(){
     $('infoArr').innerHTML = arrive != null ? fmt(arrive) + ' <span class="mut">' + wdName(arrive) + '</span>' : '—';
     var s = dayStatus(tl, T);
     $('infoNow').textContent = 'Сегодня: ' + (s === 'w' ? 'на работе' : s === 'h' ? 'дома' : s === 'v' ? 'отпуск' : '—');
+    var left = vz === null ? null : vz - T, vt = $('visaTxt');
+    if (vz === null) vt.innerHTML = '<span class="mut">Виза: дата не указана</span>';
+    else {
+      var vc = left <= 30 ? '#f0707a' : left <= 60 ? '#f5a524' : '#a3acc2';
+      vt.innerHTML = 'Виза до <b>' + fmtY(vz) + '</b> · <span style="color:' + vc + '">' + (left < 0 ? 'закончилась' : left === 0 ? 'последний день' : 'осталось ' + left + ' дн.') + '</span>';
+    }
+    $('bVisa').textContent = vz === null ? 'Указать' : 'Изменить';
+    $('lgVisa').classList.toggle('hidden', vz === null);
+    $('lgAv').classList.toggle('hidden', vz === null);
   }
 
   // отпуска: только счётчик, сам список во всплывающем окне
@@ -492,6 +521,7 @@ function render(){
       if (s2 === 'v') cls += ' vc';
       else if (s2 === 'w') cls += past ? ' wp' : ' wf';
       else if (s2 === 'h') cls += past ? ' hp' : ' hf';
+      if (vz !== null){ if (x === vz) cls += ' vz'; else if (x > vz) cls += ' av'; }
       if (x === T) cls += ' td';
       h += '<div class="' + cls + '">' + d + '</div>';
     }
@@ -505,7 +535,7 @@ function render(){
   var ys = $('yearSel'), cy = new Date().getFullYear();
   for (var y = cy - 1; y <= cy + 2; y++){ var o = document.createElement('option'); o.value = y; o.textContent = y; if (y === cy) o.selected = true; ys.appendChild(o); }
   ys.onchange = render;
-  $('bStart').onclick = openStart; $('bEnd').onclick = openEnd; $('bShift').onclick = openShift; $('bVac').onclick = openVac;
+  $('bStart').onclick = openStart; $('bEnd').onclick = openEnd; $('bShift').onclick = openShift; $('bVac').onclick = openVac; $('bVisa').onclick = openVisa;
   $('bFirst').onclick = openStart; $('bCadList').onclick = openCadList; $('bVacList').onclick = openVacList; $('vacEdit').onclick = openVacLimit;
   $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
   render();

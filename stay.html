@@ -38,10 +38,11 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .c{height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#7d86a0;border:1px solid transparent}
 .cb{background:rgba(63,191,138,.18);color:#3fbf8a;font-weight:600}
 .co{background:rgba(240,112,122,.2);color:#f0707a;font-weight:600}
+.vz{background:#e5484d !important;color:#fff !important;font-weight:700}
 .td{outline:1.5px solid var(--acc);outline-offset:-1px;color:var(--acc)}.co.td{color:var(--acc)}
 .lg{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-bottom:8px}
 .lg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.l1::before{background:rgba(63,191,138,.4)}.l2::before{background:rgba(240,112,122,.45)}.l3::before{box-shadow:inset 0 0 0 1.5px var(--acc)}
+.l1::before{background:rgba(63,191,138,.4)}.l2::before{background:rgba(240,112,122,.45)}.l3::before{box-shadow:inset 0 0 0 1.5px var(--acc)}.l4::before{background:#e5484d}
 .btn{flex:1;border-radius:12px;padding:12px 4px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid}
 .btn.main{background:var(--acc);border-color:var(--acc);color:#1f1300}
 .btn.out{background:transparent;border-color:var(--acc);color:var(--acc)}
@@ -102,7 +103,7 @@ input[type=date]{width:100%;background:#1c2030;border:1px solid #454d6b;border-r
     </div>
 
     <div class="card" id="calCard">
-      <div class="lg"><span class="l1">В РБ</span><span class="l2">Вне РБ</span><span class="l3">Сегодня</span></div>
+      <div class="lg"><span class="l1">В РБ</span><span class="l2">Вне РБ</span><span class="l3">Сегодня</span><span class="l4 hidden" id="lgVisa">Конец визы</span></div>
       <div id="cal" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"></div>
     </div>
 
@@ -339,7 +340,8 @@ function render(){
     return;
   }
   host.style.display = 'grid';
-  var map = yearMap(y, T);
+  var map = yearMap(y, T), vz = (prof.schedule && prof.schedule.visaEnd) || null;
+  $('lgVisa').classList.toggle('hidden', !vz);
   for (var m = 0; m < 12; m++){
     var box = document.createElement('div'); box.className = 'mo';
     var h = '<div class="mt">'+MONTHS[m]+'</div><div class="wd">'+WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div><div class="gd">';
@@ -349,6 +351,7 @@ function render(){
     for (var d = 1; d <= dim; d++){
       var key = iso(firstN + d - 1), s2 = map[key], cls = 'c';
       if (s2 === 'BY') cls += ' cb'; else if (s2 === 'OUT') cls += ' co';
+      if (vz && key === vz) cls += ' vz';
       if (key === T) cls += ' td';
       h += '<div class="'+cls+'">'+d+'</div>';
     }
