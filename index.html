@@ -1293,7 +1293,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
     <input type="file" id="importArchiveFile" accept=".json" class="hidden" onchange="handleArchiveFile(event)">
 
     <!-- Корпус телефона -->
-    <div class="shell w-full max-w-sm bg-[#1c2030] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-3 min-h-[580px] justify-between">
+    <div class="shell w-full max-w-sm bg-[#1c2030] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-2.5 min-h-[580px] justify-between">
         
         <!-- ================= ЭКРАН 0: СТАРТОВЫЙ (ВЫБОР / УПРАВЛЕНИЕ ПРОФИЛЯМИ) ================= -->
         <div id="selectorScreen" class="space-y-3 flex flex-col justify-between h-full">
@@ -1380,7 +1380,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             </button>
         </div>
                 <!-- ================= ЭКРАН 2: ГЛАВНЫЙ РАБОЧИЙ ПУЛЬТ ================= -->
-        <div id="mainScreen" class="space-y-2.5 hidden">
+        <div id="mainScreen" class="space-y-1.5 hidden">
             
             <!-- 1. Строка профиля с кнопкой Шестеренки ⚙️ -->
             <div class="bg-[#262b3d] px-3 py-2 rounded-xl flex items-center justify-between border border-[#343a52]">
@@ -1388,8 +1388,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     <span class="flex-shrink-0" style="width:30px;height:30px;border-radius:50%;background:#2f3550;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></svg></span>
                     <span id="displayProfileInfo" class="text-xs font-semibold text-gray-200 truncate">HULEUSKI SIARHEI</span>
                 </div>
-                <button onclick="openProfileSettingsModal()" class="text-sm bg-[#2f3550] hover:bg-[#454d6b] p-1 rounded flex-shrink-0 ml-2" title="Настройки профиля" aria-label="Настройки профиля" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
-                </button>
+                <div class="flex items-center flex-shrink-0 ml-2" style="gap:6px;"><button onclick="showToast('Справка появится позже')" class="text-sm bg-[#2f3550] hover:bg-[#454d6b] p-1 rounded flex-shrink-0" title="Справка" aria-label="Справка" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 17v.01"/><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"/></svg></button><button onclick="openProfileSettingsModal()" class="text-sm bg-[#2f3550] hover:bg-[#454d6b] p-1 rounded flex-shrink-0" title="Настройки профиля" aria-label="Настройки профиля" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
+                </button></div>
             </div>
             <!-- 2. Дата и текущая неделя -->
             <div class="bg-[#262b3d] px-3 py-2 rounded-xl border border-[#343a52] flex justify-between items-center">
@@ -1427,41 +1427,41 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/></svg> Диспетчеру (PL)
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-                    <button onclick="goSub('trailer.html')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="#f5a524" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
-                    <button onclick="showToast('Раздел пока в разработке')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
-                    <button onclick="openPauseModal()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
-                    <button onclick="copyHomeMessage()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
+                    <button onclick="goSub('trailer.html')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:7px 2px 6px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:66px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="#f5a524" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
+                    <button onclick="showToast('Раздел пока в разработке')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:7px 2px 6px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:66px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
+                    <button onclick="openPauseModal()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:7px 2px 6px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:66px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
+                    <button onclick="copyHomeMessage()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:7px 2px 6px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:66px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
                 </div>
             </div>
             <!-- Ряд разделов: Кошелёк, График, Пребывание и одно свободное место -->
             <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-                <button onclick="goSub('wallet.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/></svg></span>Кошелёк</button>
-                <button onclick="goSub('schedule.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"/><path d="M18 14v4h4"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/></svg></span>График</button>
-                <button onclick="goSub('stay.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Пребывание</button>
-                <div class="tile-empty" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;text-align:center;">
+                <button onclick="goSub('wallet.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:7px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/></svg></span>Кошелёк</button>
+                <button onclick="goSub('schedule.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:7px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"/><path d="M18 14v4h4"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/></svg></span>График</button>
+                <button onclick="goSub('stay.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:7px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Пребывание</button>
+                <div class="tile-empty" style="border-radius:12px;padding:7px 2px;font-size:11px;line-height:1.3;text-align:center;">
                     <span style="display:block;font-size:24px;line-height:26px;margin-bottom:3px;">+</span>Скоро
                 </div>
             </div>
             <!-- Дни пребывания: В РБ / Вне РБ -->
             <div class="bg-[#262b3d] p-2.5 rounded-xl border border-[#343a52]">
-                <div style="font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:10px;">ДНИ ПРЕБЫВАНИЯ</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:6px;">ДНИ ПРЕБЫВАНИЯ</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                     <div>
-                        <div class="stat-ok" style="border-radius:12px;padding:10px 4px;text-align:center;">
+                        <div class="stat-ok" style="border-radius:12px;padding:6px 4px;text-align:center;">
                             <div style="font-size:11px;color:#a3acc2;">В РБ</div>
-                            <div style="font-size:30px;font-weight:800;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
+                            <div style="font-size:26px;font-weight:800;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
                         </div>
-                        <button onclick="confirmBorder('Въезд в РБ')" class="btn-ok" style="margin-top:8px;width:100%;border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
+                        <button onclick="confirmBorder('Въезд в РБ')" class="btn-ok" style="margin-top:6px;width:100%;border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:8px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
                     </div>
                     <div>
-                        <div id="outBox" class="stat-out" style="border-radius:12px;padding:10px 4px;text-align:center;">
+                        <div id="outBox" class="stat-out" style="border-radius:12px;padding:6px 4px;text-align:center;">
                             <div style="font-size:11px;color:#a3acc2;">Вне РБ</div>
-                            <div style="font-size:30px;font-weight:800;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
+                            <div style="font-size:26px;font-weight:800;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
                         </div>
-                        <button onclick="confirmBorder('Выезд из РБ')" class="btn-no" style="margin-top:8px;width:100%;border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
+                        <button onclick="confirmBorder('Выезд из РБ')" class="btn-no" style="margin-top:6px;width:100%;border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:8px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
                     </div>
                 </div>
-                <div style="text-align:center;margin-top:10px;font-size:12px;color:#a3acc2;">Минск: <b id="minskLiveTime" style="color:#fff;">--:--:--</b></div>
+                <div style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:8px;font-size:12px;color:#a3acc2;"><span>Минск <b id="minskLiveTime" style="color:#fff;font-size:14px;font-variant-numeric:tabular-nums;">--:--</b></span><span style="width:1px;height:14px;background:#454d6b;"></span><span>Варшава <b id="warsawLiveTime" style="color:#fff;font-size:14px;font-variant-numeric:tabular-nums;">--:--</b></span></div>
             </div>
             <!-- Подвал со скромной авторской пометкой -->
             <div class="flex justify-between items-center text-[10px] text-gray-500 pt-1 px-1">
@@ -1558,7 +1558,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
             <div class="text-base font-bold text-yellow-400" id="modalTitle">Подтверждение</div>
             <p class="text-xs text-gray-300" id="modalText">Фиксируем событие?</p>
-            <div class="text-[10px] text-gray-400">Минск: <span class="minskLiveTimeCopy font-bold text-gray-100">--:--:--</span></div>
+            <div class="text-[10px] text-gray-400">Минск: <span class="minskLiveTimeCopy font-bold text-gray-100">--:--</span></div>
             <div class="grid grid-cols-2 gap-2 pt-1">
                 <button onclick="closeBorderModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
                 <button onclick="closeBorderModal(true)" class="bg-[#f5a524] text-gray-950 py-2 rounded-xl text-xs font-bold">Подтвердить</button>
@@ -1666,18 +1666,31 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             };
         }
 
-        // Живое время Минска (обновляется каждую секунду)
+        // Часы Минска и Варшавы: без секунд, двоеточие мигает (анимация в style.css). DOM трогаем только при смене минуты
+        const RU_WD = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+        function hmIn(tz) {
+            const p = {};
+            new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false })
+                .formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+            return { h: p.hour === '24' ? '00' : p.hour, m: p.minute };
+        }
+        function dayDate(ds) { const pp = ds.split('.'); return RU_WD[new Date(Date.UTC(+pp[2], +pp[1] - 1, +pp[0])).getUTCDay()] + ', ' + ds; }
+        let lastClk = '';
         function updateMinskClock() {
-            const t = new Intl.DateTimeFormat('ru-RU', {
-                timeZone: 'Europe/Minsk',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            }).format(new Date());
+            const mi = hmIn('Europe/Minsk'), wa = hmIn('Europe/Warsaw');
+            const key = mi.h + mi.m + wa.h + wa.m;
+            const dateEl = document.getElementById('currentMinskDateDisplay');
+            if (dateEl) {
+                const txt = dayDate(getLocalNow().dateString);
+                if (dateEl.innerText !== txt) dateEl.innerText = txt;
+            }
+            if (key === lastClk) return;
+            lastClk = key;
             const el = document.getElementById('minskLiveTime');
-            if (el) el.innerText = t;
-            document.querySelectorAll('.minskLiveTimeCopy').forEach(e => e.innerText = t);
+            if (el) el.innerHTML = mi.h + '<span class="blink">:</span>' + mi.m;
+            const ew = document.getElementById('warsawLiveTime');
+            if (ew) ew.innerHTML = wa.h + '<span class="blink">:</span>' + wa.m;
+            document.querySelectorAll('.minskLiveTimeCopy').forEach(e => e.innerText = mi.h + ':' + mi.m);
         }
 
         window.onload = function() {
@@ -1687,7 +1700,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             renderProfilesList();
             const minsk = getLocalNow();
             const dateEl = document.getElementById('currentMinskDateDisplay');
-            if(dateEl) dateEl.innerText = minsk.dateString;
+            if(dateEl) dateEl.innerText = dayDate(minsk.dateString);
             updateWeekNumber();
 
             if (profiles.length > 0) {
@@ -2032,7 +2045,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             
             const minsk = getLocalNow();
             const dateEl = document.getElementById('currentMinskDateDisplay');
-            if(dateEl) dateEl.innerText = minsk.dateString;
+            if(dateEl) dateEl.innerText = dayDate(minsk.dateString);
 
             updateWeekNumber();
             renderShiftInfo();

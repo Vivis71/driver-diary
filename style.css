@@ -145,3 +145,7 @@ input[type=date]{background:rgba(12,16,34,.5) !important;border-color:var(--line
 .seg.has .pk:not(.on){opacity:.5}
 .btn.dim{opacity:.55;box-shadow:none !important}
 .need{outline:2px solid #f0707a;outline-offset:3px;border-radius:12px}
+
+/* мигающее двоеточие в часах на главной */
+.blink{animation:clkblink 1s steps(1,end) infinite}
+@keyframes clkblink{50%{opacity:.15}}
