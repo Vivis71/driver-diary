@@ -65,7 +65,7 @@ body{background:radial-gradient(120% 55% at 50% 0%,var(--bg2) 0%,var(--bg1) 55%,
   border-color:var(--line) !important;
   box-shadow:var(--hi),var(--drop);
 }
-.back,.icobtn,.smallbtn,.yr,.btn.plain,.edt{
+.back,.icobtn,.smallbtn,.yr,.btn.plain,.edt,.gear{
   background:linear-gradient(180deg,#33395a,#272c47) !important;
   border-color:var(--line-strong) !important;
   box-shadow:var(--hi);

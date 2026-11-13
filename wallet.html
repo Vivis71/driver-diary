@@ -82,8 +82,8 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .dt{position:relative;display:flex;align-items:center;gap:5px;background:#1c2030;border:1px solid var(--bline);border-radius:9px;padding:0 9px;height:36px;white-space:nowrap;cursor:pointer}
 .dt input{background:transparent;border:0;color:var(--txt);font-size:12px;font-family:inherit;color-scheme:dark;width:86px;padding:0}
 .dt input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
-.pad button{background:var(--btn);border:1px solid var(--bline);border-radius:8px;color:var(--txt);font-size:15px;font-weight:500;height:28px;padding:0;font-family:inherit;cursor:pointer}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.pad button{background:var(--btn);border:1px solid var(--bline);border-radius:10px;color:var(--txt);font-size:22px;font-weight:500;height:46px;padding:0;font-family:inherit;cursor:pointer}
 .pad button:active{background:#3a4262}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}
 .it{display:flex;align-items:center;gap:5px;background:#1c2030;border:1px solid var(--line);border-radius:7px;padding:0 6px;height:26px;font-size:12px;min-width:0;white-space:nowrap;cursor:pointer;color:var(--txt)}
@@ -94,6 +94,9 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .cat .it.on .bx{background:var(--green);border-color:var(--green);color:#0b2a1c}
 .empty{text-align:center;padding:18px 10px}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:var(--btn);color:var(--txt);border:1px solid var(--bline);padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.gear{width:38px;height:38px;border-radius:10px;border:1px solid var(--bline);background:var(--btn);color:var(--mut);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0}
+.rates{font-size:12px;color:var(--mut);padding:0 6px;margin:-2px 0 8px;cursor:pointer;line-height:1.4}
+.rates b{color:var(--txt);font-weight:600;font-variant-numeric:tabular-nums}
 .hidden{display:none}
 </style>
 <link rel="stylesheet" href="style.css">
@@ -101,8 +104,9 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 <body>
 <div class="app">
 
-  <div class="card row" style="justify-content:flex-start;gap:12px">
-    <a class="back" href="index.html" aria-label="Назад">←</a><span class="title">Кошелёк</span>
+  <div class="card row">
+    <span style="display:flex;align-items:center;gap:12px"><a class="back" href="index.html" aria-label="Назад">←</a><span class="title">Кошелёк</span></span>
+    <button class="gear" id="gear" aria-label="Настройки по умолчанию" title="Валюта и категория по умолчанию"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065"/><circle cx="12" cy="12" r="3"/></svg></button>
   </div>
 
   <div id="noProfile" class="card empty hidden">
@@ -111,6 +115,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
   </div>
 
   <div id="main">
+    <div class="rates hidden" id="rateLine"></div>
     <button class="btn main" id="bAdd" style="width:100%;flex:none;margin-bottom:8px">+ Добавить чек</button>
 
     <div class="card">
@@ -308,9 +313,55 @@ function mkChecks(host, items, val, onPick){
   draw();
 }
 
+/* ---------- валюта и категория по умолчанию (по одной на профиль) ---------- */
+function defs(){
+  var d = W.def || {};
+  return {cur: CURS.some(function(x){ return x.c === d.cur; }) ? d.cur : CURS[0].c, cat: CATS.indexOf(d.cat) >= 0 ? d.cat : CATS[0]};
+}
+function openDefs(){
+  var d = defs(), cur = d.cur, cat = d.cat;
+  var html = '<div class="cap" style="margin-bottom:4px">Валюта по умолчанию</div><div class="g3 cur" id="dCur"></div>'
+    + '<div class="cap" style="margin:10px 0 4px">Категория по умолчанию</div><div class="g3 cat" id="dCat"></div>'
+    + '<div class="est" style="margin-top:8px">Эти значения выбираются заранее при добавлении чека.</div>';
+  openDlg('По умолчанию', html, [{text:'Сохранить', cls:'main', fn:function(){ W.def = {cur:cur, cat:cat}; save(); toast('✅ Сохранено'); }}, {text:'Отмена'}], 'compact');
+  mkChecks($('dCur'), CURS.map(function(x){ return {v:x.c, t:x.l}; }), cur, function(v){ cur = v; });
+  mkChecks($('dCat'), CATS.map(function(k){ return {v:k, t:k, wide:k === 'Бытовая химия'}; }), cat, function(v){ cat = v; });
+}
+
+/* ---------- сегодняшние курсы в шапке: zł с НБП, Br с НБРБ; без сети показываем последние известные с датой ---------- */
+var rateInfo = {};
+function drawRates(){
+  var el = $('rateLine'), parts = [], old = '';
+  CURS.forEach(function(c){
+    var r = rateInfo[c.c]; if (c.c === 'EUR' || !r) return;
+    parts.push('<b>' + fmtRate(r.x) + '</b> ' + esc(c.s));
+    if (r.ap && !old) old = fmtDay(r.rd);
+  });
+  if (!parts.length){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.innerHTML = '1 € = ' + parts.join(' · ') + (old ? ' · на ' + old : '');
+}
+function initRates(){
+  var T = todayIso();
+  CURS.forEach(function(c){ if (c.c !== 'EUR'){ var h = cachedRate(c.c, T); if (h) rateInfo[c.c] = h; } });
+  drawRates();
+  CURS.forEach(function(c){
+    if (c.c === 'EUR') return;
+    getRate(c.c, T).then(function(g){ if (g && g.x > 0){ rateInfo[c.c] = g; drawRates(); } });
+  });
+  $('rateLine').onclick = function(){
+    var h = '';
+    CURS.forEach(function(c){
+      var r = rateInfo[c.c]; if (c.c === 'EUR' || !r) return;
+      h += '<div class="vrow"><span>1 € = <b>' + fmtRate(r.x) + '</b> ' + esc(c.s) + '</span><span class="mut">' + esc(r.src || '') + ' · от ' + fmtDay(r.rd) + (r.ap ? ' (последний известный)' : '') + '</span></div>';
+    });
+    if (h) openDlg('Курсы к евро', h, [{text:'Закрыть', cls:'plain'}], 'compact');
+  };
+}
+
 /* ---------- добавить чек: сумма и дата сверху, потом валюта и категория ---------- */
 function openAdd(){
-  var amt = '', cur = CURS[0].c, cat = CATS[0];
+  var df = defs(), amt = '', cur = df.cur, cat = df.cat;
   var html = '<div class="top"><div class="dd" id="dd"></div>'
     + '<label class="dt">' + CAL + '<input type="date" id="fd" value="' + todayIso() + '"></label></div>'
     + '<div class="est" id="est"></div><div class="pad" id="pad"></div>'
@@ -478,9 +529,11 @@ function render(){
   if (!load()){ $('main').classList.add('hidden'); $('noProfile').classList.remove('hidden'); return; }
   $('bAdd').onclick = openAdd;
   $('bList').onclick = openList;
+  $('gear').onclick = openDefs;
   $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
   render();
   fixRates();
+  initRates();
 })();
 </script>
 <script>
