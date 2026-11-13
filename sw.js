@@ -1,5 +1,5 @@
-const CACHE = 'driver-diary-v8';
-const CORE = ['./', './index.html', './trailer.html', './schedule.html','./stay.html','./wallet.html','./shifts.js', './manifest.webmanifest'];
+const CACHE = 'driver-diary-v9';
+const CORE = ['./', './index.html', './trailer.html', './schedule.html','./stay.html','./wallet.html','./shifts.js', './style.css', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

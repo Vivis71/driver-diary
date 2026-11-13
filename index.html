@@ -1286,13 +1286,14 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             border: 1px solid rgba(255, 255, 255, 0.07);
         }
     </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-[#161a28] text-gray-100 font-sans flex justify-center items-center min-h-screen m-0 p-2">
     <!-- Скрытый инпут для загрузки архива профиля -->
     <input type="file" id="importArchiveFile" accept=".json" class="hidden" onchange="handleArchiveFile(event)">
 
     <!-- Корпус телефона -->
-    <div class="w-full max-w-sm bg-[#1c2030] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-3 min-h-[580px] justify-between">
+    <div class="shell w-full max-w-sm bg-[#1c2030] rounded-2xl shadow-2xl overflow-hidden border border-[#2a2b32] flex flex-col p-3 min-h-[580px] justify-between">
         
         <!-- ================= ЭКРАН 0: СТАРТОВЫЙ (ВЫБОР / УПРАВЛЕНИЕ ПРОФИЛЯМИ) ================= -->
         <div id="selectorScreen" class="space-y-3 flex flex-col justify-between h-full">
@@ -1313,7 +1314,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 </div>
                 <!-- Две плитки -->
                 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;">
-                    <button onclick="goToSetup()" style="background:transparent;border:1.5px solid #f5a524;color:#f5a524;border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span id="newProfileLabel">Создать профиль</span></button>
+                    <button onclick="goToSetup()" class="btn-out" style="border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span id="newProfileLabel">Создать профиль</span></button>
                     <button onclick="triggerArchiveImport()" class="bg-[#2f3550] hover:bg-[#3a4262] border border-[#454d6b] text-gray-100" style="border-radius:12px;padding:10px 4px 8px;font-size:12px;font-weight:600;line-height:1.25;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="display:block;margin:0 auto 4px;" aria-hidden="true"><path d="M12 21l-8 -4.5v-9l8 -4.5l8 4.5v4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/><path d="M22 18h-7"/><path d="M18 15l-3 3l3 3"/></svg>Из архива</button>
                 </div>
             </div>
@@ -1401,7 +1402,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 </div>
             </div>
             <!-- 3. Информационный блок статусов -->
-            <div class="bg-[#262b3d] px-3 py-2 rounded-xl border border-[#343a52]" style="position:relative;padding-right:58px;">
+            <div class="cd-accent bg-[#262b3d] px-3 py-2 rounded-xl border border-[#343a52]" style="position:relative;padding-right:58px;">
             <button onclick="openJournal()" aria-label="Журнал недель и смен" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;border:1px solid #454d6b;background:#2f3550;color:#a3acc2;display:flex;align-items:center;justify-content:center;"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10.5 5.3 8.2 4.7 4 5v12.5c4.2-.3 6.5.3 8 1.5"/><path d="M12 6.5c1.5-1.2 3.8-1.8 8-1.5v12.5c-4.2-.3-6.5.3-8 1.5"/><path d="M12 6.5V19"/></svg></button>
             
                 <div id="displayWeekStart" style="white-space:nowrap;font-size:clamp(11px,3.6vw,14px);line-height:1.9;color:#a3acc2;">Неделя: не начата</div>
@@ -1410,7 +1411,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             </div>
             <!-- Блок смен: три кнопки в ряд -->
             <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;">
-                <button onclick="confirmStartWeek()" style="background:#f5a524;border:1.5px solid #f5a524;color:#2a1c00;border-radius:12px;padding:8px 2px;font-size:12px;font-weight:700;line-height:1.25;">
+                <button onclick="confirmStartWeek()" class="btn-pri" style="border:1.5px solid #f5a524;color:#2a1c00;border-radius:12px;padding:8px 2px;font-size:12px;font-weight:700;line-height:1.25;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M16 19h6"/><path d="M19 16v6"/></svg>Начало недели
                 </button>
                 <button onclick="startShiftAction()" class="bg-[#2f3550] hover:bg-[#3a4262] active:bg-[#454d6b] border border-[#454d6b] text-gray-100" style="border-radius:12px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.25;">
@@ -1426,10 +1427,10 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a3acc2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9l-8 4.5l-8 -4.5v-9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12v9"/><path d="M12 12l-8 -4.5"/></svg> Диспетчеру (PL)
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;">
-                    <button onclick="goSub('trailer.html')" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="#f5a524" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
-                    <button onclick="showToast('Раздел пока в разработке')" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
-                    <button onclick="openPauseModal()" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
-                    <button onclick="copyHomeMessage()" style="background:#2f3550;border:1px solid #454d6b;border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
+                    <button onclick="goSub('trailer.html')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="34" height="20" viewBox="0 0 34 20" fill="none" stroke="#f5a524" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:2px auto 7px;"><rect x="1.5" y="2" width="31" height="11" rx="1.5"/><path d="M5 13v3.5M3 16.5h4"/><circle cx="20" cy="16" r="2.3"/><circle cx="25" cy="16" r="2.3"/><circle cx="30" cy="16" r="2.3"/></svg>Рапорт прицепа</button>
+                    <button onclick="showToast('Раздел пока в разработке')" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M4 21v-13a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-9l-4 4"/><path d="M8 9h8M8 13h5"/></svg>Сообщения</button>
+                    <button onclick="openPauseModal()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M7 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M22 17v-3h-20"/><path d="M2 8v9"/><path d="M12 14v-5a2 2 0 0 1 2 -2h5a3 3 0 0 1 3 3v6"/></svg>Недельный отдых</button>
+                    <button onclick="copyHomeMessage()" class="tile" style="border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 2px 8px;color:#e9ecf4;font-size:11px;font-weight:500;line-height:1.2;min-height:76px;min-width:0;overflow:hidden;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 4px;"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg>Съезд домой</button>
                 </div>
             </div>
             <!-- Ряд разделов: Кошелёк, График, Пребывание и одно свободное место -->
@@ -1437,7 +1438,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 <button onclick="goSub('wallet.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/></svg></span>Кошелёк</button>
                 <button onclick="goSub('schedule.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"/><path d="M18 14v4h4"/><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/></svg></span>График</button>
                 <button onclick="goSub('stay.html')" class="bg-[#2f3550] border border-[#454d6b]" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#e9ecf4;"><span style="color:#8b7cf6;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:0 auto 3px;"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Пребывание</button>
-                <div style="border:1px dashed #454d6b;border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;color:#7d86a0;text-align:center;">
+                <div class="tile-empty" style="border-radius:12px;padding:10px 2px;font-size:11px;line-height:1.3;text-align:center;">
                     <span style="display:block;font-size:24px;line-height:26px;margin-bottom:3px;">+</span>Скоро
                 </div>
             </div>
@@ -1446,18 +1447,18 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 <div style="font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:10px;">ДНИ ПРЕБЫВАНИЯ</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
-                        <div style="border:1px solid rgba(63,191,138,.35);background:rgba(63,191,138,.08);border-radius:12px;padding:10px 4px;text-align:center;">
+                        <div class="stat-ok" style="border-radius:12px;padding:10px 4px;text-align:center;">
                             <div style="font-size:11px;color:#a3acc2;">В РБ</div>
                             <div style="font-size:30px;font-weight:800;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
                         </div>
-                        <button onclick="confirmBorder('Въезд в РБ')" style="margin-top:8px;width:100%;background:rgba(6,95,70,.4);border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
+                        <button onclick="confirmBorder('Въезд в РБ')" class="btn-ok" style="margin-top:8px;width:100%;border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
                     </div>
                     <div>
-                        <div id="outBox" style="border:1px solid #454d6b;background:#2f3550;border-radius:12px;padding:10px 4px;text-align:center;">
+                        <div id="outBox" class="stat-out" style="border-radius:12px;padding:10px 4px;text-align:center;">
                             <div style="font-size:11px;color:#a3acc2;">Вне РБ</div>
                             <div style="font-size:30px;font-weight:800;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
                         </div>
-                        <button onclick="confirmBorder('Выезд из РБ')" style="margin-top:8px;width:100%;background:rgba(127,29,29,.4);border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
+                        <button onclick="confirmBorder('Выезд из РБ')" class="btn-no" style="margin-top:8px;width:100%;border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:10px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
                     </div>
                 </div>
                 <div style="text-align:center;margin-top:10px;font-size:12px;color:#a3acc2;">Минск: <b id="minskLiveTime" style="color:#fff;">--:--:--</b></div>

@@ -18,11 +18,11 @@ input.txt{background:#1c2030;border:1px solid #454d6b;border-radius:8px;color:va
 input.txt:focus{outline:none;border-color:var(--acc)}
 .num{cursor:pointer;width:150px;text-align:center;font-size:22px;font-weight:600;letter-spacing:.06em}
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
-.sb{background:transparent;border:1.5px solid;border-radius:10px;padding:8px 4px;min-height:48px;font-size:12px;line-height:1.25;font-family:inherit;cursor:pointer}
+.sb{background:transparent;border:1.5px solid;border-radius:10px;padding:8px 4px;min-height:48px;font-size:12px;font-weight:600;line-height:1.25;font-family:inherit;cursor:pointer}
 .sb.green{color:var(--green);border-color:var(--green)}
 .sb.yellow{color:var(--yellow);border-color:var(--yellow)}
 .sb.red{color:var(--red);border-color:var(--red)}
-.sb.on{color:#10110f;font-weight:700}
+.sb.on{color:#10110f}
 .sb.green.on{background:var(--green)}
 .sb.yellow.on{background:var(--yellow)}
 .sb.red.on{background:var(--red)}
@@ -62,11 +62,12 @@ input.txt:focus{outline:none;border-color:var(--acc)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:#2f3550;color:#e9ecf4;border:1px solid #454d6b;padding:10px 16px;border-radius:12px;font-size:13px;line-height:1.45;white-space:pre-line;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99;box-shadow:0 8px 20px rgba(0,0,0,.5)}
 .hidden{display:none}
 </style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
 
-  <div class="card row" style="justify-content:flex-start;gap:12px"><a href="index.html" class="back" aria-label="Назад">←</a><div class="title">Рапорт прицепа</div></div>
+  <div class="card row"><span style="display:flex;align-items:center;gap:12px"><a href="index.html" class="back" aria-label="Назад">←</a><div class="title">Рапорт прицепа</div></span><button class="btn sec" id="clear" style="flex:none;padding:8px 14px;font-size:13px;border-radius:10px">Очистить</button></div>
 
   <div class="card">
     <div class="row">
@@ -76,8 +77,8 @@ input.txt:focus{outline:none;border-color:var(--acc)}
     <div class="cap" style="margin-top:12px">Состояние</div>
     <div class="seg">
       <button class="sb green" data-state="czysta">Чистый</button>
-      <button class="sb yellow" data-state="po">Грязный: после палет</button>
-      <button class="sb red" data-state="krew">Грязный: пятна крови</button>
+      <button class="sb yellow" data-state="po">Грязный:<br>после палет</button>
+      <button class="sb red" data-state="krew">Грязный:<br>пятна крови</button>
     </div>
   </div>
 
@@ -100,7 +101,6 @@ input.txt:focus{outline:none;border-color:var(--acc)}
 
   <div class="acts">
     <button class="btn main" id="make">Сформировать</button>
-    <button class="btn sec" id="clear">Очистить</button>
   </div>
 </div>
 
@@ -112,9 +112,9 @@ input.txt:focus{outline:none;border-color:var(--acc)}
       <button class="k" data-k="1">1</button><button class="k" data-k="2">2</button><button class="k" data-k="3">3</button>
       <button class="k" data-k="4">4</button><button class="k" data-k="5">5</button><button class="k" data-k="6">6</button>
       <button class="k" data-k="7">7</button><button class="k" data-k="8">8</button><button class="k" data-k="9">9</button>
-      <button class="k" data-k="back">⌫</button><button class="k" data-k="0">0</button><button class="k ok" data-k="ok">ОК</button>
+      <button class="k" data-k="clr" aria-label="Стереть всё">C</button><button class="k" data-k="0">0</button><button class="k" data-k="back" aria-label="Стереть символ">⌫</button>
     </div>
-    <button class="btn plain" id="kpCancel" style="width:100%;margin-top:8px;padding:10px">Отмена</button>
+    <div class="acts" style="margin-top:8px"><button class="btn main" id="kpOk">ОК</button><button class="btn plain" id="kpCancel">Отмена</button></div>
   </div>
 </div>
 
@@ -151,7 +151,7 @@ const ITEMS = [
   {id:'e2',   label:'E2 боксы', pl:'E2'},
   {id:'euro', label:'Европалеты', pl:'Europlt'}
 ];
-const STATES = {czysta:'czysta', po:'brudna po paletach', krew:'brudna, plamy krwi'};
+const STATES = {czysta:'czysta', po:'brudna (po paletach)', krew:'brudna (plamy krwi)'};
 const KEY = 'trailerReport_v1';
 
 let S = fresh();
@@ -231,9 +231,9 @@ function openNumKeypad(){
   $('ovKeypad').classList.add('show');
 }
 function closeKeypad(){ $('ovKeypad').classList.remove('show'); kpItem = null; }
-document.querySelectorAll('.k').forEach(b => b.onclick = () => {
-  const k = b.dataset.k;
+function kpPress(k){
   if(k === 'back'){ kpVal = kpVal.slice(0, -1); }
+  else if(k === 'clr'){ kpVal = ''; }
   else if(k === 'ok'){
     if(kpMode === 'num'){ S.num = kpVal; save(); render(); }
     else {
@@ -245,7 +245,9 @@ document.querySelectorAll('.k').forEach(b => b.onclick = () => {
   else if(kpMode === 'num'){ if(kpVal.length < 8) kpVal += k; }
   else if(kpVal.length < 5){ kpVal += k; if(kpVal.length > 1) kpVal = kpVal.replace(/^0+/, ''); }
   $('kpDisp').textContent = kpVal;
-});
+}
+document.querySelectorAll('.k').forEach(b => b.onclick = () => kpPress(b.dataset.k));
+$('kpOk').onclick = () => kpPress('ok');
 $('kpCancel').onclick = closeKeypad;
 
 /* ---------- прочее ---------- */
@@ -283,7 +285,7 @@ $('clear').onclick = () => askConfirm('Очистить рапорт?', () => { 
 /* ---------- формирование текста ---------- */
 function buildText(){
   let head = S.num + ' rozładowana';
-  if(S.state) head += ' , ' + STATES[S.state];
+  if(S.state) head += ', ' + STATES[S.state];
   const lines = [head];
 
   const mats = [];
@@ -291,7 +293,7 @@ function buildText(){
   if(S.sciana) mats.push('Ściana');
   S.others.forEach(x => mats.push(x.qty > 0 ? x.name + ' - ' + x.qty : x.name));
 
-  if(mats.length){ lines.push('Materiały :'); mats.forEach(m => lines.push(m)); }
+  if(mats.length){ lines.push('Materiały:'); mats.forEach(m => lines.push(m)); }
   if(S.zwrot) lines.push('Zwrot');
   return lines.join('\n');
 }
@@ -312,6 +314,13 @@ function copyText(text){
 }
 $('make').onclick = () => {
   if(!S.num){ toast('Введите номер прицепа'); return; }
+  if(!S.state){
+    toast('Выберите состояние: чистый, грязный после палет или пятна крови');
+    const sg = document.querySelector('.seg'); sg.scrollIntoView({block:'center', behavior:'smooth'});
+    sg.style.outline = '2px solid var(--red)'; sg.style.outlineOffset = '4px'; sg.style.borderRadius = '12px';
+    setTimeout(() => { sg.style.outline = ''; }, 2200);
+    return;
+  }
   const text = buildText();
   copyText(text).then(
     () => toast('✅ Скопировано:\n' + text, 4500),

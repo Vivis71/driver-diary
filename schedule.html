@@ -28,11 +28,11 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .smallbtn{border:1px solid var(--bline);background:var(--btn);color:var(--txt);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
 .x{width:30px;height:30px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#f0707a;font-size:14px;cursor:pointer;padding:0;flex-shrink:0}
 .warn{color:#fbbf24;font-size:11px}
-.mo{background:#1c2030;border:1px solid var(--line);border-radius:8px;padding:4px 3px}
-.mt{font-size:11px;font-weight:600;color:var(--acc);text-align:center;margin-bottom:3px}
-.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;font-size:7px;color:#7d86a0;text-align:center;margin-bottom:1px}
-.gd{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
-.c{height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#7d86a0;border:1px solid transparent}
+.mo{background:#1c2030;border:1px solid var(--line);border-radius:10px;padding:6px 6px 7px}
+.mt{font-size:13px;font-weight:600;color:var(--acc);text-align:center;margin-bottom:4px}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:9px;color:#7d86a0;text-align:center;margin-bottom:2px}
+.gd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.c{height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#7d86a0;border:1px solid transparent}
 .wp{background:rgba(245,165,36,.22);color:#f5a524;font-weight:600}
 .hp{background:rgba(63,191,138,.18);color:#3fbf8a;font-weight:600}
 .wf{background:transparent;color:rgba(245,165,36,.85);border:1px dashed rgba(245,165,36,.4)}
@@ -70,6 +70,7 @@ input[type=date]{width:100%;background:#1c2030;border:1px solid #454d6b;border-r
 .sb{border:1.5px solid #454d6b;border-radius:10px;padding:10px 4px;text-align:center;font-size:13px;color:#c9cfdf;cursor:pointer}
 .sb.on{border-color:var(--acc);background:rgba(245,165,36,.2);color:var(--acc);font-weight:600}
 .banner{border-radius:12px;padding:10px;margin-bottom:8px;border:1px solid}
+.banner.pend{background:rgba(74,163,223,.1);border-color:rgba(74,163,223,.45)}
 .banner.pv{background:rgba(164,155,255,.12);border-color:rgba(164,155,255,.5)}
 .banner.pl{background:rgba(245,165,36,.1);border-color:rgba(245,165,36,.4)}
 .empty{text-align:center;padding:22px 10px}
@@ -77,6 +78,7 @@ input[type=date]{width:100%;background:#1c2030;border:1px solid #454d6b;border-r
 .hidden{display:none}
 a{color:var(--acc)}
 </style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
@@ -134,7 +136,7 @@ a{color:var(--acc)}
 
     <div class="card" id="calCard">
       <div class="lg"><span class="l1">Работа</span><span class="l2">Дома</span><span class="l3">Отпуск</span><span class="l4">Прогноз</span><span class="l5 hidden" id="lgVisa">Конец визы</span><span class="l6 hidden" id="lgAv">После визы</span></div>
-      <div id="cal" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"></div>
+      <div id="cal" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px"></div>
     </div>
   </div>
 </div>
@@ -218,19 +220,20 @@ function buildTimeline(over){
   var cad = sch.cadences.map(function(c){ return {s:dn(c.start), e:c.end ? dn(c.end) : null}; }).sort(function(a,b){ return a.s-b.s; });
   var vac = sch.vacations.map(function(v){ return {s:dn(v.start), e:dn(v.end)}; });
   var st = new Map(), blocks = [];
-  if (!cad.length) return {empty:true, st:st, blocks:blocks, vacSet:new Set(), vacWarn:[], applied:[]};
-  function mark(a, b, t){ if (b < a) return; for (var x = a; x <= b; x++) st.set(x, t); blocks.push({t:t, s:a, e:b}); }
+  if (!cad.length) return {empty:true, st:st, blocks:blocks, vacSet:new Set(), vacWarn:[], applied:[], pending:null};
+  function mark(a, b, t, f){ if (b < a) return; for (var x = a; x <= b; x++) st.set(x, t); blocks.push({t:t, s:a, e:b, f:!!f}); }
 
-  var lastEnd = null;
+  var lastEnd = null, openInfo = null;
   for (var i = 0; i < cad.length; i++){
     var c = cad[i], nxt = cad[i+1], e = c.e;
     if (e === null){
-      e = workEndFrom(c.s, N, W);
+      var p0 = workEndFrom(c.s, N, W);
       if (!nxt){
-        if (T > e) e = nextWdOnOrAfter(T, W);
-        var oe = takeNear(ends, e, c.s);
-        if (oe){ applied.push({k:'end', d:oe.d, from:e}); e = oe.n; }
-      }
+        var oe = takeNear(ends, p0, c.s), pe;
+        if (oe){ applied.push({k:'end', d:oe.d, from:p0}); e = oe.n; pe = e; }
+        else { pe = p0; e = T > p0 ? nextWdOnOrAfter(T, W) : p0; }
+        openInfo = {c:c, pe:pe};
+      } else e = p0;
     }
     if (nxt) e = Math.min(e, nxt.s - 1);
     if (e < c.s) e = c.s;
@@ -258,19 +261,22 @@ function buildTimeline(over){
     var a = attach(arrivalAfter(end, M, W), end);
     var ea = takeNear(arrs, a, end + 1);
     if (ea){ applied.push({k:'arr', d:ea.d, from:a}); a = ea.n; }
-    if (a > horizon){ mark(end+1, horizon, 'h'); break; }
-    mark(end+1, a-1, 'h');
+    if (a > horizon){ mark(end+1, horizon, 'h', true); break; }
+    mark(end+1, a-1, 'h', true);
     var e2 = workEndFrom(a, N, W);
     var ee = takeNear(ends, e2, a);
     if (ee){ applied.push({k:'end', d:ee.d, from:e2}); e2 = ee.n; }
-    mark(a, e2, 'w');
+    mark(a, e2, 'w', true);
     end = e2;
   }
 
+  var pending = null;
+  if (openInfo){ if (openInfo.pe <= T) pending = {k:'end', n:openInfo.pe}; }
+  else { for (var bi = 0; bi < blocks.length; bi++){ if (blocks[bi].t === 'w' && blocks[bi].f){ if (blocks[bi].s <= T) pending = {k:'arr', n:blocks[bi].s}; break; } } }
   var vacSet = new Set();
   vac.forEach(function(v){ for (var x = v.s; x <= v.e; x++) vacSet.add(x); });
   var vacWarn = vac.map(function(v){ for (var x = v.s; x <= v.e; x++){ if (st.get(x) === 'w') return true; } return false; });
-  return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn, applied:applied};
+  return {empty:false, st:st, blocks:blocks, vacSet:vacSet, vacWarn:vacWarn, applied:applied, pending:pending};
 }
 function dayStatus(tl, x){ return tl.vacSet.has(x) ? 'v' : (tl.st.get(x) || ''); }
 function whereNow(tl, T){
@@ -354,8 +360,8 @@ function openVacList(){
     box.appendChild(r);
   });
 }
-function openStart(){
-  var def = iso(todayN());
+function openStart(defIso){
+  var def = defIso || iso(todayN());
   openDlg('Начало каденции', 'Первый рабочий день вахты (день заезда).',
     '<label class="lab" for="f1">Дата заезда</label><input type="date" id="f1" value="'+def+'">',
     [{text:'Сохранить', cls:'main', fn:function(){
@@ -369,7 +375,7 @@ function openStart(){
       toast('✅ Каденция начата: '+fmtY(n) + (wd(n) !== W ? ' · график выровнен по дню заезда' : ''));
     }}, {text:'Отмена'}]);
 }
-function openEnd(){
+function openEnd(defIso){
   var open = sch.cadences.filter(function(c){ return !c.end; });
   if (!open.length){ toast('Нет открытой каденции. Сначала «Начало каденции»'); return; }
   function pick(v){
@@ -378,7 +384,7 @@ function openEnd(){
     return best;
   }
   openDlg('Конец каденции', '',
-    '<label class="lab" for="f1">Последний рабочий день</label><input type="date" id="f1" value="'+iso(todayN())+'"><div class="mut" id="endFor" style="margin-top:8px"></div>',
+    '<label class="lab" for="f1">Последний рабочий день</label><input type="date" id="f1" value="'+(defIso || iso(todayN()))+'"><div class="mut" id="endFor" style="margin-top:8px"></div>',
     [{text:'Сохранить', cls:'main', fn:function(){
       var v = $('f1').value; if (!v){ toast('Выберите дату'); return false; }
       var c = pick(v);
@@ -533,6 +539,42 @@ function render(){
     bn.appendChild(div);
   }
 
+  // карточка: подтвердить событие по плану
+  if (!preview){
+    var pd = buildTimeline(overFrom(false)).pending;
+    if (pd){
+      var pdIso = iso(pd.n), isArr = pd.k === 'arr';
+      var card = document.createElement('div'); card.className = 'banner pend';
+      card.innerHTML = '<div style="font-weight:600;font-size:15px;margin-bottom:3px">' + (isArr ? 'Заезд' : 'Последний рабочий день') + ' по плану: ' + fmtY(pd.n) + ' ' + wdName(pd.n) + '</div>' +
+        '<div class="mut" style="font-size:13px;margin-bottom:8px">' + (pd.n === T ? 'Сегодня.' : 'Это было ' + (T - pd.n) + ' дн. назад.') + ' ' + (isArr ? 'Подтвердить заезд?' : 'Закрыть каденцию?') + '</div>' +
+        '<div class="btns" style="flex-direction:column;margin-top:0"></div>';
+      var pb = card.querySelector('.btns');
+      function mk2(text, cls, fn){ var b = document.createElement('button'); b.className = 'btn ' + cls; b.style.padding = '10px 4px'; b.textContent = text; b.onclick = fn; pb.appendChild(b); }
+      if (isArr){
+        mk2('Подтвердить заезд', 'main', function(){
+          sch.cadences = sch.cadences.filter(function(c){ return c.start !== pdIso; });
+          sch.cadences.push({start:pdIso, end:null});
+          sch.cadences.sort(function(a, b){ return a.start < b.start ? -1 : 1; });
+          sch.edits = sch.edits.filter(function(x){ return !(x.k === 'arr' && Math.abs(dn(x.d) - pd.n) <= EDIT_WIN); });
+          save(); render(); toast('✅ Каденция начата: ' + fmtY(pd.n));
+        });
+        mk2('Продлить отдых на неделю', 'out', function(){ addEdit('arr', iso(pd.n + 7)); save(); render(); toast('Заезд сдвинут на ' + fmtY(pd.n + 7)); });
+        mk2('Другая дата', 'plain', function(){ openStart(pdIso); });
+      } else {
+        mk2('Закрыть каденцию', 'main', function(){
+          var open = sch.cadences.filter(function(c){ return !c.end; }).pop();
+          if (!open) return;
+          open.end = pdIso;
+          sch.edits = sch.edits.filter(function(x){ return !(x.k === 'end' && Math.abs(dn(x.d) - pd.n) <= EDIT_WIN); });
+          save(); render(); toast('✅ Каденция закончена: ' + fmtY(pd.n));
+        });
+        mk2('Продлить работу на неделю', 'out', function(){ addEdit('end', iso(pd.n + 7)); save(); render(); toast('Выезд сдвинут на ' + fmtY(pd.n + 7)); });
+        mk2('Другая дата', 'plain', function(){ openEnd(pdIso); });
+      }
+      bn.appendChild(card);
+    }
+  }
+
   // пустое состояние / инфо
   $('emptyState').classList.toggle('hidden', !tl.empty);
   $('info').classList.toggle('hidden', tl.empty);
@@ -571,7 +613,7 @@ function render(){
   // календарь
   var host = $('cal'); host.innerHTML = '';
   if (tl.empty) return;
-  for (var mi = 0; mi < 15; mi++){
+  for (var mi = 0; mi < 14; mi++){
     var m = mi % 12, yr = year + (mi >= 12 ? 1 : 0);
     if (mi === 12){
       var sep = document.createElement('div'); sep.className = 'nyl'; sep.textContent = String(year + 1);
@@ -601,7 +643,7 @@ function render(){
   var ys = $('yearSel'), cy = new Date().getFullYear();
   for (var y = cy - 1; y <= cy + 2; y++){ var o = document.createElement('option'); o.value = y; o.textContent = y; if (y === cy) o.selected = true; ys.appendChild(o); }
   ys.onchange = render;
-  $('bStart').onclick = openStart; $('bEnd').onclick = openEnd; $('bShift').onclick = openShift; $('bVac').onclick = openVac; $('bVisa').onclick = openVisa;
+  $('bStart').onclick = function(){ openStart(); }; $('bEnd').onclick = function(){ openEnd(); }; $('bShift').onclick = openShift; $('bVac').onclick = openVac; $('bVisa').onclick = openVisa;
   $('bFirst').onclick = openStart; $('bCadList').onclick = openCadList; $('bVacList').onclick = openVacList; $('vacEdit').onclick = openVacLimit;
   $('ov').onclick = function(e){ if (e.target === $('ov')) closeDlg(); };
   render();

@@ -1,0 +1,136 @@
+/* Общий стиль «Дневника водителя»: стекло, мягкий объём, свечение только у главного. */
+:root{
+  --bg0:#0c1022; --bg1:#10142a; --bg2:#1a2244;
+  --card-a:#2a3050; --card-b:#1f2540; --inner:#1c2030;
+  --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.15);
+  --text:#e9ecf4; --muted:#b0b8cc;
+  --amber:#f5a524; --green:#3fbf8a; --red:#f0707a; --violet:#8b7cf6; --blue:#4aa3df;
+  --hi:inset 0 1px 0 rgba(255,255,255,.08);
+  --drop:0 6px 14px rgba(0,0,0,.35);
+}
+html{background:var(--bg0)}
+body{background:radial-gradient(120% 55% at 50% 0%,var(--bg2) 0%,var(--bg1) 55%,var(--bg0) 100%) fixed !important;color:var(--text)}
+
+/* корпус «телефона» на главной прозрачный, виден фон страницы */
+.shell{background:transparent !important;border-color:transparent !important;box-shadow:none !important}
+
+/* карточки: покрывают все блоки со старым цветом #262b3d */
+.cd,.bg-\[\#262b3d\]{
+  background:linear-gradient(180deg,var(--card-a),var(--card-b));
+  border-color:var(--line);
+  box-shadow:var(--hi),var(--drop);
+}
+
+/* кнопки и плитки (старый цвет #2f3550) */
+.tile,.bg-\[\#2f3550\]{
+  background:linear-gradient(180deg,#33395a,#272c47);
+  border-color:var(--line-strong);
+  box-shadow:var(--hi);
+}
+.tile:active,.bg-\[\#2f3550\]:active{filter:brightness(1.18)}
+.border-\[\#454d6b\]{border-color:var(--line-strong)}
+.border-\[\#343a52\]{border-color:var(--line)}
+
+/* главная кнопка: единственное место со свечением */
+.btn-pri,.bg-\[\#f5a524\]{
+  background:linear-gradient(180deg,#ffb83d,#f08c00);
+  box-shadow:0 0 16px rgba(245,165,36,.4),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.btn-pri:active,.bg-\[\#f5a524\]:active{filter:brightness(1.08)}
+
+/* контурная кнопка с янтарной рамкой */
+.btn-out{background:rgba(245,165,36,.06) !important;border:1.5px solid rgba(245,165,36,.6) !important;color:var(--amber) !important}
+
+/* плашки статуса */
+.stat-ok{background:linear-gradient(180deg,rgba(63,191,138,.16),rgba(63,191,138,.06)) !important;border:1px solid rgba(63,191,138,.4) !important;box-shadow:var(--hi)}
+.stat-out{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02)) !important;border:1px solid var(--line-strong) !important;box-shadow:var(--hi)}
+.btn-ok{background:linear-gradient(180deg,rgba(6,95,70,.55),rgba(6,95,70,.3)) !important}
+.btn-no{background:linear-gradient(180deg,rgba(127,29,29,.55),rgba(127,29,29,.3)) !important}
+
+/* карточка с акцентной полоской слева (неделя / состояние) */
+.cd-accent{border-left:3px solid var(--amber) !important}
+
+/* заголовки секций */
+.lbl{font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:600;text-transform:uppercase}
+
+/* пустое место «Скоро» */
+.tile-empty{border:1px dashed rgba(255,255,255,.22) !important;background:transparent !important;color:#8d96ae !important}
+
+/* вторичный текст чуть светлее, чтобы читался на градиенте */
+.text-gray-400{color:var(--muted)}
+
+/* ===== подразделы (График, Пребывание, Кошелёк, Рапорт): те же приёмы на их классах ===== */
+.card,.dlg{
+  background:linear-gradient(180deg,var(--card-a),var(--card-b)) !important;
+  border-color:var(--line) !important;
+  box-shadow:var(--hi),var(--drop);
+}
+.back,.icobtn,.smallbtn,.yr,.btn.plain,.edt{
+  background:linear-gradient(180deg,#33395a,#272c47) !important;
+  border-color:var(--line-strong) !important;
+  box-shadow:var(--hi);
+}
+.btn.plain{background:rgba(255,255,255,.03) !important;box-shadow:none}
+.btn.main{
+  background:linear-gradient(180deg,#ffb83d,#f08c00) !important;
+  box-shadow:0 0 16px rgba(245,165,36,.4),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.btn.out{background:rgba(245,165,36,.06) !important;border-color:rgba(245,165,36,.6) !important}
+.mo{background:rgba(12,16,34,.45) !important;border-color:var(--line) !important}
+.banner.pend{box-shadow:var(--hi),0 0 14px rgba(74,163,223,.18)}
+.bar{background:rgba(255,255,255,.08) !important}
+.ov{background:rgba(6,9,22,.72)}
+#toast{background:linear-gradient(180deg,#33395a,#272c47) !important;border-color:var(--line-strong) !important;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+
+/* ===== Кошелёк ===== */
+.pad button{background:linear-gradient(180deg,#33395a,#272c47) !important;border-color:var(--line-strong) !important;box-shadow:var(--hi)}
+.pad button:active{filter:brightness(1.2)}
+.dd,.dt,.it,.msum,.mbar,.mrow .trk{background:rgba(12,16,34,.5) !important;border-color:var(--line-strong)}
+.msum{border:1px solid var(--line)}
+.mbar,.mrow .trk{border:0}
+.crow.total{background:linear-gradient(180deg,rgba(245,165,36,.22),rgba(245,165,36,.08)) !important;border-color:rgba(245,165,36,.45) !important}
+.col.on,.mrow.on{background:linear-gradient(180deg,rgba(245,165,36,.16),rgba(245,165,36,.04)) !important}
+.col .st{box-shadow:0 0 0 0 transparent}
+.col.on .st{box-shadow:0 0 12px rgba(245,165,36,.35)}
+.crow{border-top-color:var(--line) !important}
+.ci{background:rgba(12,16,34,.55) !important;box-shadow:var(--hi)}
+.crow.total .ci{background:rgba(245,165,36,.22) !important}
+
+/* ===== Пребывание ===== */
+.sbox.by{background:linear-gradient(180deg,rgba(63,191,138,.18),rgba(63,191,138,.06)) !important;border-color:rgba(63,191,138,.4) !important;box-shadow:var(--hi)}
+.sbox.out{background:linear-gradient(180deg,rgba(240,112,122,.18),rgba(240,112,122,.06)) !important;border-color:rgba(240,112,122,.4) !important;box-shadow:var(--hi)}
+.sbox.out.zero{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02)) !important;border-color:var(--line-strong) !important}
+.tbtn.by{background:linear-gradient(180deg,rgba(6,95,70,.55),rgba(6,95,70,.3)) !important;box-shadow:var(--hi)}
+.tbtn.out{background:linear-gradient(180deg,rgba(127,29,29,.55),rgba(127,29,29,.3)) !important;box-shadow:var(--hi)}
+#aSeg .sb,#jSeg .sb{background:rgba(12,16,34,.4);border-color:var(--line-strong) !important}
+#aSeg .sb.on.by,#jSeg .sb.on.by{background:rgba(63,191,138,.2) !important;border-color:var(--green) !important}
+#aSeg .sb.on.out,#jSeg .sb.on.out{background:rgba(240,112,122,.2) !important;border-color:var(--red) !important}
+input[type=date]{background:rgba(12,16,34,.5) !important;border-color:var(--line-strong) !important}
+
+/* ===== Рапорт прицепа ===== */
+.k,.ibtn,.rbtn,.xbtn{background:linear-gradient(180deg,#33395a,#272c47) !important;border-color:var(--line-strong) !important;box-shadow:var(--hi)}
+.ibtn{border-color:rgba(245,165,36,.6) !important;background:rgba(245,165,36,.07) !important}
+.k:active{filter:brightness(1.2)}
+.disp,input.txt{background:rgba(12,16,34,.5) !important}
+.box{background:rgba(12,16,34,.5)}
+.chk.on .box{background:linear-gradient(180deg,#ffb83d,#f08c00) !important;box-shadow:0 0 10px rgba(245,165,36,.35)}
+.sb.green,.sb.yellow,.sb.red{background:rgba(12,16,34,.4)}
+.sb.green.on{background:linear-gradient(180deg,#58d4a0,#2fae7a) !important}
+.sb.yellow.on{background:linear-gradient(180deg,#fcd34d,#f0a90f) !important}
+.sb.red.on{background:linear-gradient(180deg,#f58c95,#e25a66) !important}
+.btn.sec{background:rgba(240,112,122,.06) !important;border-color:rgba(240,112,122,.5) !important}
+.g,.orow{border-top-color:var(--line)}
+
+/* ===== окна из shifts.js: журнал, правка времени, подтверждение ===== */
+#flowModal,#journalModal,#timeModal{background:rgba(6,9,22,.72) !important}
+#flowModal>div,#journalModal>div,#timeBody{
+  background:linear-gradient(180deg,var(--card-a),var(--card-b)) !important;
+  border-color:var(--line) !important;box-shadow:var(--hi),var(--drop)}
+#flowModal [style*="background:#2f3550"],#journalModal [style*="background:#2f3550"],#timeModal [style*="background:#2f3550"]{
+  background:linear-gradient(180deg,#33395a,#272c47) !important;border-color:var(--line-strong) !important;box-shadow:var(--hi)}
+#flowModal [style*="background:#f5a524"],#journalModal [style*="background:#f5a524"],#timeModal [style*="background:#f5a524"]{
+  background:linear-gradient(180deg,#ffb83d,#f08c00) !important;box-shadow:0 0 16px rgba(245,165,36,.4),inset 0 1px 0 rgba(255,255,255,.35)}
+#journalBody [style*="background:#262b3d"]{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02)) !important;border-color:var(--line) !important}
+#timeModal [style*="background:#1c2030"]{background:rgba(12,16,34,.5) !important}
+#flowModal [style*="solid #454d6b"],#journalModal [style*="solid #454d6b"],#timeModal [style*="solid #454d6b"]{border-color:var(--line-strong) !important}
+#journalModal [style*="border-top:1px solid #343a52"]{border-top-color:var(--line) !important}
