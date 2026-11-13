@@ -239,20 +239,29 @@ function addEvent(action, dateIso){
   else toast('✅ Записано: '+action+' '+fmtY(dateIso));
 }
 
+var PK_IN = '<path d="M7 7l10 10"/><path d="M17 8v9h-9"/>', PK_OUT = '<path d="M17 7l-10 10"/><path d="M8 7h9v9"/>', PK_OK = '<path d="M5 12l5 5l10-10"/>';
+function flash(el){ el.classList.add('need'); setTimeout(function(){ el.classList.remove('need'); }, 2200); }
+
 function openAdd(){
   var y = curYear(), act = '', digits = '';
-  var html = '<div class="seg" id="aSeg"><div class="sb by" data-v="'+IN+'">Въезд в РБ</div><div class="sb out" data-v="'+OUT+'">Выезд из РБ</div></div>'
+  var html = '<div class="seg" id="aSeg"><div class="pk by" data-v="'+IN+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+PK_IN+'</svg><span>Въезд в РБ</span></div><div class="pk out" data-v="'+OUT+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+PK_OUT+'</svg><span>Выезд из РБ</span></div></div>'
     + '<label class="lab">Дата, год '+y+'</label><div class="dd" id="dd"></div>'
     + '<div class="pad" id="pad"></div><div class="prev" id="prev"></div>';
   openDlg('Добавить пересечение', '', html, [{text:'Добавить', cls:'main', fn:function(){
-    var d = parsed(); if (!act){ toast('Выберите: въезд или выезд'); return false; }
-    if (!d){ toast('Введите дату цифрами'); return false; }
+    var d = parsed(); if (!act){ toast('Выберите: въезд или выезд'); flash($('aSeg')); return false; }
+    if (!d){ toast('Введите дату цифрами'); flash($('dd')); return false; }
     if (addEvent(act, d) === false) return false;
   }}, {text:'Отмена'}]);
 
-  function fmtDigits(){
-    var t = digits.slice(0,2), m = digits.slice(2,4);
-    return digits.length > 2 ? t + '.' + m : t;
+  // шаблон ДД.ММ: набранные цифры обычные, ненабранные места бледные; точка встаёт сама после двух цифр
+  function tplHtml(){
+    var out = '', di = 0;
+    'ДД.ММ'.split('').forEach(function(ch){
+      if (ch === '.') out += digits.length >= 2 ? '.' : '<span class="ph">.</span>';
+      else if (di < digits.length) out += digits.charAt(di++);
+      else out += '<span class="ph">' + ch + '</span>';
+    });
+    return out;
   }
   // дата из 4 цифр ДДММ + год со страницы; null если некорректна
   function parsed(){
@@ -264,7 +273,8 @@ function openAdd(){
     return y + '-' + pad(m) + '-' + pad(d);
   }
   function upd(){
-    $('dd').innerHTML = digits ? fmtDigits() : '<span class="ph">ДД.ММ</span>';
+    $('dd').innerHTML = tplHtml();
+    if (addBtn) addBtn.classList.toggle('dim', !(act && parsed()));
     var pv = $('prev'), d = parsed();
     if (digits.length === 4 && !d){
       var m = parseInt(digits.slice(2,4),10);
@@ -286,8 +296,16 @@ function openAdd(){
     };
     pad_.appendChild(b);
   });
-  [].forEach.call(document.querySelectorAll('#aSeg .sb'), function(b){
-    b.onclick = function(){ act = b.getAttribute('data-v'); [].forEach.call(document.querySelectorAll('#aSeg .sb'), function(o){ o.classList.toggle('on', o === b); }); upd(); };
+  var addBtn = $('dBtns').children[0];
+  [].forEach.call(document.querySelectorAll('#aSeg .pk'), function(b){
+    b.onclick = function(){
+      act = b.getAttribute('data-v'); $('aSeg').classList.add('has'); $('aSeg').classList.remove('need');
+      [].forEach.call(document.querySelectorAll('#aSeg .pk'), function(o){
+        var on = o === b; o.classList.toggle('on', on);
+        o.querySelector('svg').innerHTML = on ? PK_OK : (o.getAttribute('data-v') === IN ? PK_IN : PK_OUT);
+      });
+      upd();
+    };
   });
   upd();
 }
