@@ -1617,9 +1617,9 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             'Среда': 3, 'Четверг': 4, 'Пятница': 5, 'Суббота': 6
         };
 
-        // Текущая дата и время по часам телефона (для недели и смен)
+        // Текущая дата и время по Варшаве (для недели и смен)
         function getLocalNow() {
-            const d = new Date();
+            const d = new Date(nowW());
             const pad = n => String(n).padStart(2, '0');
             const day = pad(d.getDate()), month = pad(d.getMonth() + 1), year = d.getFullYear();
             const hour = pad(d.getHours()), minute = pad(d.getMinutes());
@@ -2029,7 +2029,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         function updateWeekNumber() {
             const el = document.getElementById('weekNumberDisplay');
             if (!el) return;
-            const now = new Date();
+            const now = new Date(nowW());
             const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
             const day = d.getUTCDay() || 7;
             d.setUTCDate(d.getUTCDate() + 4 - day);
@@ -2062,7 +2062,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
 
         function getNextDateForDay(targetDayName) {
             const targetDay = daysMap[targetDayName] !== undefined ? daysMap[targetDayName] : 6;
-            const now = new Date();
+            const now = new Date(nowW());
             const currentDay = now.getDay();
             let distance = targetDay - currentDay;
             if (distance <= 0) distance += 7;
@@ -2123,7 +2123,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 const checkedRadio = document.querySelector('input[name="modal_pause"]:checked');
                 const val = checkedRadio ? checkedRadio.value : '45';
                 
-                let baseDate = new Date();
+                let baseDate = new Date(nowW());
                 if (userProfile && userProfile.weekStart) {
                     const parts = userProfile.weekStart.split(' ');
                     const dParts = parts[0].split('.');

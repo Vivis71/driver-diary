@@ -7,6 +7,13 @@
 // Структура: userProfile.weeks = [{ start:'ДД.ММ.ГГГГ ЧЧ:ММ', end:null|строка, shifts:[{start, end}] }]
 // Последняя неделя считается текущей. Старые поля weekStart/shiftStart/shiftEnd держим синхронными (для главного экрана и паузы).
 const WEEK_MS = 144 * 3600 * 1000;
+// «Сейчас» по Варшаве: возвращает мс такие, что локальные геттеры Date (getHours и т.д.) дают варшавские часы
+function nowW() {
+    const p = {};
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Warsaw', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+        .formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+    return new Date(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute).getTime();
+}
 const jPad = n => String(n).padStart(2, '0');
 const noYearStr = str => String(str).replace(/\.(\d{4})(?= )/, '');
 function parseDT(s) {
@@ -85,7 +92,7 @@ function closeWeekModal(ok) {
 // Новая неделя: прошлая закрывается по концу её последней закрытой смены
 function startWeekNow() {
     ensureWeeks(userProfile);
-    const now = fmtDT(Date.now());
+    const now = fmtDT(nowW());
     const cur = curWeek();
     if (cur && !cur.end) cur.end = fmtDT(weekLastClosedEnd(cur));
     userProfile.weeks.push({ start: now, end: null, shifts: [{ start: now, end: null }] });
@@ -94,7 +101,7 @@ function startWeekNow() {
 }
 function doStartShift() {
     const cur = curWeek();
-    const now = fmtDT(Date.now());
+    const now = fmtDT(nowW());
     cur.shifts.push({ start: now, end: null });
     persistJournal();
     showToast(`✅ Смена начата:\n${now}`);
@@ -102,7 +109,7 @@ function doStartShift() {
 function startShiftAction() {
     const cur = curWeek();
     if (!cur) { startWeekNow(); return; }
-    if (weekExpired(cur, Date.now())) {
+    if (weekExpired(cur, nowW())) {
         flowConfirm('Начать новую неделю?', `С начала недели (${noYearStr(cur.start)}) прошло больше 144 часов. Неделя начнётся сейчас вместе со сменой.`, 'Начать', startWeekNow);
         return;
     }
@@ -117,7 +124,7 @@ function endShiftAction() {
     const cur = curWeek();
     const last = cur && cur.shifts[cur.shifts.length - 1];
     if (!last || last.end) { showToast('Нет открытой смены'); return; }
-    const now = fmtDT(Date.now());
+    const now = fmtDT(nowW());
     last.end = now;
     persistJournal();
     showToast(`⏹ Смена завершена:\n${now}`);
@@ -157,7 +164,7 @@ function renderJournal() {
     const ci = weeks.length - 1, cw = weeks[ci];
     let h = `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#262b3d;border:1px solid #343a52;border-radius:10px;margin-bottom:4px;">
         <span style="font-size:14px;font-weight:600;color:#f5a524;">Неделя · с ${noYearStr(cw.start)}</span>
-        <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:${weekExpired(cw, Date.now()) ? '#fbbf24' : '#3fbf8a'};">${weekExpired(cw, Date.now()) ? '144 ч прошло' : 'идёт'}</span>
+        <span style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:${weekExpired(cw, nowW()) ? '#fbbf24' : '#3fbf8a'};">${weekExpired(cw, nowW()) ? '144 ч прошло' : 'идёт'}</span>
         <button onclick="editWeek(${ci})" aria-label="Изменить неделю" style="width:28px;height:28px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#a3acc2;font-size:13px;">&#9998;</button></span></div>`;
     if (!cw.shifts.length) h += '<div style="color:#a3acc2;font-size:13px;padding:8px 4px;">Смен пока нет</div>';
     cw.shifts.forEach((s, si) => { h += jShiftRow(ci, si, cw, true); });
@@ -207,7 +214,7 @@ function openTimeEdit(title, fields, onSave, onDelete) {
         f: fields.map(x => ({
             label: x.label, optional: !!x.optional,
             digits: (x.ms !== null && x.ms !== undefined) ? dtDigits(x.ms) : '',
-            year: (x.ms !== null && x.ms !== undefined) ? new Date(x.ms).getFullYear() : new Date().getFullYear()
+            year: (x.ms !== null && x.ms !== undefined) ? new Date(x.ms).getFullYear() : new Date(nowW()).getFullYear()
         }))
     };
     renderTimeEdit();
@@ -300,7 +307,7 @@ function renderShiftInfo() {
         let endDate = new Date(dParts[2], dParts[1] - 1, dParts[0], tParts[0], tParts[1]);
         endDate.setTime(endDate.getTime() + (144 * 60 * 60 * 1000));
         const endStr = `${String(endDate.getDate()).padStart(2, '0')}.${String(endDate.getMonth() + 1).padStart(2, '0')}.${endDate.getFullYear()} ${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
-        const expired = weekExpired(curWeek(), Date.now());
+        const expired = weekExpired(curWeek(), nowW());
         weekInfo.innerHTML = expired
             ? `<span style="color:#fbbf24;">Неделя: ${noYear(userProfile.weekStart)} → ${noYear(endStr)}</span><span style="display:block;font-size:12px;line-height:1.3;color:#fbbf24;padding-bottom:5px;">Прошло 144 ч, начните новую неделю</span>`
             : `Неделя: <span style="color:#e9ecf4;">${noYear(userProfile.weekStart)}</span> → <span style="color:#fbbf24;">${noYear(endStr)}</span>`;

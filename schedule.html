@@ -154,9 +154,10 @@ var WDN = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 /* ---------- даты: целые номера дней, без часовых поясов ---------- */
 function pad(n){ return String(n).padStart(2,'0'); }
 function dn(s){ var p = s.split('-').map(Number); return Math.round(Date.UTC(p[0],p[1]-1,p[2]) / DAY); }
+function wNow(){ var p={}; new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value;}); return new Date(+p.year,+p.month-1,+p.day); }
 function iso(n){ var d = new Date(n*DAY); return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate()); }
 function wd(n){ return new Date(n*DAY).getUTCDay(); }
-function todayN(){ var t = new Date(); return Math.round(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()) / DAY); }
+function todayN(){ var t = wNow(); return Math.round(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()) / DAY); }
 function fmt(n){ var d = new Date(n*DAY); return pad(d.getUTCDate())+'.'+pad(d.getUTCMonth()+1); }
 function fmtY(n){ return fmt(n)+'.'+new Date(n*DAY).getUTCFullYear(); }
 function nextWdAfter(n, W){ var x = n+1; while (wd(x) !== W) x++; return x; }
@@ -612,7 +613,7 @@ function render(){
   var host = $('cal'); host.innerHTML = '';
   // вид: «short» — пара месяцев с текущим и два следующих; «full» — весь год и два месяца следующего
   var calView = 'short'; try { calView = localStorage.getItem('sch_calview') === 'full' ? 'full' : 'short'; } catch(e){}
-  var nowD = new Date(), curY = nowD.getFullYear(), curM = nowD.getMonth();
+  var nowD = wNow(), curY = nowD.getFullYear(), curM = nowD.getMonth();
   var m0 = 0, m1 = 14;
   if (calView === 'short'){ m0 = (year === curY) ? curM - (curM % 2) : 0; m1 = Math.min(14, m0 + 4); }
   var cm = $('calMode');
