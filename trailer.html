@@ -174,9 +174,17 @@ function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} 
 
 const $ = id => document.getElementById(id);
 
+function toastFill(t, text){
+  t.textContent = '';
+  var m = /^(⚠️|❌)\s*([\s\S]*)$/.exec(text);
+  if (!m) { t.textContent = text; return; }
+  var big = document.createElement('div');
+  big.textContent = m[1]; big.style.cssText = 'font-size:38px;line-height:1.1;margin-bottom:4px';
+  t.appendChild(big); t.appendChild(document.createTextNode(m[2]));
+}
 function toast(text, ms){
   const t = $('toast');
-  t.textContent = text;
+  toastFill(t, text);
   t.style.opacity = 1;
   clearTimeout(toast._t);
   toast._t = setTimeout(() => { t.style.opacity = 0; }, ms || 3500);
@@ -323,8 +331,8 @@ $('make').onclick = () => {
   }
   const text = buildText();
   copyText(text).then(
-    () => toast('✅ Скопировано:\n' + text, 4500),
-    () => toast('⚠️ Не удалось скопировать. Текст:\n' + text, 6000)
+    () => toast(text, 4000),
+    () => toast('⚠️ Не скопировано\n' + text, 5000)
   );
 };
 

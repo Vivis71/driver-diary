@@ -1578,10 +1578,18 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
 
     <script src="shifts.js"></script>
     <script>
+        function toastFill(t, text){
+          t.textContent = '';
+          var m = /^(⚠️|❌)\s*([\s\S]*)$/.exec(text);
+          if (!m) { t.textContent = text; return; }
+          var big = document.createElement('div');
+          big.textContent = m[1]; big.style.cssText = 'font-size:38px;line-height:1.1;margin-bottom:4px';
+          t.appendChild(big); t.appendChild(document.createTextNode(m[2]));
+        }
         function showToast(text, ms) {
             const t = document.getElementById('toast');
             if (!t) return;
-            t.textContent = text;
+            toastFill(t, text);
             t.style.opacity = 1;
             t.style.pointerEvents = 'auto';
             clearTimeout(showToast._t);
@@ -2073,8 +2081,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             
             copyToClipboard(msg).then(ok => {
                 showToast(ok
-                    ? `✅ Скопировано диспетчеру:\n"${msg}"`
-                    : `⚠️ Не удалось скопировать автоматически. Выделите и скопируйте вручную:\n"${msg}"`, 4000);
+                    ? msg
+                    : `⚠️ Не скопировано\n${msg}`, 5000);
             });
         }
 
@@ -2136,8 +2144,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                 
                 copyToClipboard(msg).then(ok => {
                     showToast(ok
-                        ? `✅ Скопировано (от начала недели + 144ч):\n"${msg}"`
-                        : `⚠️ Не удалось скопировать автоматически. Выделите и скопируйте вручную:\n"${msg}"`, 4000);
+                        ? msg
+                        : `⚠️ Не скопировано\n${msg}`, 5000);
                 });
             }
         }
