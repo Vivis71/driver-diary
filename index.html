@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дневник водителя</title>
+<script>try{var _p=JSON.parse(localStorage.getItem('driver_profiles'));if(Array.isArray(_p)&&_p.length){document.documentElement.classList.add('has-prof');setTimeout(function(){document.documentElement.classList.remove('has-prof')},2500);}}catch(e){}</script>
+<style>.has-prof #selectorScreen{display:none !important}</style>
+
     <style>
 /*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
 @layer properties;
@@ -1528,22 +1531,16 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
 
         <!-- Модалка Паузы -->
     <div id="pauseModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4">
-        <div class="bg-[#262b3d] border border-[#454d6b] p-4 rounded-2xl max-w-xs w-full space-y-3 text-center shadow-xl">
-            <div class="text-base font-bold text-yellow-400">Еженедельная пауза</div>
-            <p class="text-xs text-gray-300">Выберите тип паузы:</p>
-            <div class="grid grid-cols-2 gap-2 my-2">
-                <label class="flex items-center justify-center space-x-1 bg-[#1c2030] border border-[#454d6b] py-2 rounded-lg cursor-pointer text-xs">
-                    <input type="radio" name="modal_pause" value="24" class="accent-[#f5a524]">
-                    <span>Пауза 24</span>
-                </label>
-                <label class="flex items-center justify-center space-x-1 bg-[#1c2030] border border-[#454d6b] py-2 rounded-lg cursor-pointer text-xs">
-                    <input type="radio" name="modal_pause" value="45" checked class="accent-[#f5a524]">
-                    <span>Пауза 45</span>
-                </label>
+        <div class="bg-[#262b3d] border border-[#454d6b] rounded-2xl w-full text-center shadow-xl" style="max-width:360px;padding:20px;display:flex;flex-direction:column;gap:14px;">
+            <div style="font-size:20px;font-weight:700;color:#facc15;">Еженедельная пауза</div>
+            <p style="font-size:15px;color:#d1d5db;margin:0;">Выберите тип паузы:</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <label class="pz"><input type="radio" name="modal_pause" value="24"><span>Пауза 24</span></label>
+                <label class="pz"><input type="radio" name="modal_pause" value="45" checked><span>Пауза 45</span></label>
             </div>
-            <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="closePauseModal(false)" class="bg-[#2f3550] text-gray-300 py-2 rounded-xl text-xs font-semibold">Отмена</button>
-                <button onclick="closePauseModal(true)" class="bg-[#f5a524] text-gray-950 py-2 rounded-xl text-xs font-bold">ОК</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <button onclick="closePauseModal(false)" class="bg-[#2f3550] text-gray-300 rounded-xl font-semibold" style="padding:14px 0;font-size:16px;">Отмена</button>
+                <button onclick="closePauseModal(true)" class="bg-[#f5a524] text-gray-950 rounded-xl font-bold" style="padding:14px 0;font-size:16px;">ОК</button>
             </div>
         </div>
     </div>
@@ -1727,6 +1724,7 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     try { history.replaceState(null, '', location.pathname); } catch (e) {}
                 }
             }
+            document.documentElement.classList.remove('has-prof');
         }
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appInit); else appInit();
 
@@ -2128,6 +2126,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         }
 
         function openPauseModal() { 
+            if (!userProfile || !userProfile.weekStart) { showToast('⚠️ Неделя не начата', 3500); return; }
+            if (weekExpired(curWeek(), nowW())) { showToast('⚠️ Неделя закончилась, начните новую', 3500); return; }
             document.getElementById('pauseModal').classList.remove('hidden'); 
         }
         
