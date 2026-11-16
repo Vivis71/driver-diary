@@ -29,6 +29,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple
 .x{width:30px;height:30px;border-radius:8px;border:1px solid #454d6b;background:transparent;color:#f0707a;font-size:14px;cursor:pointer;padding:0;flex-shrink:0}
 .warn{color:#fbbf24;font-size:11px}
 .mo{background:#1c2030;border:1px solid var(--line);border-radius:10px;padding:6px 6px 7px}
+.mpl{font-size:11px;font-weight:500;color:var(--mut);margin-left:2px}
 .mt{font-size:13px;font-weight:600;color:var(--acc);text-align:center;margin-bottom:4px}
 .wd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:9px;color:#7d86a0;text-align:center;margin-bottom:2px}
 .gd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
@@ -148,6 +149,7 @@ a{color:var(--acc)}
 var $ = function(id){ return document.getElementById(id); };
 var DAY = 86400000, VAC_LIMIT = 20;
 var DAYS = {'Воскресенье':0,'Понедельник':1,'Вторник':2,'Среда':3,'Четверг':4,'Пятница':5,'Суббота':6};
+var MONTHS_PL = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
 var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 var WDN = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
 
@@ -628,7 +630,7 @@ function render(){
       host.appendChild(sep);
     }
     var box = document.createElement('div'); box.className = 'mo' + (mi >= 12 ? ' ny' : '');
-    var h = '<div class="mt">' + MONTHS[m] + '</div><div class="wd">' + WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('') + '</div><div class="gd">';
+    var h = '<div class="mt">' + MONTHS[m] + ' <span class="mpl">/ ' + MONTHS_PL[m] + '</span></div><div class="wd">' + WDN.map(function(x){ return '<span>'+x+'</span>'; }).join('') + '</div><div class="gd">';
     var firstN = Math.round(Date.UTC(yr, m, 1) / DAY), shift = (wd(firstN) + 6) % 7;
     for (var k = 0; k < shift; k++) h += '<div></div>';
     var dim = new Date(Date.UTC(yr, m+1, 0)).getUTCDate();
