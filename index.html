@@ -1709,6 +1709,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
         }
 
         window.onload = function() {
+            // Просим браузер не вычищать данные приложения при нехватке места (тихо, без окон; если не дали — ничего не меняется)
+            try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
             updateMinskClock();
             setInterval(updateMinskClock, 1000);
             profiles.forEach(ensureYearsData);
