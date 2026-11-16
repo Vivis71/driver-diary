@@ -109,7 +109,9 @@ input[type=date]{background:rgba(12,16,34,.5) !important;border-color:var(--line
 
 /* ===== Рапорт прицепа ===== */
 .k,.ibtn,.rbtn,.xbtn{background:linear-gradient(180deg,#33395a,#272c47) !important;border-color:var(--line-strong) !important;box-shadow:var(--hi)}
-.ibtn{border-color:rgba(245,165,36,.6) !important;background:rgba(245,165,36,.07) !important}
+.ibtn{border-color:rgba(63,191,138,.6) !important;background:rgba(63,191,138,.1) !important;color:#3fbf8a !important}
+.rbtn{color:#f0707a !important;border-color:rgba(240,112,122,.45) !important;background:rgba(240,112,122,.08) !important}
+.rbtn:disabled{color:var(--mut) !important;border-color:var(--line) !important;background:transparent !important}
 .k:active{filter:brightness(1.2)}
 .disp,input.txt{background:rgba(12,16,34,.5) !important}
 .box{background:rgba(12,16,34,.5)}
