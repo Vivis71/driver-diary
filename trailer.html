@@ -176,11 +176,23 @@ const $ = id => document.getElementById(id);
 
 function toastFill(t, text){
   t.textContent = '';
-  var m = /^(⚠️|❌)\s*([\s\S]*)$/.exec(text);
+  var K = {
+    '✅': ['linear-gradient(180deg,#1f6b4f,#144633)', '#3fbf8a'],
+    '⚠️': ['linear-gradient(180deg,#6e4d12,#4a3309)', '#f5a524'],
+    '❌': ['linear-gradient(180deg,#702733,#4a1a22)', '#f0707a']
+  };
+  var m = /^(✅|⚠️|❌)\s*([\s\S]*)$/.exec(text);
+  var c = m && K[m[1]];
+  t.style.setProperty('background', c ? c[0] : 'linear-gradient(180deg,#3a4270,#2a3052)', 'important');
+  t.style.setProperty('border-color', c ? c[1] : '#6c78b4', 'important');
   if (!m) { t.textContent = text; return; }
   var big = document.createElement('div');
-  big.textContent = m[1]; big.style.cssText = 'font-size:38px;line-height:1.1;margin-bottom:4px';
-  t.appendChild(big); t.appendChild(document.createTextNode(m[2]));
+  big.style.cssText = 'line-height:1;margin-bottom:6px';
+  if (m[1] === '✅') {
+    big.innerHTML = '<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#3fbf8a"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#0d2a1f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  } else { big.textContent = m[1]; big.style.fontSize = '38px'; }
+  t.appendChild(big);
+  if (m[2]) t.appendChild(document.createTextNode(m[2]));
 }
 function toast(text, ms){
   const t = $('toast');
@@ -268,7 +280,7 @@ $('otCancel').onclick = () => $('ovOther').classList.remove('show');
 $('otQty').oninput = e => { e.target.value = e.target.value.replace(/\D/g, ''); };
 $('otOk').onclick = () => {
   const name = $('otName').value.trim();
-  if(!name){ $('otName').focus(); toast('Введите название'); return; }
+  if(!name){ $('otName').focus(); toast('⚠️ Введите название'); return; }
   S.others.push({name:name, qty:parseInt($('otQty').value, 10) || 0});
   save(); render();
   $('ovOther').classList.remove('show');
@@ -321,9 +333,9 @@ function copyText(text){
   });
 }
 $('make').onclick = () => {
-  if(!S.num){ toast('Введите номер прицепа'); return; }
+  if(!S.num){ toast('⚠️ Введите номер прицепа'); return; }
   if(!S.state){
-    toast('Выберите состояние: чистый, грязный после палет или пятна крови');
+    toast('⚠️ Выберите состояние: чистый, грязный после палет или пятна крови');
     const sg = document.querySelector('.seg'); sg.scrollIntoView({block:'center', behavior:'smooth'});
     sg.style.outline = '2px solid var(--red)'; sg.style.outlineOffset = '4px'; sg.style.borderRadius = '12px';
     setTimeout(() => { sg.style.outline = ''; }, 2200);
@@ -331,7 +343,7 @@ $('make').onclick = () => {
   }
   const text = buildText();
   copyText(text).then(
-    () => toast(text, 4000),
+    () => toast('✅ ' + text, 4000),
     () => toast('⚠️ Не скопировано\n' + text, 5000)
   );
 };
