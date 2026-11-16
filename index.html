@@ -1708,9 +1708,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             document.querySelectorAll('.minskLiveTimeCopy').forEach(e => e.innerText = mi.h + ':' + mi.m);
         }
 
-        window.onload = function() {
-            // Просим браузер не вычищать данные приложения при нехватке места (тихо, без окон; если не дали — ничего не меняется)
-            try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+        // Запускаем при готовности разметки, а не после загрузки всех ресурсов: иначе на долю секунды виден экран выбора профиля
+        function appInit() {
             updateMinskClock();
             setInterval(updateMinskClock, 1000);
             profiles.forEach(ensureYearsData);
@@ -1728,7 +1727,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
                     try { history.replaceState(null, '', location.pathname); } catch (e) {}
                 }
             }
-        };
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appInit); else appInit();
 
         function renderProfilesList() {
             const container = document.getElementById('profilesListContainer');
