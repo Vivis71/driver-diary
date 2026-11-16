@@ -149,3 +149,12 @@ input[type=date]{background:rgba(12,16,34,.5) !important;border-color:var(--line
 /* мигающее двоеточие в часах на главной */
 .blink{animation:clkblink 1s steps(1,end) infinite}
 @keyframes clkblink{50%{opacity:.15}}
+
+/* Главная: блок «Дни пребывания» — табло (нажимается) и кнопки (отмечают границу) */
+.stayhd{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:6px;cursor:pointer}
+.staytab{display:flex;align-items:center;padding:4px 0 10px;border-bottom:1px solid var(--line);cursor:pointer}
+.staytab .c{flex:1;text-align:center}
+.staytab .sep{width:1px;height:42px;background:var(--line)}
+.staybtn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 4px;border-radius:12px;font-size:13px;font-weight:600;color:#e9ecf4}
+.staybtn.in{background:linear-gradient(180deg,rgba(63,191,138,.34),rgba(63,191,138,.14));border:1px solid rgba(63,191,138,.5);color:#8fe3bf;box-shadow:var(--hi)}
+.staybtn.out{background:linear-gradient(180deg,rgba(240,112,122,.34),rgba(240,112,122,.14));border:1px solid rgba(240,112,122,.5);color:#f8b0b6;box-shadow:var(--hi)}

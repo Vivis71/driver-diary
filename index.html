@@ -1444,22 +1444,21 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             </div>
             <!-- Дни пребывания: В РБ / Вне РБ -->
             <div class="bg-[#262b3d] p-2.5 rounded-xl border border-[#343a52]">
-                <div style="font-size:11px;letter-spacing:.06em;color:#a3acc2;font-weight:600;margin-bottom:6px;">ДНИ ПРЕБЫВАНИЯ</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                    <div>
-                        <div class="stat-ok" style="border-radius:12px;padding:6px 4px;text-align:center;">
-                            <div style="font-size:11px;color:#a3acc2;">В РБ</div>
-                            <div style="font-size:26px;font-weight:800;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
-                        </div>
-                        <button onclick="confirmBorder('Въезд в РБ')" class="btn-ok" style="margin-top:6px;width:100%;border:1px solid rgba(63,191,138,.35);color:#7fd9b4;border-radius:10px;padding:8px 4px;font-size:13px;font-weight:600;">Въезд в РБ</button>
+                <div class="stayhd" onclick="goSub('stay.html')" role="button" aria-label="Пребывание"><span>ДНИ ПРЕБЫВАНИЯ</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6l-6 6"/></svg></div>
+                <div class="staytab" onclick="goSub('stay.html')" role="button">
+                    <div class="c">
+                        <div style="font-size:11px;color:#a3acc2;">В РБ</div>
+                        <div style="font-size:30px;font-weight:700;color:#3fbf8a;line-height:1.1;" id="mainDaysBY">—</div>
                     </div>
-                    <div>
-                        <div id="outBox" class="stat-out" style="border-radius:12px;padding:6px 4px;text-align:center;">
-                            <div style="font-size:11px;color:#a3acc2;">Вне РБ</div>
-                            <div style="font-size:26px;font-weight:800;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
-                        </div>
-                        <button onclick="confirmBorder('Выезд из РБ')" class="btn-no" style="margin-top:6px;width:100%;border:1px solid rgba(240,112,122,.35);color:#f5a3aa;border-radius:10px;padding:8px 4px;font-size:13px;font-weight:600;">Выезд из РБ</button>
+                    <div class="sep"></div>
+                    <div class="c" id="outBox">
+                        <div style="font-size:11px;color:#a3acc2;">Вне РБ</div>
+                        <div style="font-size:30px;font-weight:700;color:#a3acc2;line-height:1.1;" id="mainDaysOut">—</div>
                     </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+                    <button onclick="confirmBorder('Въезд в РБ')" class="staybtn in"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10"/><path d="M17 8v9h-9"/></svg>Въезд в РБ</button>
+                    <button onclick="confirmBorder('Выезд из РБ')" class="staybtn out"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7l-10 10"/><path d="M8 7h9v9"/></svg>Выезд из РБ</button>
                 </div>
                 <div style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:8px;font-size:12px;color:#a3acc2;"><span>Минск <b id="minskLiveTime" style="color:#fff;font-size:14px;font-variant-numeric:tabular-nums;">--:--</b></span><span style="width:1px;height:14px;background:#454d6b;"></span><span>Варшава <b id="warsawLiveTime" style="color:#fff;font-size:14px;font-variant-numeric:tabular-nums;">--:--</b></span></div>
             </div>
@@ -2008,11 +2007,8 @@ button:not(:disabled), [role="button"] { cursor: pointer; }
             const byEl = document.getElementById('mainDaysBY');
             const outEl = document.getElementById('mainDaysOut');
             const dayWord = ' <span style="font-size:14px;">дн.</span>';
-            const outBox = document.getElementById('outBox');
             const paintOut = (zero) => {
                 outEl.style.color = zero ? '#a3acc2' : '#f0707a';
-                outBox.style.background = zero ? '#2f3550' : 'rgba(240,112,122,.08)';
-                outBox.style.borderColor = zero ? '#454d6b' : 'rgba(240,112,122,.35)';
             };
             if (!stJan1(parseInt(cy, 10))) {
                 byEl.innerHTML = "—";
