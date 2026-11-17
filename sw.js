@@ -1,4 +1,4 @@
-const CACHE = 'driver-diary-v11';
+const CACHE = 'driver-diary-v12';
 const CORE = ['./', './index.html', './trailer.html', './schedule.html','./stay.html','./wallet.html','./help.html','./shifts.js', './style.css', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
