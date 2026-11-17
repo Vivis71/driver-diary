@@ -9,6 +9,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;padding:12px;display:flex;justify-content:center}
 .app{width:100%;max-width:480px}
+.acts{position:sticky;bottom:0;z-index:5;display:flex;padding:14px 0 10px;margin-top:-6px;background:linear-gradient(180deg,rgba(22,26,40,0),var(--bg) 38%)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .cap{color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
@@ -18,15 +19,15 @@ input.txt{background:#1c2030;border:1px solid #454d6b;border-radius:8px;color:va
 input.txt:focus{outline:none;border-color:var(--acc)}
 .num{cursor:pointer;width:150px;text-align:center;font-size:22px;font-weight:600;letter-spacing:.06em}
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
-.sb{background:transparent;border:1.5px solid;border-radius:10px;padding:8px 4px;min-height:48px;font-size:12px;font-weight:600;line-height:1.25;font-family:inherit;cursor:pointer}
-.sb.green{color:var(--green);border-color:var(--green)}
-.sb.yellow{color:var(--yellow);border-color:var(--yellow)}
-.sb.red{color:var(--red);border-color:var(--red)}
-.sb.on{color:#10110f}
-.sb.green.on{background:var(--green)}
-.sb.yellow.on{background:var(--yellow)}
-.sb.red.on{background:var(--red)}
-.g{display:grid;grid-template-columns:minmax(0,1fr) 52px 38px 32px;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.stb{display:flex;flex-direction:column;align-items:center;gap:6px;background:transparent;border:0;padding:8px 2px;font-family:inherit;font-size:13px;font-weight:600;line-height:1.25;text-align:center;cursor:pointer}
+.stb.green{color:var(--green)}
+.stb.yellow{color:var(--yellow)}
+.stb.red{color:var(--red)}
+.stb .bx{width:26px;height:26px;border-radius:7px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:inherit}
+.stb.on .bx{background:currentColor}
+.stb.on .bx::after{content:"✓";color:#10110f}
+.seg.has .stb:not(.on){opacity:.55}
+.g{display:grid;grid-template-columns:minmax(0,1fr) 52px 38px 32px;gap:8px;align-items:center;padding:4px 0;border-top:1px solid var(--line)}
 .g:first-of-type{border-top:0}
 .g.zero .name,.g.zero .tot{opacity:.45}
 .tot{font-size:19px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
@@ -40,6 +41,9 @@ input.txt:focus{outline:none;border-color:var(--acc)}
 .chk .box::after{content:""}
 .chk.on .box::after{content:"✓"}
 .sub{color:var(--mut);font-size:12px}
+.opts{display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.opts .chk{gap:8px;padding:2px}
+.oth{display:flex;align-items:center;justify-content:flex-end;gap:8px;color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
 .orow{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
 .orow .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .orow .q{font-weight:600;color:var(--acc);min-width:30px;text-align:right}
@@ -76,26 +80,20 @@ input.txt:focus{outline:none;border-color:var(--acc)}
     </div>
     <div class="cap" style="margin-top:12px">Состояние</div>
     <div class="seg">
-      <button class="sb green" data-state="czysta">Чистый</button>
-      <button class="sb yellow" data-state="po">Грязный:<br>после палет</button>
-      <button class="sb red" data-state="krew">Грязный:<br>пятна крови</button>
+      <button class="stb green" data-state="czysta"><span class="bx"></span>Чистый</button>
+      <button class="stb yellow" data-state="po"><span class="bx"></span><span>Грязный:<br>после палет</span></button>
+      <button class="stb red" data-state="krew"><span class="bx"></span><span>Грязный:<br>пятна крови</span></button>
     </div>
   </div>
 
   <div class="card">
     <div class="cap" style="margin-bottom:2px">Тара</div>
     <div id="tara"></div>
-    <div class="g" id="sciana-row" style="grid-template-columns:minmax(0,1fr)">
+    <div class="opts">
       <div class="chk" id="sciana"><span class="box"></span><span>Стена</span></div>
+      <div class="chk" id="zwrot" title="возвратный груз"><span class="box"></span><span>Возврат</span></div>
+      <div class="oth"><span>Прочее</span><button class="ibtn" id="addOther" aria-label="Добавить строку">+</button></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="chk" id="zwrot"><span class="box"></span><span>Возврат <span class="sub">(возвратный груз)</span></span></div>
-  </div>
-
-  <div class="card">
-    <div class="row"><span class="cap">Прочее</span><button class="ibtn" id="addOther" aria-label="Добавить строку">+</button></div>
     <div id="others"></div>
   </div>
 
@@ -205,7 +203,8 @@ function toast(text, ms){
 
 function render(){
   $('num').value = S.num;
-  document.querySelectorAll('.sb').forEach(b => b.classList.toggle('on', b.dataset.state === S.state));
+  document.querySelectorAll('.stb').forEach(b => b.classList.toggle('on', b.dataset.state === S.state));
+  document.querySelector('.seg').classList.toggle('has', !!S.state);
 
   const box = $('tara'); box.innerHTML = '';
   ITEMS.forEach(it => {
@@ -295,7 +294,7 @@ $('cfNo').onclick = () => { $('ovConfirm').classList.remove('show'); cfAction = 
 
 /* ---------- поля и кнопки ---------- */
 $('num').onclick = openNumKeypad;
-document.querySelectorAll('.sb').forEach(b => b.onclick = () => {
+document.querySelectorAll('.stb').forEach(b => b.onclick = () => {
   S.state = (S.state === b.dataset.state) ? '' : b.dataset.state;
   save(); render();
 });
